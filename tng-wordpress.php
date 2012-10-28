@@ -38,10 +38,10 @@ class familyRootsLoad
  	*/
   	public static function init()
  	{
- 		add_action( 'plugins_loaded', array( __class__, 'constants' ), 1 );
-		add_action( 'plugins_loaded', array( __class__, 'includes' ), 2 );
-		add_action( 'plugins_loaded', array( __class__, 'admin' ), 3 );
-		register_activation_hook( __file__, array( __class__, 'activation' ) );
+ 		add_action( 'plugins_loaded', array( __CLASS__, 'constants' ), 1 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'includes' ), 2 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'admin' ), 3 );
+		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
  	}
  	
 	/**
