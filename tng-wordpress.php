@@ -78,7 +78,7 @@ class familyRootsLoad
 	 */
 	public function includes()
 	{
-		//require_once( FAMROOTS_INCLUDES . 'tool-bar.php' );
+		require_once( FAMROOTS_INCLUDES . 'tool-bar.php' );
 	}
 	
 	/**
