@@ -12,7 +12,7 @@
 // This plugin builds upon the work by Mark Barnes in his TNG Wordpress Integration Plugin.
 // The original can be found at http://www.4-14.org.uk/wordpress-plugins/tng.
 
-familyRootsLoad::init()
+familyRootsLoad::init();
 
 /** 
 *	Family Roots Load
