@@ -41,8 +41,25 @@ class familyRootsLoad
  		add_action( 'plugins_loaded', array( __CLASS__, 'constants' ), 1 );
 		add_action( 'plugins_loaded', array( __CLASS__, 'includes' ), 2 );
 		add_action( 'plugins_loaded', array( __CLASS__, 'admin' ), 3 );
+		add_action( 'init', array( __CLASS__, 'localization' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
  	}
+ 	
+ 	/** 
+ 	*	Localization
+ 	*
+ 	*	Add support for localization
+ 	*
+ 	*	@author		Nate Jacobs
+ 	*	@date		10/28/12
+ 	*	@since		1.0
+ 	*
+ 	*	@param		
+ 	*/
+ 	public function localization() 
+ 	{
+  		load_plugin_textdomain( 'family-roots-integration', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ); 
+	}
  	
 	/**
 	 *	Plugin Constants
@@ -57,7 +74,7 @@ class familyRootsLoad
 	 */	
 	public function constants() 
 	{
-		define( 'FAMROOTS_VERSION', '1.0' );
+		define( 'FAMROOTS_VERSION', '0.1' );
 		define( 'FAMROOTS_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'FAMROOTS_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'FAMROOTS_INCLUDES', FAMROOTS_DIR.trailingslashit( 'inc' ) );
