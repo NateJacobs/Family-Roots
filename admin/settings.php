@@ -71,7 +71,9 @@ class familyRootsSettings
 				$settings = (array) get_option( 'family-roots-settings' );
 				if ( empty( $settings['tng_path'] ) ) 
 				{
-					echo "<div class='error'><p>Your TNG file path could not be determined. Please enter it in the appropriate field below.</p></div>";
+					?>
+						<div class='error'><p> <?php _e( 'Your TNG file path could not be determined. Please enter it in the appropriate field below.', 'family-roots-integration' ); ?></p></div>
+					<?php
 				} 
 			?>
 			<?php settings_errors(); ?>
