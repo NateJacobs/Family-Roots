@@ -65,27 +65,34 @@ class familyRootsSettings
 		?>
 
 		<div class="wrap">
-			<div class="icon32" id="icon-family-roots"><img src='<?php echo FAMROOTS_URI . "family-roots-icon" ?>'><br /></div>
+			<div class="icon32" id="icon-family-roots"><img src='<?php echo FAMROOTS_URI . "family-roots-icon.png" ?>'><br /></div>
 			<h2><?php _e( 'Family Roots Options', 'family-roots-integration' ); ?></h2>
+			<?php
+				$settings = (array) get_option( 'family-roots-settings' );
+				if ( empty( $settings['tng_path'] ) ) 
+				{
+					echo "<div class='error'><p>Your TNG file path could not be determined. Please enter it in the appropriate field below.</p></div>";
+				} 
+			?>
 			<?php settings_errors(); ?>
 			<!-- check and see if an active tab is set, if not, set the general tab to be active -->
 			<?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general'; ?>
 			<h2 class="nav-tab-wrapper">  
             	<a href="?page=family-roots-options&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>"><?php _e( 'General Options', 'family-roots-integration' ); ?></a>  
             	<a href="?page=family-roots-options&tab=users" class="nav-tab <?php echo $active_tab == 'users' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Users & Logins', 'family-roots-integration' ); ?></a>  
-            </h2> 
+            </h2>
 			<form action="options.php" method="POST">
 				<?php
+					settings_fields( 'family-roots-integration' );
 					if( $active_tab == 'general' )
 					{
-						settings_fields( 'family-roots-integration' );
 						do_settings_sections( 'family-roots-options' );
-						submit_button();
 					}
 					else
 					{
 						
 					};
+					submit_button();
 				?>
 			</form>
 		</div>
@@ -110,6 +117,7 @@ class familyRootsSettings
 		add_settings_section( 'tng-settings', 'TNG Settings', array( __CLASS__, 'tng_settings_callback' ), 'family-roots-options' );
 		add_settings_section( 'wp-settings', 'WordPress Settings', array( __CLASS__, 'wp_settings_callback' ), 'family-roots-options' );
 		add_settings_field( 'tng-path', 'Path to TNG Files', array( __CLASS__, 'tng_path_callback' ), 'family-roots-options', 'tng-settings' );
+		add_settings_field( 'tng-admin-url', 'URL to TNG Admin', array( __CLASS__, 'tng_admin_url_callback' ), 'family-roots-options', 'tng-settings' );
 	}
 	
 	/** 
@@ -147,7 +155,7 @@ class familyRootsSettings
 	/** 
 	*	TNG File Path Callback
 	*
-	*	Display the TNG File Path field
+	*	Display the TNG File path field
 	*
 	*	@author		Nate Jacobs
 	*	@date		10/28/12
@@ -162,4 +170,23 @@ class familyRootsSettings
 		
 		echo "<input class='widefat' type='text' name='family-roots-settings[tng_path]' value='$trn_path' />";
 	}
+	
+	/** 
+	*	TNG Admin URL Path Callback
+	*
+	*	Display the TNG Admin URL path field
+	*
+	*	@author		Nate Jacobs
+	*	@date		10/31/12
+	*	@since		0.1
+	*
+	*	@param		null
+	*/
+	public function tng_admin_url_callback()
+	{
+		$settings = (array) get_option( 'family-roots-settings' );
+		$trn_path = isset( $settings['tng_admin_url'] ) ? esc_attr( $settings['tng_admin_url'] ) : '';
+		
+		echo "<input class='widefat' type='text' name='family-roots-settings[tng_admin_url]' value='$trn_path' />";
+	}	
 }
