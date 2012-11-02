@@ -2,7 +2,7 @@
 
 /**
  *	Plugin Name: 	Family Roots
- *	Description: 	The Next Generation Genealogy and WordPress Integration.
+ *	Description: 	The Next Generation of Genealogy Site Building and WordPress Integration.
  *	Version: 		0.1
  *	Date:			10/28/12
  *	Author:			Nate Jacobs
@@ -122,18 +122,38 @@ class familyRootsLoad
 	*	Activation
 	*
 	*	Runs the method when the plugin is activated.
+	*	Iterates through directory looking for three files present in the TNG install.
+	*	If the three files are present and have the same path, the TNG file path is saved to the plugin options.
 	*
 	*	@author		Nate Jacobs
 	*	@date		10/28/12
 	*	@since		0.1
 	*
 	*	@todo		Change permalinks
-	*	@todo		Add new page called genealogy
 	*
 	*	@param		null
 	*/
 	public function activation()
 	{
+		$path = dirname( ABSPATH );
+
+		$directory = new RecursiveDirectoryIterator( $path,RecursiveDirectoryIterator::SKIP_DOTS );
+		$iterator = new RecursiveIteratorIterator( $directory,RecursiveIteratorIterator::LEAVES_ONLY );
 		
+		$req_files = array( "ahnentafel.php", "genlib.php", "admin_cemeteries.php" );
+		
+		foreach ( $iterator as $fileinfo ) 
+		{
+		    if ( in_array( $fileinfo->getFilename(), $req_files ) ) 
+		    {
+		        $files[] = $fileinfo->getPath();
+		    }
+		}
+		
+		if( count( $files ) == 3 && count( array_unique( $files ) ) == 1 )
+		{
+			add_option( 'family-roots-settings', array( 'tng_path' => trailingslashit( $files[0] ) ) );
+			add_option( 'family-roots-settings', array( 'tng_admin_url' => trailingslashit( $files[0] ) ) )	
+		}
 	}
 }
