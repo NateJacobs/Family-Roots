@@ -153,7 +153,6 @@ class familyRootsLoad
 		if( count( $files ) == 3 && count( array_unique( $files ) ) == 1 )
 		{
 			add_option( 'family-roots-settings', array( 'tng_path' => trailingslashit( $files[0] ) ) );
-			add_option( 'family-roots-settings', array( 'tng_admin_url' => trailingslashit( $files[0] ) ) )	
 		}
 	}
 }
