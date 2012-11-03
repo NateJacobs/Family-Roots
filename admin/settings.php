@@ -295,7 +295,7 @@ class familyRootsSettings
 		?>
 			<p><strong><?php _e( 'Select an existing page or create a new one', 'family-roots-integration' ); ?></strong></p>
 		<?php
-			$page_dropdown_args = array( 'show_option_none' => 'Select a page', 'selected' => $tng_wp_page_id, 'name' => 'family-roots-settings[tng_wp_page_id]' );
+			$page_dropdown_args = array( 'show_option_none' => __( 'Select a page', 'family-roots-integration' ), 'selected' => $tng_wp_page_id, 'name' => 'family-roots-settings[tng_wp_page_id]' );
 			wp_dropdown_pages( $page_dropdown_args );
 			echo "<br><br><input type='text' name='family-roots-settings[tng_new_page]' />";
 		?>
