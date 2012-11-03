@@ -313,7 +313,7 @@ class familyRootsSettings
 	*	@date		11/1/12
 	*	@since		0.1
 	*
-	*	@param		
+	*	@param	array	$input
 	*/
 	public function family_roots_validate( $input )
 	{
