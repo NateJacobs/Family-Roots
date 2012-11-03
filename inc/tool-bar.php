@@ -37,7 +37,7 @@ class familyRootsToolbar
 	*
 	*	@author		Nate Jacobs
 	*	@date		11/3/12
-	*	@since		1.0
+	*	@since		0.1
 	*
 	*	@param		
 	*/
@@ -47,11 +47,11 @@ class familyRootsToolbar
 		
 		$wp_admin_bar->add_menu( array(
 			'id' => 'family-roots-menu',
-			'title' => __( 'TNG' ),
+			'title' => __( 'TNG', 'family-roots-integration' ),
 		) );
 		$wp_admin_bar->add_menu( array(
 			'id' => 'family-roots-menu-surnames',
-			'title' => __( 'Surnames' ),
+			'title' => __( 'Surnames', 'family-roots-integration' ),
 			'parent' => 'family-roots-menu'
 		) );
 	}
