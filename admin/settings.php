@@ -92,7 +92,7 @@ class familyRootsSettings
 					}
 					else
 					{
-						
+						do_settings_sections( 'family-roots-users' );
 					};
 					submit_button();
 				?>
@@ -115,11 +115,50 @@ class familyRootsSettings
 	*/
 	public function settings_init()
 	{
-		register_setting( 'family-roots-integration', 'family-roots-settings' );
-		add_settings_section( 'tng-settings', 'TNG Settings', array( __CLASS__, 'tng_settings_callback' ), 'family-roots-options' );
-		add_settings_section( 'wp-settings', 'WordPress Settings', array( __CLASS__, 'wp_settings_callback' ), 'family-roots-options' );
-		add_settings_field( 'tng-path', 'Path to TNG Files', array( __CLASS__, 'tng_path_callback' ), 'family-roots-options', 'tng-settings' );
-		add_settings_field( 'tng-admin-url', 'URL to TNG Admin', array( __CLASS__, 'tng_admin_url_callback' ), 'family-roots-options', 'tng-settings' );
+		register_setting( 
+			'family-roots-integration', 
+			'family-roots-settings', 
+			array( __CLASS__, 'family_roots_validate' )
+		);
+		add_settings_section( 
+			'tng-settings', 
+			'TNG Settings', 
+			array( __CLASS__, 'tng_settings_callback' ), 
+			'family-roots-options' 
+		);
+		add_settings_section( 
+			'wp-settings', 
+			'WordPress Settings', 
+			array( __CLASS__, 'wp_settings_callback' ), 
+			'family-roots-options' 
+		);
+		add_settings_section( 
+			'user-settings', 
+			'User Settings', 
+			array( __CLASS__, 'user_settings_callback' ), 
+			'family-roots-users' 
+		);
+		add_settings_field( 
+			'tng-path', 
+			'Path to TNG Files', 
+			array( __CLASS__, 'tng_path_callback' ), 
+			'family-roots-options', 
+			'tng-settings' 
+		);
+		add_settings_field( 
+			'tng-admin-url', 
+			'URL to TNG Admin', 
+			array( __CLASS__, 'tng_admin_url_callback' ), 
+			'family-roots-options', 
+			'tng-settings' 
+		);
+		add_settings_field( 
+			'tng-wp-page', 
+			'Name of page for TNG content', 
+			array( __CLASS__, 'tng_wp_page_callback' ), 
+			'family-roots-options', 
+			'wp-settings'
+		);
 	}
 	
 	/** 
@@ -190,5 +229,90 @@ class familyRootsSettings
 		$trn_path = isset( $settings['tng_admin_url'] ) ? esc_attr( $settings['tng_admin_url'] ) : '';
 		
 		echo "<input class='widefat' type='text' name='family-roots-settings[tng_admin_url]' value='$trn_path' />";
+	}
+	
+	/** 
+	*	TNG WP Page
+	*
+	*	Create the placeholder page for TNG content
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/1/12
+	*	@since		0.1
+	*
+	*	@param		
+	*/
+	public function tng_wp_page_callback()
+	{
+		$settings = (array) get_option( 'family-roots-settings' );
+		$tng_wp_page_id = isset( $settings['tng_wp_page_id'] ) ? esc_attr( $settings['tng_wp_page_id'] ) : '';
+		
+		$page_url = get_permalink( $tng_wp_page_id );
+		
+		?>
+			<p><strong><?php _e( 'Select an existing page or create a new one', 'family-roots-integration' ); ?></strong></p>
+		<?php
+			$page_dropdown_args = array( 'show_option_none' => 'Select a page', 'selected' => $tng_wp_page_id, 'name' => 'family-roots-settings[tng_wp_page_id]' );
+			wp_dropdown_pages( $page_dropdown_args );
+			echo "<br><br><input type='text' name='family-roots-settings[tng_new_page]' />";
+		?>
+			<span class='description'><?php _e( 'Once you save, this will create a new page in WordPress with this name.', 'family-roots-integration' ); ?></span>
+			<br><br><p><?php _e(' In TNG go to Setup -> General Settings -> Site Design and Definition and set the Genealogy URL to: ', 'family-roots-integration' ); echo '<strong>'.$page_url.'</strong>';  ?></p>
+		<?php
 	}	
+	
+	/** 
+	*	Family Roots Validation
+	*
+	*	Method that is called when the settings page is saved
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/1/12
+	*	@since		0.1
+	*
+	*	@param		
+	*/
+	public function family_roots_validate( $input )
+	{
+		$output = get_option( 'family-roots-settings' );
+		
+		$page_array = array(
+			'post_title' => $input['tng_new_page'],
+			'post_type' => 'page',
+			'post_author' => get_current_user_id(),
+			'post_status' => 'publish'
+		);
+		
+		$output['tng_path'] = $input['tng_path'];
+		$output['tng_admin_url'] = $input['tng_admin_url'];
+		
+		if( !empty( $input['tng_wp_page_id'] ) )
+		{
+			$output['tng_wp_page_id'] = $input['tng_wp_page_id'];
+		}
+		
+		if( !empty( $input['tng_new_page'] ) )
+		{
+			$page_id = wp_insert_post( $page_array, TRUE );
+			$output['tng_wp_page_id'] = $page_id;	
+		}
+		
+		return $output;
+	}
+	
+	/** 
+	*	User Settings
+	*
+	*	Display user settings
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/3/12
+	*	@since		0.1
+	*
+	*	@param		
+	*/
+	public function user_settings_callback()
+	{
+		_e( 'WordPress Users and TNG Users Integration', 'family-roots-integration' );
+	}
 }
