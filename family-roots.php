@@ -6,7 +6,7 @@
  *	Version: 		0.1
  *	Date:			10/28/12
  *	Author:			Nate Jacobs
- *	Author URI:		http://natejacobs.org
+ *	Author URI:		https://github.com/NateJacobs
  */
  
 // This plugin builds upon the work by Mark Barnes in his TNG Wordpress Integration Plugin.
