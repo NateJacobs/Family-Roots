@@ -85,7 +85,7 @@ class familyRootsLoad
 	 *	Include Files
 	 *
 	 *	Lists the files used for plugin actions in the includes folder.
-	 *	They are stored in the inc folder
+	 *	They are stored in the inc folder. These files are able to be accessed from both front and back end of site.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		10/28/12
@@ -102,7 +102,7 @@ class familyRootsLoad
 	 *	Admin Files
 	 *
 	 *	Lists the files used for plugin actions in the admin dashboard. 
-	 *	They are stored in the admin folder.
+	 *	They are stored in the admin folder. These files are only able to accessed from the back end of the site
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		10/28/12
@@ -135,23 +135,30 @@ class familyRootsLoad
 	*/
 	public function activation()
 	{
+		// get the directory above the WordPress install
 		$path = dirname( ABSPATH );
 
+		// define options for recursive iterator
 		$directory = new RecursiveDirectoryIterator( $path,RecursiveDirectoryIterator::SKIP_DOTS );
 		$iterator = new RecursiveIteratorIterator( $directory,RecursiveIteratorIterator::LEAVES_ONLY );
 		
+		// define the files required for a TNG match
 		$req_files = array( "ahnentafel.php", "genlib.php", "admin_cemeteries.php" );
 		
+		// loop through all files returned from the search
 		foreach ( $iterator as $fileinfo ) 
 		{
+			// are the files defined above in the return, if so add them to an array
 		    if ( in_array( $fileinfo->getFilename(), $req_files ) ) 
 		    {
 		        $files[] = $fileinfo->getPath();
 		    }
 		}
 		
+		// after looping through all the files check and see if there are three files and they all have the identical path
 		if( count( $files ) == 3 && count( array_unique( $files ) ) == 1 )
 		{
+			// if they do, then add the path to the plugin options
 			add_option( 'family-roots-settings', array( 'tng_path' => trailingslashit( $files[0] ) ) );
 		}
 	}
