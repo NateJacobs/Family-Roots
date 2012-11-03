@@ -82,6 +82,7 @@ class familyRootsSettings
 			<h2 class="nav-tab-wrapper">  
             	<a href="?page=family-roots-options&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>"><?php _e( 'General Options', 'family-roots-integration' ); ?></a>  
             	<a href="?page=family-roots-options&tab=users" class="nav-tab <?php echo $active_tab == 'users' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Users & Logins', 'family-roots-integration' ); ?></a>  
+            	<a href="?page=family-roots-options&tab=advanced" class="nav-tab <?php echo $active_tab == 'advanced' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Advanced', 'family-roots-integration' ); ?></a>  
             </h2>
 			<form action="options.php" method="POST">
 				<?php
@@ -90,10 +91,14 @@ class familyRootsSettings
 					{
 						do_settings_sections( 'family-roots-options' );
 					}
-					else
+					elseif( $active_tab == 'users' )
 					{
 						do_settings_sections( 'family-roots-users' );
-					};
+					}
+					else
+					{
+						do_settings_sections( 'family-roots-advanced' );
+					}
 					submit_button();
 				?>
 			</form>
@@ -138,6 +143,12 @@ class familyRootsSettings
 			array( __CLASS__, 'user_settings_callback' ), 
 			'family-roots-users' 
 		);
+		add_settings_section( 
+			'advanced-settings', 
+			'Advanced Settings', 
+			array( __CLASS__, 'advanced_settings_callback' ), 
+			'family-roots-advanced' 
+		);
 		add_settings_field( 
 			'tng-path', 
 			'Path to TNG Files', 
@@ -154,7 +165,7 @@ class familyRootsSettings
 		);
 		add_settings_field( 
 			'tng-wp-page', 
-			'Name of page for TNG content', 
+			'Show TNG content on', 
 			array( __CLASS__, 'tng_wp_page_callback' ), 
 			'family-roots-options', 
 			'wp-settings'
@@ -191,6 +202,38 @@ class familyRootsSettings
 	public function wp_settings_callback()
 	{
 		_e( 'These settings apply to your WordPress installation', 'family-roots-integration' );
+	}
+		
+	/** 
+	*	User Settings
+	*
+	*	Display user settings
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/3/12
+	*	@since		0.1
+	*
+	*	@param		
+	*/
+	public function user_settings_callback()
+	{
+		_e( 'WordPress Users and TNG Users Integration', 'family-roots-integration' );
+	}
+	
+	/** 
+	*	Advanced Settings
+	*
+	*	Display advanced settings
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/3/12
+	*	@since		0.1
+	*
+	*	@param		
+	*/
+	public function advanced_settings_callback()
+	{
+		_e( 'Advanced', 'family-roots-integration' );
 	}
 	
 	/** 
@@ -298,21 +341,5 @@ class familyRootsSettings
 		}
 		
 		return $output;
-	}
-	
-	/** 
-	*	User Settings
-	*
-	*	Display user settings
-	*
-	*	@author		Nate Jacobs
-	*	@date		11/3/12
-	*	@since		0.1
-	*
-	*	@param		
-	*/
-	public function user_settings_callback()
-	{
-		_e( 'WordPress Users and TNG Users Integration', 'family-roots-integration' );
 	}
 }
