@@ -27,6 +27,32 @@ class familyRootsToolbar
  	*/
 	public static function init()
 	{
+		add_action('wp_before_admin_bar_render', array( __CLASS__, 'family_roots_menu' ) );
+	}
+	
+	/** 
+	*	Family Roots Menu
+	*
+	*	Dispalys links to TNG pages
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/3/12
+	*	@since		1.0
+	*
+	*	@param		
+	*/
+	public function family_roots_menu()
+	{
+		global $wp_admin_bar;
 		
+		$wp_admin_bar->add_menu( array(
+			'id' => 'family-roots-menu',
+			'title' => __( 'TNG' ),
+		) );
+		$wp_admin_bar->add_menu( array(
+			'id' => 'family-roots-menu-surnames',
+			'title' => __( 'Surnames' ),
+			'parent' => 'family-roots-menu'
+		) );
 	}
 }
