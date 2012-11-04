@@ -201,7 +201,7 @@ class familyRootsSettings
 	*	@date		10/28/12
 	*	@since		0.1
 	*
-	*	@param		null
+	*	@param	null
 	*/
 	public function wp_settings_callback()
 	{
@@ -217,7 +217,7 @@ class familyRootsSettings
 	*	@date		11/3/12
 	*	@since		0.1
 	*
-	*	@param		
+	*	@param	null	
 	*/
 	public function user_settings_callback()
 	{
@@ -233,7 +233,9 @@ class familyRootsSettings
 	*	@date		11/3/12
 	*	@since		0.1
 	*
-	*	@param		
+	*	@param	null
+	*
+	*	@todo		add method to update TNG DB values
 	*/
 	public function advanced_settings_callback()
 	{
@@ -249,7 +251,7 @@ class familyRootsSettings
 	*	@date		10/28/12
 	*	@since		0.1
 	*
-	*	@param		null
+	*	@param	null
 	*/
 	public function tng_path_callback()
 	{
@@ -268,7 +270,7 @@ class familyRootsSettings
 	*	@date		10/31/12
 	*	@since		0.1
 	*
-	*	@param		null
+	*	@param	null
 	*/
 	public function tng_admin_url_callback()
 	{
@@ -287,7 +289,7 @@ class familyRootsSettings
 	*	@date		11/1/12
 	*	@since		0.1
 	*
-	*	@param		
+	*	@param	null	
 	*/
 	public function tng_wp_page_callback()
 	{
@@ -322,7 +324,7 @@ class familyRootsSettings
 	*/
 	public function family_roots_validate( $input )
 	{
-		$output = get_option( 'family-roots-settings' );
+		$output = (array) get_option( 'family-roots-settings' );
 		
 		// build the new page array
 		$page_array = array(
