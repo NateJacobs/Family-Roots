@@ -46,6 +46,7 @@ class familyRootsSettings
 	*/
 	public function settings_menu()
 	{
+		// add plugins options page to the WordPress Settings menu as a submenu link
 		add_options_page( 'Family Roots - TNG Integration', 'Family Roots', 'manage_options', 'family-roots-options', array( __CLASS__, 'family_roots_options_page' ) );
 	}
 
@@ -69,6 +70,8 @@ class familyRootsSettings
 			<h2><?php _e( 'Family Roots Options', 'family-roots-integration' ); ?></h2>
 			<?php
 				$settings = (array) get_option( 'family-roots-settings' );
+
+				// is the tng_path setting present? Meaning, upon activation the plugin found the TNG path. If it isn't, display a warning
 				if ( empty( $settings['tng_path'] ) ) 
 				{
 					?>
@@ -86,6 +89,7 @@ class familyRootsSettings
             </h2>
 			<form action="options.php" method="POST">
 				<?php
+					// based upon the active tab set which tab contents to display
 					settings_fields( 'family-roots-integration' );
 					if( $active_tab == 'general' )
 					{
@@ -295,6 +299,7 @@ class familyRootsSettings
 		?>
 			<p><strong><?php _e( 'Select an existing page or create a new one', 'family-roots-integration' ); ?></strong></p>
 		<?php
+			// present a list of pages on the WordPress site
 			$page_dropdown_args = array( 'show_option_none' => __( 'Select a page', 'family-roots-integration' ), 'selected' => $tng_wp_page_id, 'name' => 'family-roots-settings[tng_wp_page_id]' );
 			wp_dropdown_pages( $page_dropdown_args );
 			echo "<br><br><input type='text' name='family-roots-settings[tng_new_page]' />";
@@ -319,6 +324,7 @@ class familyRootsSettings
 	{
 		$output = get_option( 'family-roots-settings' );
 		
+		// build the new page array
 		$page_array = array(
 			'post_title' => $input['tng_new_page'],
 			'post_type' => 'page',
@@ -329,11 +335,13 @@ class familyRootsSettings
 		$output['tng_path'] = $input['tng_path'];
 		$output['tng_admin_url'] = $input['tng_admin_url'];
 		
+		// A page was selected from the dropdown list of pages
 		if( !empty( $input['tng_wp_page_id'] ) )
 		{
 			$output['tng_wp_page_id'] = $input['tng_wp_page_id'];
 		}
 		
+		// A new page is to be created based upon the users input
 		if( !empty( $input['tng_new_page'] ) )
 		{
 			$page_id = wp_insert_post( $page_array, TRUE );
