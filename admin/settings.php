@@ -12,7 +12,7 @@ familyRootsSettings::init();
 *	@date		10/28/12
 *	@since		0.1
 */
-class familyRootsSettings
+class familyRootsSettings extends familyRootsTNGDatabase
 {
 	/** 
  	*	Initialize
@@ -259,6 +259,7 @@ class familyRootsSettings
 		$trn_path = isset( $settings['tng_path'] ) ? esc_attr( $settings['tng_path'] ) : '';
 		
 		echo "<input class='widefat' type='text' name='family-roots-settings[tng_path]' value='$trn_path' />";
+		
 	}
 	
 	/** 
