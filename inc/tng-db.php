@@ -71,13 +71,13 @@ class familyRootsTNGDatabase
 			
 			update_option( 'family-roots-tng-db', 
 				array( 
-						'host' => $db_values['host'], 
-						'name' => $db_values['name'], 
-						'username' => $db_values['username'], 
-						'password' => $db_values['password'], 
-						'users_table' => $users_table 
-					) 
-				);
+					'host' 			=> $db_values['host'], 
+					'name' 			=> $db_values['name'], 
+					'username' 		=> $db_values['username'], 
+					'password' 		=> $db_values['password'], 
+					'users_table'	=> $users_table 
+				) 
+			);
 		}
 	}
 	

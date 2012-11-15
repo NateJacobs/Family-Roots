@@ -259,7 +259,7 @@ class familyRootsSettings extends familyRootsTNGDatabase
 		$trn_path = isset( $settings['tng_path'] ) ? esc_attr( $settings['tng_path'] ) : '';
 		
 		echo "<input class='widefat' type='text' name='family-roots-settings[tng_path]' value='$trn_path' />";
-		
+print_r( parent::connect() );
 	}
 	
 	/** 
