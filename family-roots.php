@@ -124,45 +124,27 @@ class familyRootsLoad
 	*	Activation
 	*
 	*	Runs the method when the plugin is activated.
-	*	Iterates through directory looking for three files present in the TNG install.
-	*	If the three files are present and have the same path, the TNG file path is saved to the plugin options.
+	*	If the path is found: update the wp options db and get tng db values.
 	*
 	*	@author		Nate Jacobs
 	*	@date		10/28/12
 	*	@since		0.1
 	*
 	*	@todo		Change permalinks
-	*	@todo		Add error handling
 	*
 	*	@param		null
 	*/
 	public function activation()
 	{
-		// get the directory above the WordPress install
-		$path = dirname( ABSPATH );
-
-		// define options for recursive iterator
-		$directory = new RecursiveDirectoryIterator( $path,RecursiveDirectoryIterator::SKIP_DOTS );
-		$iterator = new RecursiveIteratorIterator( $directory,RecursiveIteratorIterator::LEAVES_ONLY );
+		include_once( plugin_dir_path( __FILE__ )."/inc/utilities.php" );
 		
-		// define the files required for a TNG match
-		$req_files = array( "ahnentafel.php", "genlib.php", "admin_cemeteries.php" );
+		$path = familyRootsUtilities::get_path();
 		
-		// loop through all files returned from the search
-		foreach ( $iterator as $fileinfo ) 
+		// if the path is not empty, add option to db
+		if( !empty( $path ) )
 		{
-			// are the files defined above in the return, if so add them to an array
-		    if ( in_array( $fileinfo->getFilename(), $req_files ) ) 
-		    {
-		        $files[] = $fileinfo->getPath();
-		    }
-		}
-		
-		// after looping through all the files check and see if there are three files and they all have the identical path
-		if( count( $files ) == 3 && count( array_unique( $files ) ) == 1 )
-		{
-			// if they do, then add the path to the plugin options
-			add_option( 'family-roots-settings', array( 'tng_path' => trailingslashit( $files[0] ) ) );
+			add_option( 'family-roots-settings', array( 'tng_path' => $path ) );
+			familyRootsUtilities::get_tng_db_values();
 		}
 	}
 }
