@@ -42,18 +42,23 @@ class familyRootsUtilities
 	*/
 	public function get_tng_config()
 	{
+		// get the tng file path
 		$settings = (array) get_option( 'family-roots-settings' );
 		
+		// if the tng file path is present
 		if( !empty( $settings['tng_path'] ) )
 		{
 			$trn_path = $settings['tng_path'];
+			// get contents of config.php
 			$config = file_get_contents( $trn_path.'config.php' );
+			// get contents of customconfig.php
 			$config .= file_get_contents( $trn_path.'customconfig.php' );
+			// return everything in an array split by new lines
 			return explode( "\n", $config );
 		}
 		else
 		{
-			return FALSE;
+			return;
 		}
 		
 	}
