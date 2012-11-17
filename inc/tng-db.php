@@ -56,7 +56,7 @@ class familyRootsTNGDatabase
 				{
 					$key = substr( trim( strstr( $line, '=', TRUE ) ), 10 );
 					$value = explode( '=', $line );
-					$db_values[$key] = $value[1];
+					$db_values[$key] = rtrim( str_replace('"', "", $value[1] ), ";" );
 				}
 			}
 			
@@ -64,18 +64,18 @@ class familyRootsTNGDatabase
 			{
 				if( substr( trim( $line ), 0, 12 ) == '$users_table' )
 				{
-					$value = explode( '=', $line );
-					$users_table = $value[1];
+					$value = explode( '=', $line );		
+					$users_table = rtrim( str_replace('"', "", $value[1] ), ";" );
 				}
 			}
 			
 			update_option( 'family-roots-tng-db', 
 				array( 
-					'host' 			=> $db_values['host'], 
-					'name' 			=> $db_values['name'], 
-					'username' 		=> $db_values['username'], 
-					'password' 		=> $db_values['password'], 
-					'users_table'	=> $users_table 
+					'host' 			=> trim( $db_values['host'] ), 
+					'name' 			=> trim( $db_values['name'] ), 
+					'username' 		=> trim( $db_values['username'] ), 
+					'password' 		=> trim( trim( $db_values['password'], " '" ) ), 
+					'users_table'	=> trim( $users_table )
 				) 
 			);
 		}
@@ -95,18 +95,14 @@ class familyRootsTNGDatabase
 	protected function connect()
 	{
 		$settings = (array) get_option( 'family-roots-tng-db' );
-		
+
 		try
 		{
 			$tng_db = new wpdb( $settings['username'], $settings['password'], $settings['name'], $settings['host'] );
-			if( $tng_db )
-			{
-				return $tng_db;
-			}
+			return $tng_db;
 		}
 		catch( Exception $e )
 		{
-			throw new Exception( 'Didn\'t Work' );
 			echo $e->getMessage();
 		}
 	}
