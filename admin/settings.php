@@ -12,7 +12,7 @@ familyRootsSettings::init();
 *	@date		10/28/12
 *	@since		0.1
 */
-class familyRootsSettings extends familyRootsTNGDatabase
+class familyRootsSettings
 {
 	/** 
  	*	Initialize
