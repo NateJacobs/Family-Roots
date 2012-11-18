@@ -98,6 +98,7 @@ class familyRootsLoad
 		require_once( FAMROOTS_INCLUDES . 'tool-bar.php' );
 		require_once( FAMROOTS_INCLUDES . 'tng-db.php' );
 		require_once( FAMROOTS_INCLUDES . 'utilities.php' );
+		require_once( FAMROOTS_INCLUDES . 'users.php' );
 	}
 	
 	/**
