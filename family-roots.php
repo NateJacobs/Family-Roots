@@ -130,8 +130,6 @@ class familyRootsLoad
 	*	@date		10/28/12
 	*	@since		0.1
 	*
-	*	@todo		Change permalinks
-	*
 	*	@param		null
 	*/
 	public function activation()
