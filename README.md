@@ -15,7 +15,6 @@ The plugin is currently at version 0.1. It is the bare-bones skeleton.
 * Unified logins
 * Unified user management
 * Unified privacy settings
-* Auto setting of permalinks
 * Allow the creation of necessary WordPress placeholder page from the settings page
 
 **Future Plans**
