@@ -89,18 +89,20 @@ class familyRootsSettings
             </h2>
 			<form action="options.php" method="POST">
 				<?php
-					// based upon the active tab set which tab contents to display
-					settings_fields( 'family-roots-integration' );
+					// based upon the active tab set which tab contents to display					
 					if( $active_tab == 'general' )
 					{
+						settings_fields( 'family-roots-options' );
 						do_settings_sections( 'family-roots-options' );
 					}
 					elseif( $active_tab == 'users' )
 					{
+						settings_fields( 'family-roots-users' );
 						do_settings_sections( 'family-roots-users' );
 					}
 					else
 					{
+						settings_fields( 'family-roots-advanced' );
 						do_settings_sections( 'family-roots-advanced' );
 					}
 					submit_button();
@@ -123,35 +125,13 @@ class familyRootsSettings
 	*	@param		null
 	*/
 	public function settings_init()
-	{
-		register_setting( 
-			'family-roots-integration', 
-			'family-roots-settings', 
-			array( __CLASS__, 'family_roots_validate' )
-		);
+	{	
+		// TNG settings section
 		add_settings_section( 
 			'tng-settings', 
 			'TNG Settings', 
 			array( __CLASS__, 'tng_settings_callback' ), 
 			'family-roots-options' 
-		);
-		add_settings_section( 
-			'wp-settings', 
-			'WordPress Settings', 
-			array( __CLASS__, 'wp_settings_callback' ), 
-			'family-roots-options' 
-		);
-		add_settings_section( 
-			'user-settings', 
-			'User Settings', 
-			array( __CLASS__, 'user_settings_callback' ), 
-			'family-roots-users' 
-		);
-		add_settings_section( 
-			'advanced-settings', 
-			'Advanced Settings', 
-			array( __CLASS__, 'advanced_settings_callback' ), 
-			'family-roots-advanced' 
 		);
 		add_settings_field( 
 			'tng-path', 
@@ -167,12 +147,62 @@ class familyRootsSettings
 			'family-roots-options', 
 			'tng-settings' 
 		);
+		
+		// WP settings section
+		add_settings_section( 
+			'wp-settings', 
+			'WordPress Settings', 
+			array( __CLASS__, 'wp_settings_callback' ), 
+			'family-roots-options' 
+		);
 		add_settings_field( 
 			'tng-wp-page', 
 			'Show TNG content on', 
 			array( __CLASS__, 'tng_wp_page_callback' ), 
 			'family-roots-options', 
 			'wp-settings'
+		);
+		
+		// register tng and wp settings sections
+		register_setting( 
+			'family-roots-options', 
+			'family-roots-settings', 
+			array( __CLASS__, 'family_roots_validate' )
+		);
+		
+		// users section
+		add_settings_section( 
+			'user-settings', 
+			'User Settings', 
+			array( __CLASS__, 'user_settings_callback' ), 
+			'family-roots-users' 
+		);
+		add_settings_field( 
+			'sync-user-management', 
+			'Combine TNG and WordPress user management?', 
+			array( __CLASS__, 'user_sync_callback' ), 
+			'family-roots-users', 
+			'user-settings'
+		);
+		
+		// register users and logins section
+		register_setting( 
+			'family-roots-users', 
+			'family-roots-users-settings'
+		);
+		
+		// advanced settings section
+		add_settings_section( 
+			'advanced-settings', 
+			'Advanced Settings', 
+			array( __CLASS__, 'advanced_settings_callback' ), 
+			'family-roots-advanced' 
+		);
+		
+		// register advanced settings section
+		register_setting( 
+			'family-roots-advanced', 
+			'family-roots-advanced-settings'
 		);
 	}
 	
@@ -190,6 +220,7 @@ class familyRootsSettings
 	public function tng_settings_callback()
 	{
 		_e( 'These settings apply to your TNG installation', 'family-roots-integration' );
+
 	}
 	
 	/** 
@@ -281,6 +312,28 @@ class familyRootsSettings
 	}
 	
 	/** 
+	*	Combine User Management
+	*
+	*	
+	*
+	*	@author		Nate Jacobs
+	*	@date		11/17/12
+	*	@since		0.1
+	*
+	*	@param	null	
+	*/
+	public function user_sync_callback()
+	{
+		$settings = (array) get_option( 'family-roots-users-settings' );
+		$checked = isset( $settings['sync_users'] ) ? $checked = ' checked="checked" ' : '';
+		
+		echo "<input ".$checked." type='checkbox' name='family-roots-users-settings[sync_users]' />";
+		
+	//if($options['chkbox1']) { $checked = ' checked="checked" '; }
+	//echo "<input ".$checked." id='plugin_chk1' name='plugin_options[chkbox1]' type='checkbox' />";
+	}
+	
+	/** 
 	*	TNG WP Page
 	*
 	*	Create the placeholder page for TNG content
@@ -302,7 +355,11 @@ class familyRootsSettings
 			<p><strong><?php _e( 'Select an existing page or create a new one', 'family-roots-integration' ); ?></strong></p>
 		<?php
 			// present a list of pages on the WordPress site
-			$page_dropdown_args = array( 'show_option_none' => __( 'Select a page', 'family-roots-integration' ), 'selected' => $tng_wp_page_id, 'name' => 'family-roots-settings[tng_wp_page_id]' );
+			$page_dropdown_args = array( 
+				'show_option_none' => __( 'Select a page', 'family-roots-integration' ), 
+				'selected' => $tng_wp_page_id, 
+				'name' => 'family-roots-settings[tng_wp_page_id]' 
+			);
 			wp_dropdown_pages( $page_dropdown_args );
 			echo "<br><br><input type='text' name='family-roots-settings[tng_new_page]' />";
 		?>
