@@ -145,5 +145,23 @@ class familyRootsLoad
 			add_option( 'family-roots-settings', array( 'tng_path' => $path ) );
 			familyRootsUtilities::get_tng_db_values();
 		}
+		
+		// get the admin role
+		$role = get_role( 'administrator' );
+		
+		// if there is an admin role
+		if ( !empty( $role ) ) 
+		{
+			// add the tng admin capabilities to it
+			$role->add_cap( 'tng_add_all' );
+			$role->add_cap( 'tng_edit_all' );
+			$role->add_cap( 'tng_delete_all' );
+			$role->add_cap( 'tng_view_living' );
+			$role->add_cap( 'tng_view_private' );
+			$role->add_cap( 'tng_dl_gedcom' );
+			$role->add_cap( 'tng_dl_pdf' );
+			$role->add_cap( 'tng_view_lds' );
+			$role->add_cap( 'tng_edit_profile' );
+		}
 	}
 }
