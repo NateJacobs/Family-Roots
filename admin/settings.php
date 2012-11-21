@@ -328,6 +328,7 @@ class familyRootsSettings
 		$checked = isset( $settings['sync_users'] ) ? $checked = ' checked="checked" ' : '';
 		
 		echo "<input ".$checked." type='checkbox' name='family-roots-users-settings[sync_users]' />";
+		echo "<span class='description'> If this option is checked, all of the user management shall be done from WordPress</span>";
 		
 	//if($options['chkbox1']) { $checked = ' checked="checked" '; }
 	//echo "<input ".$checked." id='plugin_chk1' name='plugin_options[chkbox1]' type='checkbox' />";
