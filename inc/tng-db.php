@@ -22,7 +22,9 @@ class familyRootsTNGDatabase
 	*	@date		11/4/12
 	*	@since		0.1
 	*
-	*	@param	null	
+	*	@param	null
+	* 
+	* 	@todo	Create better error handling
 	*/
 	protected function connect()
 	{
