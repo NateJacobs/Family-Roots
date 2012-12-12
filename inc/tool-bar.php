@@ -27,7 +27,7 @@ class familyRootsToolbar
  	*/
 	public static function init()
 	{
-		add_action('wp_before_admin_bar_render', array( __CLASS__, 'family_roots_menu' ) );
+		//add_action('wp_before_admin_bar_render', array( __CLASS__, 'family_roots_menu' ) );
 	}
 	
 	/** 
