@@ -287,9 +287,9 @@ class familyRootsSettings
 	public function tng_path_callback()
 	{
 		$settings = (array) get_option( 'family-roots-settings' );
-		$trn_path = isset( $settings['tng_path'] ) ? esc_attr( $settings['tng_path'] ) : '';
+		$tng_path = isset( $settings['tng_path'] ) ? esc_attr( $settings['tng_path'] ) : '';
 		
-		echo "<input class='widefat' type='text' name='family-roots-settings[tng_path]' value='$trn_path' />";
+		echo "<input class='widefat' type='text' name='family-roots-settings[tng_path]' value='$tng_path' />";
 	}
 	
 	/** 
@@ -306,9 +306,9 @@ class familyRootsSettings
 	public function tng_admin_url_callback()
 	{
 		$settings = (array) get_option( 'family-roots-settings' );
-		$trn_path = isset( $settings['tng_admin_url'] ) ? esc_attr( $settings['tng_admin_url'] ) : '';
+		$admin_url = isset( $settings['tng_admin_url'] ) ? esc_attr( $settings['tng_admin_url'] ) : '';
 		
-		echo "<input class='widefat' type='text' name='family-roots-settings[tng_admin_url]' value='$trn_path' />";
+		echo "<input class='widefat' type='text' name='family-roots-settings[tng_admin_url]' value='$admin_url' />";
 	}
 	
 	/** 
