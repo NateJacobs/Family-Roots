@@ -26,11 +26,15 @@ class familyRootsUserManagement extends familyRootsTNGDatabase
 	*/
 	public static function init()
 	{
+		// get users settings
 		$settings = (array) get_option( 'family-roots-users-settings' );
 		$sync_users = isset( $settings['sync_users'] ) ? $settings['sync_users'] : '';
+		
+		// if the combined user management checkbox is checked, create and delete users from the TNG db
 		if( $sync_users == 'on' )
 		{
 			add_action( 'delete_user', array( __CLASS__, 'delete_user' ) );
+			add_action( 'user_register', array( __CLASS__, 'create_user' ) );
 		}
 	}
 	
@@ -43,11 +47,11 @@ class familyRootsUserManagement extends familyRootsTNGDatabase
 	*	@date		11/17/12
 	*	@since		0.1
 	*
-	*	@param	null	
+	*	@param	int	$user_id	The newly created user's id	
 	*/
-	public function create_user()
+	public function create_user( $user_id )
 	{
-		
+		// take the user id and 
 	}
 		
 	/** 
