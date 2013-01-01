@@ -174,4 +174,33 @@ class familyRootsUtilities
 			);
 		}
 	}
+	
+	/** 
+	*	Encrypt/Decrypt or Obfuscate
+	*
+	*	This method is used to obfuscate sensative strings. No real security if the source code is compromised.
+	*
+	*	@author		Nate Jacobs
+	*	@date		12/31/12
+	*	@since		0.1
+	*
+	*	@param	string	$string	string to encrypt or decrypt
+	*	@param	string	$method string that indicates if the method should encrypt or decrypt	
+	*/
+	public function obfuscate( $string, $method = 'encrypt' )
+	{
+		$iv_size = mcrypt_get_iv_size( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB );
+		$iv = mcrypt_create_iv( $iv_size, MCRYPT_RAND );
+		$h_key = hash( 'sha256', NONCE_KEY, TRUE );
+		
+		switch( $method )
+		{
+			case 'encrypt':
+				return base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, $h_key, $string, MCRYPT_MODE_ECB, $iv ) );
+				break;
+			case 'decrypt':
+				return trim( mcrypt_decrypt( MCRYPT_RIJNDAEL_256, $h_key, base64_decode( $string ), MCRYPT_MODE_ECB, $iv ) );
+				break;
+		}
+	}
 }
