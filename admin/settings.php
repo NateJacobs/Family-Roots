@@ -59,21 +59,20 @@ class FamilyRootsSettings {
 	public function family_roots_options_page() {
 		?>
 		<div class="wrap">
-			<h2><?php _e( 'Family Roots Options', 'family-roots-integration' ); ?></h2>
+			<h2><?php _e('Family Roots Options', 'family-roots-integration'); ?></h2>
 			<?php
-				$settings = get_option( 'family-roots-settings' );
+				$settings = get_option('family-roots-settings');
 
 				// is the tng_path setting present? Meaning, upon activation the plugin found the TNG path. If it isn't, display a warning
-				if ( empty( $settings['tng_path'] ) ) 
-				{
+				if(empty($settings['tng_path'])) {
 					?>
-						<div class='error'><p> <?php _e( 'Your TNG file path could not be determined. Please enter it in the appropriate field below.', 'family-roots-integration' ); ?></p></div>
+						<div class='error'><p> <?php _e('Your TNG file path could not be determined. Please enter it in the appropriate field below.', 'family-roots-integration'); ?></p></div>
 					<?php
 				} 
 			?>
 			<?php settings_errors(); ?>
 			<!-- check and see if an active tab is set, if not, set the general tab to be active -->
-			<?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general'; ?>
+			<?php $active_tab = isset($_GET[ 'tab' ]) ? $_GET[ 'tab' ] : 'general'; ?>
 			<h2 class="nav-tab-wrapper">  
             	<a href="?page=family-roots-options&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>"><?php _e( 'General Options', 'family-roots-integration' ); ?></a>  
             	<a href="?page=family-roots-options&tab=users" class="nav-tab <?php echo $active_tab == 'users' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Users & Logins', 'family-roots-integration' ); ?></a>  

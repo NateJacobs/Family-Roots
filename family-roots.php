@@ -25,12 +25,12 @@ class FamilyRootsLoad {
  	 *	@since		0.1
  	 */
   	public function __construct() {
- 		add_action( 'plugins_loaded', [ $this, 'constants' ], 1 );
-		add_action( 'plugins_loaded', [ $this, 'includes' ], 2 );
-		add_action( 'plugins_loaded', [ $this, 'admin' ], 3 );
-		add_action( 'init', [ $this, 'localization' ] );
-		register_activation_hook( __FILE__, [ $this, 'activation' ] );
-		register_deactivation_hook( __FILE__, [ $this, 'deletion' ] );
+ 		add_action('plugins_loaded', [$this, 'constants'], 1);
+		add_action('plugins_loaded', [$this, 'includes'], 2);
+		add_action('plugins_loaded', [$this, 'admin'], 3);
+		add_action('init', [$this, 'localization']);
+		register_activation_hook(__FILE__, [$this, 'activation']);
+		register_deactivation_hook(__FILE__, [$this, 'deletion']);
  	}
  	
 	/**
@@ -43,11 +43,10 @@ class FamilyRootsLoad {
 	 *	@since 		0.1
 	 */	
 	public function constants() {
-		define( 'FAMROOTS_VERSION', '0.1' );
-		define( 'FAMROOTS_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
-		define( 'FAMROOTS_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-		define( 'FAMROOTS_INCLUDES', FAMROOTS_DIR.trailingslashit( 'inc' ) );
-		define( 'FAMROOTS_ADMIN', FAMROOTS_DIR.trailingslashit( 'admin' ) );
+		define('FAMROOTS_DIR', trailingslashit(plugin_dir_path(__FILE__)));
+		define('FAMROOTS_URI', trailingslashit(plugin_dir_url(__FILE__)));
+		define('FAMROOTS_INCLUDES', FAMROOTS_DIR.trailingslashit('inc'));
+		define('FAMROOTS_ADMIN', FAMROOTS_DIR.trailingslashit('admin'));
 	}
 	
 	/**
@@ -61,10 +60,10 @@ class FamilyRootsLoad {
 	 *	@since 		0.1
 	 */
 	public function includes() {
-		require_once( FAMROOTS_INCLUDES . 'tool-bar.php' );
-		require_once( FAMROOTS_INCLUDES . 'tng-db.php' );
-		require_once( FAMROOTS_INCLUDES . 'utilities.php' );
-		require_once( FAMROOTS_INCLUDES . 'users.php' );
+		require_once(FAMROOTS_INCLUDES . 'tool-bar.php');
+		require_once(FAMROOTS_INCLUDES . 'tng-db.php');
+		require_once(FAMROOTS_INCLUDES . 'utilities.php');
+		require_once(FAMROOTS_INCLUDES . 'users.php');
 	}
 	
 	/**
@@ -79,7 +78,7 @@ class FamilyRootsLoad {
 	 */
 	public function admin() {
 		if(is_admin()) {
-			require_once( FAMROOTS_ADMIN . 'settings.php' );
+			require_once(FAMROOTS_ADMIN . 'settings.php');
 		}
 	}
 	
@@ -94,53 +93,17 @@ class FamilyRootsLoad {
 	 *	@since		0.1
 	 */
 	public function activation() {
-		include_once( plugin_dir_path( __FILE__ )."/inc/utilities.php" );
+		include_once(plugin_dir_path(__FILE__).'/inc/utilities.php');
 		
-		$path = familyRootsUtilities::get_path();
+		$utilities = new FamilyRootsUtilities();
+		
+		$path = $utilities->get_path();
 		
 		// if the path is not empty, add option to db
-		if( !empty( $path ) ) {
-			add_option( 'family-roots-settings', [ 'tng_path' => $path ) );
-			familyRootsUtilities::get_tng_db_values();
-		}
-		
-		// this last section might be merged into the tng-user-management plugin
-		// get the admin role
-		$role = get_role( 'administrator' );
-		
-		// if there is an admin role
-		if ( !empty( $role ) ) {
-			// add the tng admin capabilities to it
-			/*
-$role->add_cap( 'tng_add_all' );
-			$role->add_cap( 'tng_edit_all' );
-			$role->add_cap( 'tng_delete_all' );
-			$role->add_cap( 'tng_view_living' );
-			$role->add_cap( 'tng_view_private' );
-			$role->add_cap( 'tng_dl_gedcom' );
-			$role->add_cap( 'tng_dl_pdf' );
-			$role->add_cap( 'tng_view_lds' );
-			$role->add_cap( 'tng_edit_profile' );
-*/
-		}
-		
-		// add new WordPress roles to match the TNG roles with the applicable capabilities
-		/*
-add_role( 'Guest', 'guest' );
-		add_role( 'Submitter', 'subm', [ 'tng_submit_edit' => true  ) );
-		add_role( 'Contributor', 'contrib', [ 'tng_add_all' => true ) );
-		add_role( 'Editor', 'editor', [  
-			'tng_add_all' 		=> true,
-			'tng_edit_all' 		=> true,
-			'tng_delete_all'	=> true
-		));
-		add_role( 'Media Contributor', 'mcontrib', [ 'tng_add_media' => true ) );
-		add_role( 'Media Editor', 'meditor', [  
-			'tng_add_media' 	=> true,
-			'tng_edit_media' 	=> true,
-			'tng_delete_media' 	=> true
-		));
-*/
+		if(!empty($path)) {
+			add_option('family-roots-settings', ['tng_path' => $path]);
+			$utilities->get_tng_db_values();
+		}		
 	}
 	
 	/** 
