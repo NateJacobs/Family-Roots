@@ -8,59 +8,30 @@
  *	Author:			Nate Jacobs
  *	Author URI:		https://github.com/NateJacobs
  */
- 
-// This plugin builds upon the work by Mark Barnes in his TNG Wordpress Integration Plugin.
-// The original can be found at http://www.4-14.org.uk/wordpress-plugins/tng.
-
-familyRootsLoad::init();
 
 /** 
-*	Family Roots Load
-*
-*	This class sets up all the required files and constants for the plugin. 
-*
-*	@author		Nate Jacobs
-*	@date		10/28/12
-*	@since		0.1
-*/
-class familyRootsLoad
-{
+ *	This class sets up all the required files and constants for the plugin. 
+ *
+ *	@author		Nate Jacobs
+ *	@date		10/28/12
+ *	@since		0.1
+ */
+class FamilyRootsLoad {
 	/** 
- 	*	Initialize
- 	*
- 	*	Hook into WordPress and prepare all the methods as necessary.
- 	*
- 	*	@author		Nate Jacobs
- 	*	@date		10/28/12
- 	*	@since		0.1
- 	*
- 	*	@param		null
- 	*/
-  	public static function init()
- 	{
- 		add_action( 'plugins_loaded', array( __CLASS__, 'constants' ), 1 );
-		add_action( 'plugins_loaded', array( __CLASS__, 'includes' ), 2 );
-		add_action( 'plugins_loaded', array( __CLASS__, 'admin' ), 3 );
-		add_action( 'init', array( __CLASS__, 'localization' ) );
-		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
-		register_deactivation_hook( __FILE__, array( __CLASS__, 'deletion' ) );
+ 	 *	Hook into WordPress and prepare all the methods as necessary.
+ 	 *
+ 	 *	@author		Nate Jacobs
+ 	 *	@date		10/28/12
+ 	 *	@since		0.1
+ 	 */
+  	public function __construct() {
+ 		add_action( 'plugins_loaded', [ $this, 'constants' ], 1 );
+		add_action( 'plugins_loaded', [ $this, 'includes' ], 2 );
+		add_action( 'plugins_loaded', [ $this, 'admin' ], 3 );
+		add_action( 'init', [ $this, 'localization' ] );
+		register_activation_hook( __FILE__, [ $this, 'activation' ] );
+		register_deactivation_hook( __FILE__, [ $this, 'deletion' ] );
  	}
- 	
- 	/** 
- 	*	Localization
- 	*
- 	*	Add support for localization
- 	*
- 	*	@author		Nate Jacobs
- 	*	@date		10/28/12
- 	*	@since		1.0
- 	*
- 	*	@param		
- 	*/
- 	public function localization() 
- 	{
-  		load_plugin_textdomain( 'family-roots-integration', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' ); 
-	}
  	
 	/**
 	 *	Plugin Constants
@@ -70,11 +41,8 @@ class familyRootsLoad
 	 *	@author		Nate Jacobs
 	 *	@date		10/28/12
 	 *	@since 		0.1
-	 *
-	 *	@param		null
 	 */	
-	public function constants() 
-	{
+	public function constants() {
 		define( 'FAMROOTS_VERSION', '0.1' );
 		define( 'FAMROOTS_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'FAMROOTS_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
@@ -91,11 +59,8 @@ class familyRootsLoad
 	 *	@author		Nate Jacobs
 	 *	@date		10/28/12
 	 *	@since 		0.1
-	 *
-	 *	@param		null
 	 */
-	public function includes()
-	{
+	public function includes() {
 		require_once( FAMROOTS_INCLUDES . 'tool-bar.php' );
 		require_once( FAMROOTS_INCLUDES . 'tng-db.php' );
 		require_once( FAMROOTS_INCLUDES . 'utilities.php' );
@@ -111,41 +76,31 @@ class familyRootsLoad
 	 *	@author		Nate Jacobs
 	 *	@date		10/28/12
 	 *	@since 		0.1
-	 *
-     *	@param		null
 	 */
-	public function admin()
-	{
-		if ( is_admin() ) 
-		{
+	public function admin() {
+		if(is_admin()) {
 			require_once( FAMROOTS_ADMIN . 'settings.php' );
 		}
 	}
 	
 	/** 
-	*	Activation
-	*
-	*	Runs the method when the plugin is activated.
-	*	Attempts to locate the TNG file directory/path.
-	*	If the path is found: update the wp options db and get tng db values.
-	*	Add tng capabilities to WordPress administrator roles. Add new TNG roles
-	*
-	*	@author		Nate Jacobs
-	*	@date		10/28/12
-	*	@since		0.1
-	*
-	*	@param		null
-	*/
-	public function activation()
-	{
+	 *	Runs the method when the plugin is activated.
+	 *	Attempts to locate the TNG file directory/path.
+	 *	If the path is found: update the wp options db and get tng db values.
+	 *	Add tng capabilities to WordPress administrator roles. Add new TNG roles
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		10/28/12
+	 *	@since		0.1
+	 */
+	public function activation() {
 		include_once( plugin_dir_path( __FILE__ )."/inc/utilities.php" );
 		
 		$path = familyRootsUtilities::get_path();
 		
 		// if the path is not empty, add option to db
-		if( !empty( $path ) )
-		{
-			add_option( 'family-roots-settings', array( 'tng_path' => $path ) );
+		if( !empty( $path ) ) {
+			add_option( 'family-roots-settings', [ 'tng_path' => $path ) );
 			familyRootsUtilities::get_tng_db_values();
 		}
 		
@@ -154,8 +109,7 @@ class familyRootsLoad
 		$role = get_role( 'administrator' );
 		
 		// if there is an admin role
-		if ( !empty( $role ) ) 
-		{
+		if ( !empty( $role ) ) {
 			// add the tng admin capabilities to it
 			/*
 $role->add_cap( 'tng_add_all' );
@@ -173,15 +127,15 @@ $role->add_cap( 'tng_add_all' );
 		// add new WordPress roles to match the TNG roles with the applicable capabilities
 		/*
 add_role( 'Guest', 'guest' );
-		add_role( 'Submitter', 'subm', array( 'tng_submit_edit' => true  ) );
-		add_role( 'Contributor', 'contrib', array( 'tng_add_all' => true ) );
-		add_role( 'Editor', 'editor', array(  
+		add_role( 'Submitter', 'subm', [ 'tng_submit_edit' => true  ) );
+		add_role( 'Contributor', 'contrib', [ 'tng_add_all' => true ) );
+		add_role( 'Editor', 'editor', [  
 			'tng_add_all' 		=> true,
 			'tng_edit_all' 		=> true,
 			'tng_delete_all'	=> true
 		));
-		add_role( 'Media Contributor', 'mcontrib', array( 'tng_add_media' => true ) );
-		add_role( 'Media Editor', 'meditor', array(  
+		add_role( 'Media Contributor', 'mcontrib', [ 'tng_add_media' => true ) );
+		add_role( 'Media Editor', 'meditor', [  
 			'tng_add_media' 	=> true,
 			'tng_edit_media' 	=> true,
 			'tng_delete_media' 	=> true
@@ -190,19 +144,16 @@ add_role( 'Guest', 'guest' );
 	}
 	
 	/** 
-	*	Deletion
-	*
-	*	Runs the method when the plugin is deleted.
-	*
-	*	@author		Nate Jacobs
-	*	@date		11/20/12
-	*	@since		0.1
-	*
-	*	@param	null	
-	*/
-	public function deletion()
-	{
+	 *	Runs the method when the plugin is deleted.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		11/20/12
+	 *	@since		0.1
+	 */
+	public function deletion() {
 		// remove family-roots-settings, family-roots-users-settings, family-roots-advanced-settings
 		// remove roles and capabilities
 	}
 }
+
+$family_roots_load = new FamilyRootsLoad();
