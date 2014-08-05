@@ -16,7 +16,7 @@ class FamilyRootsToolbar {
  	 *	@since		0.1
  	 */
 	public function __construct() {
-		//add_action('wp_before_admin_bar_render', [$this, 'family_roots_menu']);
+		add_action('wp_before_admin_bar_render', [$this, 'family_roots_menu']);
 	}
 	
 	/** 

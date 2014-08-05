@@ -22,9 +22,9 @@ class FamilyRootsSettings {
  	 */
 	public function __construct() {
 		// add admin menu
-		add_action( 'admin_menu', [ $this, 'settings_menu' ] );
+		add_action('admin_menu', [$this, 'settings_menu']);
 		// add settings, sections, fields
-		add_action( 'admin_menu', [ $this, 'settings_init' ] );
+		add_action('admin_menu', [$this, 'settings_init']);
 	}
 	
 	/** 
