@@ -28,7 +28,6 @@ class FamilyRootsLoad {
  		add_action('plugins_loaded', [$this, 'constants'], 1);
 		add_action('plugins_loaded', [$this, 'includes'], 2);
 		add_action('plugins_loaded', [$this, 'admin'], 3);
-		add_action('init', [$this, 'localization']);
 		register_activation_hook(__FILE__, [$this, 'activation']);
 		register_deactivation_hook(__FILE__, [$this, 'deletion']);
  	}
@@ -101,7 +100,7 @@ class FamilyRootsLoad {
 		
 		// if the path is not empty, add option to db
 		if(!empty($path)) {
-			add_option('family-roots-settings', ['tng_path' => $path]);
+			add_option('family-roots-settings', ['tng_path' => trailingslashit($path)]);
 			$utilities->get_tng_db_values();
 		}		
 	}
