@@ -19,7 +19,7 @@ class FamilyRootsUtilities {
 	public function __construct() {
 		
 	}
-
+	
 	/** 
 	 *	Iterates through directory looking for three files present in the TNG install.
 	 *	If the three files are present and have the same path, the TNG file path is saved to the plugin options.

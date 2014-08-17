@@ -33,7 +33,7 @@ class FamilyRootsTNGDatabase {
 	 */
 	protected function connect() {
 		// get the tng db values from the wp options table
-		$settings = get_option('family-roots-tng-db');
+		$settings = get_option('family-roots-settings');
 
 		try {
 			// create a new wpdb object and return it
@@ -41,7 +41,8 @@ class FamilyRootsTNGDatabase {
 			return $tng_db;
 		} catch( Exception $e ) {
 			// any problems?
-			echo $e->getMessage();
+			$error = new WP_Error(500,$e->getMessage());
+			return $error;
 		}
 	}
 }

@@ -46,6 +46,9 @@ class FamilyRootsLoad {
 		define('FAMROOTS_URI', trailingslashit(plugin_dir_url(__FILE__)));
 		define('FAMROOTS_INCLUDES', FAMROOTS_DIR.trailingslashit('inc'));
 		define('FAMROOTS_ADMIN', FAMROOTS_DIR.trailingslashit('admin'));
+		define('FAMROOTS_TEMPLATES', FAMROOTS_DIR.trailingslashit('templates'));
+		define('FAMROOTS_FAMILY', FAMROOTS_DIR.trailingslashit('family'));
+		define('FAMROOTS_PERSON', FAMROOTS_DIR.trailingslashit('person'));
 	}
 	
 	/**
@@ -59,10 +62,13 @@ class FamilyRootsLoad {
 	 *	@since 		0.1
 	 */
 	public function includes() {
-		require_once(FAMROOTS_INCLUDES . 'tool-bar.php');
-		require_once(FAMROOTS_INCLUDES . 'tng-db.php');
-		require_once(FAMROOTS_INCLUDES . 'utilities.php');
-		require_once(FAMROOTS_INCLUDES . 'users.php');
+		require_once(FAMROOTS_INCLUDES . 'class-tool-bar.php');
+		require_once(FAMROOTS_INCLUDES . 'class-tng-db.php');
+		require_once(FAMROOTS_INCLUDES . 'class-rewrite-template.php');
+		require_once(FAMROOTS_INCLUDES . 'class-utilities.php');
+		require_once(FAMROOTS_FAMILY . 'class-family-query.php');
+		require_once(FAMROOTS_FAMILY . 'class-family.php');
+		//require_once(FAMROOTS_INCLUDES . 'users.php');
 	}
 	
 	/**
@@ -77,7 +83,7 @@ class FamilyRootsLoad {
 	 */
 	public function admin() {
 		if(is_admin()) {
-			require_once(FAMROOTS_ADMIN . 'settings.php');
+			require_once(FAMROOTS_ADMIN . 'class-settings.php');
 		}
 	}
 	
