@@ -70,10 +70,6 @@ class FamilyRootsSettings {
 					<?php
 				} 
 			?>
-			<?php $query = new TNG_Family_Query(); ?>
-			<?php echo '<pre>';
-			var_dump( $query->get_family_by_id('f1225') );
-			echo '</pre>'; ?>
 			<form action="options.php" method="POST">
 				<?php
 					settings_fields( 'family-roots-options' );
