@@ -21,6 +21,8 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	
 	public $children;
 	
+	public $siblings;
+	
 	/** 
 	 *	Start up the person class. 
 	 *
@@ -32,7 +34,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@param		array	$name	The person's first and last name
 	 */
 	public function __construct($id = 0, $name = []) {
-		if(!empty($id) && !is_numeric($id)) {
+		if(!empty($id) && (!is_numeric($id) && 'I' != substr($id, 0, 1))) {
 			$name = $id;
 			$id = 0;
 		}
@@ -51,6 +53,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 			$this->parents = $this->get_person_parents();
 			$this->children = $this->get_person_children();
 			$this->partners = $this->get_person_partners();
+			$this->siblings = $this->get_person_siblings();
 		}
 	}
 
@@ -74,14 +77,6 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		}
 		
 		if('id' === $field) {
-			if(!is_numeric($value)) {
-				return false;
-			}
-			
-			if($value < 1) {
-				return  false;
-			}
-			
 			if('I' === substr($value, 0, 1)) {
 				$value = $value;
 			} else {
@@ -174,7 +169,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 			}
 			
 			foreach($family as $family_group) {
-				$children_ids[] = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s", $family_group->familyID));
+				$children_ids[] = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
 			}
 			
 			$children = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($children_ids)), FALSE);
@@ -202,19 +197,98 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		}
 		$family_unit = $settings['db']->get_results($settings['db']->prepare("SELECT * FROM {$family_table} WHERE husband = %s OR wife = %s", $this->data->person_id, $this->data->person_id));
 		
-		foreach($family_unit as $key => $family) {
-			if($this->data->person_id === $family->husband) {
-				$partner[$key]['person_id'] = $family->wife;
+		if(!empty($family_unit)) {		
+			foreach($family_unit as $key => $family) {
+				if($this->data->person_id === $family->husband) {
+					$partner[$key]['person_id'] = $family->wife;
+				} elseif($this->data->person_id === $family->wife) {
+					$partner[$key]['person_id'] = $family->husband;
+				}
+				
 				$partner[$key]['family_id'] = $family->familyID;
-				$new_partner[] = (object) $partner[$key];
-			} elseif($this->data->person_id === $family->wife) {
-				$partner[$key]['person_id'] = $family->husband;
-				$partner[$key]['family_id'] = $family->familyID;
+				$partner[$key]['marriage_date'] = $family->marrdatetr;
+				$partner[$key]['marriage_place'] = $family->marrplace;
+				$partner[$key]['divorce_date'] = $family->divdatetr;
+				$partner[$key]['divorce_place'] = $family->divplace;
+				
 				$new_partner[] = (object) $partner[$key];
 			}
+		} else {
+			$new_partner = false;
+		}
+		return $new_partner;
+	}
+	
+	/** 
+	 *	Retrieve all the person's siblings.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/23/14
+	 *	@since		1.0
+	 */
+	public function get_person_siblings() {
+		if($this->has_parents()) {
+			$settings = $this->get_db_settings();
+			
+			$parents = $this->get_parents();
+			
+			$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+			
+			if(!$family_table) {
+				return false;
+			}
+			
+			$father = 'I' === substr($parents->father, 0, 1) ? $parents->father : 'I'.$parents->father;
+			$mother = 'I' === substr($parents->mother, 0, 1) ? $parents->mother : 'I'.$parents->mother;
+			
+			$family = $settings['db']->get_results($settings['db']->prepare("SELECT familyID FROM {$family_table} WHERE husband = %s OR wife = %s", $father, $mother));
+			
+			if(!empty($family)) {
+				$children_table = isset($settings['tables']['children_table']) ? $settings['tables']['children_table'] : false;
+				
+				if(!$children_table) {
+					return false;
+				}
+				
+				foreach($family as $family_group) {
+					$sibling_ids[] = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
+				}
+				
+				$siblings = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($sibling_ids)), FALSE);
+				
+				// remove the current person
+				$person_key = array_search($this->data->person_id, $siblings);
+				unset($siblings[$person_key]);
+			} else {
+				$siblings = false;
+			}
+			
+			return $siblings;
+		}
+	}
+	
+	/** 
+	 *	
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/23/14
+	 *	@since		1.0
+	 */
+	public function get_notes() {
+		$settings = $this->get_db_settings();
+		
+		$note_links_table = isset($settings['tables']['notelinks_table']) ? $settings['tables']['notelinks_table'] : false;
+		$xnotes_table = isset($settings['tables']['xnotes_table']) ? $settings['tables']['xnotes_table'] : false;
+		$event_table = isset($settings['tables']['events_table']) ? $settings['tables']['events_table'] : false;
+		$event_type_table = isset($settings['tables']['eventtypes_table']) ? $settings['tables']['eventtypes_table'] : false;
+				
+		if(!$note_links_table) {
+			return false;
 		}
 		
-		return $new_partner;
+		$notes = $settings['db']->get_results($settings['db']->prepare("SELECT display, $xnotes_table.note as note, $note_links_table.eventID as eventID, $note_links_table.xnoteID as xnoteID, $note_links_table.ID as ID, noteID FROM {$note_links_table} LEFT JOIN {$xnotes_table} on $note_links_table.xnoteID = $xnotes_table.ID LEFT JOIN {$event_table} ON $note_links_table.eventID = $event_table.eventID LEFT JOIN {$event_type_table} on $event_type_table.eventtypeID = $event_table.eventtypeID WHERE $note_links_table.persfamID = %s ORDER BY eventdatetr, $event_type_table.ordernum, tag, $note_links_table.ordernum, ID", $this->data->person_id));
+		
+		return $notes;
 	}
 	
 	/** 
@@ -229,7 +303,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
-	 *	Retrieve the value of a property from the person or events table.
+	 *	Retrieve the value of a property from the person or parents table.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/10/14
@@ -240,15 +314,9 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	public function __get($key) {
 		$value = false;
 		if(isset($this->data->$key)) {
-			$value[] = $this->data->$key;
+			$value = $this->data->$key;
 		} elseif(isset($this->parents->$key)) {
-			$value[] = $this->parents->$key;
-		} else {
-			foreach($this->events as $event) {
-				if(isset($event->$key)) {
-					$value[] = $event->$key;
-				}
-			}
+			$value = $this->parents->$key;
 		}
 		
 		return $value;
@@ -306,21 +374,6 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
-	 *	Determine whether a person has parents.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		8/17/14
-	 *	@since		1.0	
-	 */
-	public function has_parents() {
-		if(!empty($this->parents)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/** 
 	 *	Determine whether the user exists in the database.
 	 *
 	 *	@author		Nate Jacobs
@@ -354,6 +407,21 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
+	 *	Determine whether a person has parents.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0	
+	 */
+	public function has_parents() {
+		if(!empty($this->parents)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/** 
 	 *	Return the children array.
 	 *
 	 *	@author		Nate Jacobs
@@ -362,5 +430,72 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 */
 	public function get_children() {
 		return $this->children;
+	}
+	
+	/** 
+	 *	Determine whether a person has parents.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0	
+	 */
+	public function has_children() {
+		if(!empty($this->children)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/** 
+	 *	Return the partner array.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/23/14
+	 *	@since		1.0
+	 */
+	public function get_partners() {
+		return $this->partners;
+	}
+	
+	/** 
+	 *	Determine whether a person has parents.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0	
+	 */
+	public function has_partners() {
+		if(!empty($this->partners)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/** 
+	 *	Return the siblings array.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/27/14
+	 *	@since		1.0
+	 */
+	public function get_siblings() {
+		return $this->siblings;
+	}
+	
+	/** 
+	 *	Determine whether a person has siblings.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/27/14
+	 *	@since		1.0	
+	 */
+	public function has_siblings() {
+		if(!empty($this->siblings)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

@@ -239,6 +239,197 @@ class FamilyRootsUtilities {
 		
 		return $string;
 	}
+	
+	/** 
+	 *	Test if a person is living or not.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$living	A 1 to indicatge living or a 0 to indicate dead.
+	 */
+	public function is_living($living, $birth_date) {
+		if('0' == $living && '0000-00-00' != $birth_date){
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/** 
+	 *	Returns a nicely formatted date with day of week, month, day and year.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$date	The date to format.
+	 */
+	public function get_date_for_display($date) {
+		// if the birth date has just a year, e.g. 1950-00-00
+		if('00-00' === substr($date, 5, 5) && '0000' != substr($date, 0, 4)) {
+			$date_1 = substr_replace($date, "01-01", 5);
+			$date = date('Y', strtotime($date_1));
+		} else {
+			if('0000-00-00' == $date) {
+				$date = 'Unknown';
+			} else {
+				$date = date('l, F d, Y', strtotime($date));
+			}
+		}
+		
+		return $date;
+	}
+	
+	/** 
+	 *	Returns the gender full string.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$sex		The single character representation of the person's sex.
+	 */
+	public function get_sex_for_display($sex) {
+		switch($sex) {
+			case 'M':
+				$gender = 'Male';
+				break;
+			case 'F':
+				$gender = 'Female';
+				break;
+			default:
+				$gender = 'Unknown';
+				break;
+		}
+		
+		return $gender;
+	}
+	
+	/** 
+	 *	
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		
+	 */
+	public function get_child_type($sex) {
+		switch($sex) {
+			case 'M':
+				$type = 'Son';
+				break;
+			case 'F':
+				$type = 'Daughter';
+				break;
+			default:
+				$type = 'Unknown';
+				break;
+		}
+		
+		return $type;
+	}
+	
+	/** 
+	 *	
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		
+	 */
+	public function get_person_url($person) {
+		$id = substr($person->get('person_id'), 1);
+		
+		return trailingslashit(trailingslashit(home_url()).'genealogy/person/'.$id);
+	}
+	
+	/** 
+	 *	
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		
+	 */
+	public function get_person_age($birth_date, $death_date) {
+		// set default age
+		$age = 'Unknown';
+		
+		// if there is no birth date, can't calculate age
+		if('0000-00-00' == $birth_date) {
+			return $age;
+		}
+		
+		// if the birth date has just a year, e.g. 1950-00-00
+		if('00-00' === substr($birth_date, 5, 5) && '0000' != substr($birth_date, 0, 4)) {
+			$birth_date = substr_replace($birth_date, "01-01", 5);
+		}
+		
+		// if the death date has just a year, e.g. 1950-00-00
+		if('00-00' === substr($death_date, 5, 5) && '0000' != substr($death_date, 0, 4)){
+			$death_date = substr_replace($death_date, "01-01", 5);
+		}
+		
+		$from = new DateTime($birth_date);
+		
+		// if the death date is unknown, use today
+		if('0000-00-00' == $death_date) {
+			$to = new DateTime('today');
+		} else {
+			$to = new DateTime($death_date);
+		}
+		
+		$current_age = $from->diff($to)->y;
+		
+		// check if the person would be more than 120 years old
+		if('0000-00-00' == $death_date) {
+			// if so, return the age as unknown
+			if(120 < $current_age) {
+				$age = 'Unknown';
+			} else {
+				$age = $current_age;
+			}
+		} else {
+			$age = $current_age;
+		}
+		
+		
+		return $age;
+	}
+	
+	/** 
+	 *	Return the parent string.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/23/14
+	 *	@since		1.0
+	 *
+	 *	@param		object	$person	The TNG_Person object
+	 */
+	public function get_parent_template($person) {
+		$father = !empty($person->get('father')) ? new TNG_Person($person->get('father')) : null;
+		$mother = !empty($person->get('mother')) ? new TNG_Person($person->get('mother')) : null;
+		
+		$father_name = is_null($father) ? null : '<a href="'.$this->get_person_url($father).'">'.$father->get('first_name').' '.$father->get('last_name').'</a>';
+		$mother_name = is_null($mother) ? null : '<a href="'.$this->get_person_url($mother).'">'.$mother->get('first_name').' '.$mother->get('last_name').'</a>';
+
+		$child_type = $this->get_child_type($person->get('sex'));
+		
+		if(is_null($father_name)) {
+			$parents = $child_type.' of '.$mother_name;
+		} elseif(is_null($mother_name)) {
+			$parents = $child_type.' of '.$father_name;
+		} else {
+			$parents = $child_type.' of '.$father_name.' and '.$mother_name;
+		}
+		
+		return $parents;
+	}
 }
 
 $family_roots_utilities = new FamilyRootsUtilities();
