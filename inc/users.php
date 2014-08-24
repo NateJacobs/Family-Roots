@@ -7,7 +7,7 @@
  *	@date		11/17/12
  *	@since		0.1
  */
-class FamilyRootsUserManagement extends familyRootsTNGDatabase {
+class FamilyRootsUserManagement extends FamilyRootsTNGDatabase {
 	/** 
 	 *	Hook into WordPress and prepare all the methods as necessary.
 	 *
