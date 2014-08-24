@@ -32,12 +32,12 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 	 *	@param		
 	 */
 	public function __construct($id = 0) {
-		if(!empty($id) && !is_numeric($id)) {
+		if(!empty($id) && (!is_numeric($id) && 'F' != substr($id, 0, 1))) {
 			$id = 0;
 		}
 		
 		if($id) {
-			$data = get_family_data($id);
+			$data = $this->get_family_data($id);
 		}
 		
 		if($data) {
