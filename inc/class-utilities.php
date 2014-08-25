@@ -389,9 +389,11 @@ class FamilyRootsUtilities {
 		// check if the person would be more than 120 years old
 		if('0000-00-00' == $death_date) {
 			// if so, return the age as unknown
-			if(120 < $current_age) {
+			if(115 < $current_age) {
 				$age = 'Unknown';
-			} else {
+			} elseif(0 === $current_age) {
+				$age = $from->diff($to)->m.' months';
+			}else {
 				$age = $current_age;
 			}
 		} else {
