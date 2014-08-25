@@ -47,8 +47,8 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		
 		if($data) {
 			$this->data = $data;
-			$this->ID = $data->ID;
-			$this->events = $this->get_events_by_id();
+			$this->ID = (int) $data->ID;
+			$this->events = $this->get_person_events();
 			unset($this->events[0]);
 			$this->parents = $this->get_person_parents();
 			$this->children = $this->get_person_children();
@@ -100,7 +100,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@date		8/17/14
 	 *	@since		1.0
 	 */
-	private function get_events_by_id() {
+	private function get_person_events() {
 		$settings = $this->get_db_settings();
 		
 		$event_table = isset($settings['tables']['events_table']) ? $settings['tables']['events_table'] : false;
@@ -110,8 +110,10 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		}
 		
 		$event_type_table = isset($settings['tables']['eventtypes_table']) ? $settings['tables']['eventtypes_table'] : false;
+		$note_links_table = isset($settings['tables']['notelinks_table']) ? $settings['tables']['notelinks_table'] : false;
+		$xnotes_table = isset($settings['tables']['xnotes_table']) ? $settings['tables']['xnotes_table'] : false;
 		
-		return  $settings['db']->get_results($settings['db']->prepare("SELECT t1.eventdatetr AS event_date, t1.eventplace AS event_place, t1.age, t1.info, t2.eventtypeID AS event_type_id, t2.description, t2.display FROM {$event_table} AS t1 LEFT JOIN {$event_type_table} AS t2 ON t1.eventtypeID = t2.eventtypeID WHERE persfamID = %s", $this->data->person_id));
+		return $settings['db']->get_results($settings['db']->prepare("SELECT t1.eventdatetr AS event_date, t1.eventplace AS event_place, t1.age, t1.info, t2.eventtypeID AS event_type_id, t2.description, t2.display, t4.note FROM {$event_table} AS t1 LEFT JOIN {$event_type_table} AS t2 ON t1.eventtypeID = t2.eventtypeID LEFT JOIN {$note_links_table} AS t3 ON t3.eventID = t1.eventID LEFT JOIN {$xnotes_table} AS t4 on t3.xnoteID = t4.ID WHERE t1.persfamID = %s", $this->data->person_id));
 	}
 	
 	/** 
@@ -347,6 +349,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		
 		return $return;
 	}
+	
 	/** 
 	 *	Retrieve the value of a property from the person or events table.
 	 *
@@ -433,7 +436,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
-	 *	Determine whether a person has parents.
+	 *	Determine whether a person has children.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/17/14

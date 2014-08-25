@@ -41,7 +41,7 @@
 							<?php $partner_object = new TNG_Person($partner->person_id);?>
 							<?php $married = '0000-00-00' != $partner->marriage_date ? ' &mdash; Married '.$utilities->get_date_for_display($partner->marriage_date).' &mdash; '.$partner->marriage_place : '' ?>
 							<?php $divorced = '0000-00-00' != $partner->divorce_date ? ' &mdash; Divorced '.$utilities->get_date_for_display($partner->divorce_date).' &mdash; '.$partner->divorce_place : '' ?>
-							<a href="<?php echo $utilities->get_person_url($partner_object); ?>"><?php echo $partner_object->get('first_name').' '.$partner_object->get('last_name'); ?></a> (<a href="<?php echo trailingslashit(home_url('genealogy/family/').substr($person->family_id, 1)); ?>">Family Details</a>)<?php echo $married; ?>
+							<a href="<?php echo $utilities->get_person_url($partner_object); ?>"><?php echo $partner_object->get('first_name').' '.$partner_object->get('last_name'); ?></a> &ndash; <a href="<?php echo trailingslashit(home_url('genealogy/family/').substr($partner->family_id, 1)); ?>">Family Details</a><?php echo $married.' '.$divorced; ?>
 							<br>
 						<?php endif; ?>
 					<?php endforeach; ?>
@@ -104,6 +104,7 @@
 									<?php echo $utilities->get_date_for_display($event->event_date); ?>
 								<?php endif; ?>
 							</p>
+							<p><?php echo $event->note; ?></p>
 							<p><?php echo $event->event_place; ?></p>
 						</div>
 					</div>
