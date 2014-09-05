@@ -49,7 +49,6 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 			$this->data = $data;
 			$this->ID = (int) $data->ID;
 			$this->events = $this->get_person_events();
-			unset($this->events[0]);
 			$this->parents = $this->get_person_parents();
 			$this->children = $this->get_person_children();
 			$this->partners = $this->get_person_partners();
