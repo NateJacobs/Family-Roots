@@ -31,7 +31,7 @@ class FamilyRootsTNGDatabase {
 	 * 
 	 * 	@todo	Create better error handling
 	 */
-	protected function connect() {
+	public function connect() {
 		// get the tng db values from the wp options table
 		$settings = get_option('family-roots-settings');
 
