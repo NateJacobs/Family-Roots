@@ -9,6 +9,9 @@
  */
 class FamilyRootsUtilities {
 	
+	public $db;
+	public $settings;
+	
 	/** 
  	 *	Hook into WordPress and prepare all the methods as necessary.
  	 *
@@ -17,7 +20,8 @@ class FamilyRootsUtilities {
  	 *	@since		0.1
  	 */
 	public function __construct() {
-		
+		$this->db = new FamilyRootsTNGDatabase();
+		$this->settings = get_option('family-roots-settings');
 	}
 	
 	/** 
@@ -342,7 +346,15 @@ class FamilyRootsUtilities {
 	 *	@param		
 	 */
 	public function get_person_url($person) {
-		$id = substr($person->get('person_id'), 1);
+		if($person instanceof TNG_PERSON) {
+			$id = substr($person->get('person_id'), 1);
+		} elseif(is_numeric($person)) {
+			$id = $person;
+		} elseif('I' === substr($person, 0, 1)) {
+			$id = substr($person, 1);
+		} else {
+			$id = 0;
+		}
 		
 		return trailingslashit(trailingslashit(home_url()).'genealogy/person/'.$id);
 	}
@@ -431,6 +443,81 @@ class FamilyRootsUtilities {
 		}
 		
 		return $parents;
+	}
+	
+	/** 
+	 *	Return a surname tag cloud.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/3/14
+	 *	@since		1.0
+	 *
+	 *	@param		int	$threshold	The minimum number of people with a surname required to show in tag cloud.
+	 */
+	public function get_lastname_cloud($threshold = 15)
+	{	
+		$person_table = isset($this->settings['people_table']) ? $$this->settings['people_table'] : false;
+		
+		if(!$person_table) {
+			return  false;
+		}
+		
+		$last_names = $this->db->connect()->get_results("SELECT lastname FROM {$person_table} WHERE lastname IS NOT NULL AND lastname != ' '");
+		
+		$output = array_map(function ($last_names) { return $last_names->lastname; }, $last_names);
+		$last_names = implode(' ', $output);
+		
+		$frequency = [];
+		
+		foreach(str_word_count($last_names, 1) as $word) {
+			// For each word found in the frequency table, increment its value by one
+			array_key_exists($word, $frequency) ? $frequency[ $word ]++ : $frequency[ $word ] = 0;
+		}
+		
+		$minFontSize = 12;
+		$maxFontSize = 30;
+		
+		$minimumCount = min(array_values($frequency));
+		$maximumCount = max(array_values($frequency));
+		$spread = $maximumCount - $minimumCount;
+		$cloudHTML = '';
+		$cloudTags = [];
+	 
+		$spread == 0 && $spread = 1;
+	 
+		foreach($frequency as $tag => $count)
+		{
+			if($count > $threshold) {
+				$size = $minFontSize + ($count - $minimumCount) * ($maxFontSize - $minFontSize) / $spread;
+				$cloudTags[] = '<a style="font-size: ' . floor($size) . 'px' 
+				. '" class="surname_cloud" href="'.home_url('genealogy/lastname/').$tag 
+				. '" title="'.$count.' people">' 
+				. htmlspecialchars(stripslashes($tag)).'</a>';
+			}
+		}
+	 
+		return join(' ', $cloudTags);
+	}
+	
+	/** 
+	 *	Return an array of all the people with the specified last name.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/4/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$last_name	The last name to search for.
+	 */
+	public function get_people_from_last_name($last_name) {
+		$person_table = isset($this->settings['people_table']) ? $this->settings['people_table'] : false;
+		
+		if(!$person_table) {
+			return false;
+		}
+		
+		$people = $this->db->connect()->get_results($this->db->connect()->prepare("SELECT personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, sex, famc FROM {$person_table} WHERE lastname = %s", $last_name));
+		
+		return $people;
 	}
 }
 
