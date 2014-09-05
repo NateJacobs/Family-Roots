@@ -92,6 +92,7 @@
 			<?php $events = $person->get_events(); ?>
 			<?php $event_iterator = 0; ?>
 			<?php foreach($events as $event): ?>
+				<?php if($event->display != '_UID'): ?>
 				<div class="col-xs-12 col-md-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -109,6 +110,7 @@
 						</div>
 					</div>
 				</div>
+				<?php endif; ?>
 				<?php $event_iterator++; ?>
 				<?php if( $event_iterator % 3 == 0 ): ?>
 					<div class="clearfix"></div>
