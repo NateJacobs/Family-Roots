@@ -508,16 +508,17 @@ class FamilyRootsUtilities {
 	 *
 	 *	@param		string	$last_name	The last name to search for.
 	 */
-	public function get_people_from_last_name($last_name) {
-		$person_table = isset($this->settings['people_table']) ? $this->settings['people_table'] : false;
+	public function get_people_from_last_name($vars) {
+		$defaults = [
+			'search_columns' => ['last_name'],
+			'fields' => 'all'
+		];
 		
-		if(!$person_table) {
-			return false;
-		}
+		$args = wp_parse_args($vars, $defaults);
 		
-		$people = $this->db->connect()->get_results($this->db->connect()->prepare("SELECT personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, sex, famc FROM {$person_table} WHERE lastname = %s", $last_name));
+		$search = new TNG_Person_Query($args);
 		
-		return $people;
+		return $search;
 	}
 }
 
