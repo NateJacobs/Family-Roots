@@ -261,7 +261,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
-	 *	
+	 *	Get all the notes for the person.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/23/14
@@ -280,6 +280,27 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 		$notes = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT display, $xnotes_table.note as note, $note_links_table.eventID as eventID, $note_links_table.xnoteID as xnoteID, $note_links_table.ID as ID, noteID FROM {$note_links_table} LEFT JOIN {$xnotes_table} on $note_links_table.xnoteID = $xnotes_table.ID LEFT JOIN {$event_table} ON $note_links_table.eventID = $event_table.eventID LEFT JOIN {$event_type_table} on $event_type_table.eventtypeID = $event_table.eventtypeID WHERE $note_links_table.persfamID = %s ORDER BY eventdatetr, $event_type_table.ordernum, tag, $note_links_table.ordernum, ID", $this->data->person_id));
 		
 		return $notes;
+	}
+	
+	/** 
+	 *	Get all the media for the person.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/5/14
+	 *	@since		1.0
+	 */
+	public function get_media() {
+		$media_links_table = isset($this->settings['tables']['media_links_table']) ? $this->settings['tables']['media_links_table'] : false;
+		
+		$media_table = isset($this->settings['tables']['media_table']) ? $this->settings['tables']['media_table'] : false;
+		
+		if(!$media_links_table) {
+			return false;
+		}
+		
+		$media = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT $media_table.path AS media_path, $media_table.thumbpath AS thumb_path, $media_table.mediatypeID AS media_type, $media_table.description FROM {$media_links_table} LEFT JOIN {$media_table} ON $media_table.mediaID = $media_links_table.mediaID WHERE $media_links_table.personID = %s", $this->data->person_id));
+		
+		return $media;
 	}
 	
 	/** 

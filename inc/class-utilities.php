@@ -173,19 +173,34 @@ class FamilyRootsUtilities {
 					$settings['trees_table'] = $this->split_value($line);
 				}
 				
-				// is it the $trees_table value?
-				if(substr(trim($line), 0, 12) == '$trees_table') {
-					$settings['trees_table'] = $this->split_value($line);
-				}
-				
 				// is it the $defaulttree value?
 				if(substr(trim($line), 0, 12) == '$defaulttree') {
 					$settings['default_tree'] = $this->split_value($line);
 				}
 				
+				// is it the $tngconfig['media_table'] value?
+				if(substr(trim($line), 0, 12) == '$media_table') {
+					$settings['media_table'] = $this->split_value($line);
+				}
+				
+				// is it the $tngconfig['medialinks_table'] value?
+				if(substr(trim($line), 0, 17) == '$medialinks_table') {
+					$settings['media_links_table'] = $this->split_value($line);
+				}
+				
 				// is it the $tngconfig['password_type'] value?
 				if(substr(trim($line), 12, 13) == 'password_type') {
 					$settings['password_type'] = $this->split_value($line);
+				}
+				
+				// is it the $tngconfig['tngdomain'] value?
+				if(substr(trim($line), 0, 10) == '$tngdomain') {
+					$settings['tng_domain'] = $this->split_value($line);
+				}
+				
+				// is it the $tngconfig['photopath'] value?
+				if(substr(trim($line), 0, 10) == '$photopath') {
+					$settings['photo_dir'] = $this->split_value($line);
 				}
 			}
 						
@@ -519,6 +534,53 @@ class FamilyRootsUtilities {
 		$search = new TNG_Person_Query($args);
 		
 		return $search;
+	}
+	
+	/** 
+	 *	Return the url for the photo requested.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/5/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$file_name	The media file name.
+	 */
+	public function get_photo_url($file_name) {
+		$photo_dir = isset($this->settings['photo_dir']) ? $this->settings['photo_dir'] : false;
+		$tng_domain = isset($this->settings['tng_domain']) ? $this->settings['tng_domain'] : false;
+		
+		if(!$photo_dir) {
+			return  false;
+		}
+		
+		return trailingslashit($tng_domain).trailingslashit($photo_dir).rawurlencode($file_name);
+	}
+	
+	/** 
+	 *	Return the first photo for a person.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/6/14
+	 *	@since		1.0
+	 *
+	 *	@param		object	$person	A TNG_Person object
+	 */
+	public function get_person_photo($person) {
+		$media = $person->get_media();
+		
+		foreach($media as $item) {
+			if('photos' == $item->media_type) {
+				$photos[] = $item->media_path;
+			}
+		}
+		
+		if(empty($photos)) {
+			$url = false;
+		} else {
+			$url = $this->get_photo_url($photos[0]);
+		}
+		
+		return $url;
 	}
 }
 
