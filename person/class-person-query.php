@@ -49,7 +49,7 @@ class TNG_Person_Query extends FamilyRootsTNGDatabase {
 	 *	@date		8/31/14
 	 *	@since		1.0
 	 *
-	 *	@param		array	$query	The requested variables
+	 *	@param		array	$query	The requested variables.
 	 */
 	public function prepare_query($query) {	
 		if(empty($this->query_vars) || ! empty($query)) {
