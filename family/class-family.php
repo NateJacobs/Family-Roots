@@ -1,8 +1,5 @@
 <?php
 
-// get by family id, husband id, wife id
-// return array with TNG_Person objects 
-
 /** 
  *	TNG family class.
  *
@@ -18,8 +15,10 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 	
 	public $children;
 	
+	private $settings;
+	
 	/** 
-	 *	 
+	 *	Start up the family class.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/10/14
@@ -32,6 +31,8 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 			$id = 0;
 		}
 		
+		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
+		
 		if($id) {
 			$data = $this->get_family_parents($id);
 		}
@@ -41,17 +42,6 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 			$this->ID = (int) $id;
 			$this->children = $this->get_family_children();
 		}
-	}
-	
-	/** 
-	 *	Get the database connection and family-roots settings.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		8/17/14
-	 *	@since		1.0
-	 */
-	private function get_db_settings() {
-		return ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
 	}
 	
 	/** 
@@ -84,15 +74,13 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 	 *	@param		string	$id	The family ID.
 	 */
 	protected function get_family_parents($id) {
-		$settings = $this->get_db_settings();
-		
-		$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 		
 		if(!$family_table) {
 			return false;
 		}
 		
-		$family = $settings['db']->get_row($settings['db']->prepare("SELECT * FROM {$family_table} WHERE $family_table.familyID = %s", $this->add_id_prefix($id)));
+		$family = $this->settings['db']->get_row($this->settings['db']->prepare("SELECT * FROM {$family_table} WHERE $family_table.familyID = %s", $this->add_id_prefix($id)));
 		
 		if(!is_null($family)) {
 			return (object) [
@@ -116,15 +104,13 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	protected function get_family_children() {
-		$settings = $this->get_db_settings();
-		
-		$children_table = isset($settings['tables']['children_table']) ? $settings['tables']['children_table'] : false;
+		$children_table = isset($this->settings['tables']['children_table']) ? $this->settings['tables']['children_table'] : false;
 		
 		if(!$children_table) {
 			return false;
 		}
 		
-		$children = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $this->add_id_prefix($this->ID)));
+		$children = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $this->add_id_prefix($this->ID)));
 		
 		$children = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($children)), FALSE);
 		

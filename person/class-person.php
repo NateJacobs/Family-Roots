@@ -17,6 +17,8 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	
 	public $parents;
 	
+	private $settings;
+	
 	public $partners;
 	
 	public $children;
@@ -38,6 +40,8 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 			$name = $id;
 			$id = 0;
 		}
+		
+		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
 		
 		if($id) {
 			$data = $this->get_data_by('id', $id);
@@ -67,9 +71,7 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@param		string	$value	The value to search for.
 	 */
 	private function get_data_by($field, $value) {
-		$settings = $this->get_db_settings();
-		
-		$person_table = isset($settings['tables']['people_table']) ? $settings['tables']['people_table'] : false;
+		$person_table = isset($this->settings['tables']['people_table']) ? $this->settings['tables']['people_table'] : false;
 		
 		if(!$person_table) {
 			return  false;
@@ -82,12 +84,12 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 				$value = 'I'.$value;
 			}
 			
-			return  $settings['db']->get_row( 
-				$settings['db']->prepare("SELECT ID, personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, burialdatetr AS burial_date, burialplace AS burial_place, baptdatetr AS baptism_date, baptplace AS baptism_place, changedate AS change_date, nickname, title, prefix, suffix, famc AS family_id, living FROM {$person_table} WHERE personID = %s", $value)
+			return  $this->settings['db']->get_row( 
+				$this->settings['db']->prepare("SELECT ID, personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, burialdatetr AS burial_date, burialplace AS burial_place, baptdatetr AS baptism_date, baptplace AS baptism_place, changedate AS change_date, nickname, title, prefix, suffix, famc AS family_id, living FROM {$person_table} WHERE personID = %s", $value)
 			);
 		} elseif('name' === $field) {
-			return  $settings['db']->get_row( 
-				$settings['db']->prepare("SELECT * FROM {$person_table} WHERE firstname = %s AND lastname = %s", sanitize_user($value['first']), sanitize_user($value['last']))
+			return  $this->settings['db']->get_row( 
+				$this->settings['db']->prepare("SELECT * FROM {$person_table} WHERE firstname = %s AND lastname = %s", sanitize_user($value['first']), sanitize_user($value['last']))
 			);
 		}
 	}
@@ -100,19 +102,17 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	private function get_person_events() {
-		$settings = $this->get_db_settings();
-		
-		$event_table = isset($settings['tables']['events_table']) ? $settings['tables']['events_table'] : false;
+		$event_table = isset($this->settings['tables']['events_table']) ? $this->settings['tables']['events_table'] : false;
 		
 		if(!$event_table) {
 			return false;
 		}
 		
-		$event_type_table = isset($settings['tables']['eventtypes_table']) ? $settings['tables']['eventtypes_table'] : false;
-		$note_links_table = isset($settings['tables']['notelinks_table']) ? $settings['tables']['notelinks_table'] : false;
-		$xnotes_table = isset($settings['tables']['xnotes_table']) ? $settings['tables']['xnotes_table'] : false;
+		$event_type_table = isset($this->settings['tables']['eventtypes_table']) ? $this->settings['tables']['eventtypes_table'] : false;
+		$note_links_table = isset($this->settings['tables']['notelinks_table']) ? $this->settings['tables']['notelinks_table'] : false;
+		$xnotes_table = isset($this->settings['tables']['xnotes_table']) ? $this->settings['tables']['xnotes_table'] : false;
 		
-		return $settings['db']->get_results($settings['db']->prepare("SELECT t1.eventdatetr AS event_date, t1.eventplace AS event_place, t1.age, t1.info, t2.eventtypeID AS event_type_id, t2.description, t2.display, t4.note FROM {$event_table} AS t1 LEFT JOIN {$event_type_table} AS t2 ON t1.eventtypeID = t2.eventtypeID LEFT JOIN {$note_links_table} AS t3 ON t3.eventID = t1.eventID LEFT JOIN {$xnotes_table} AS t4 on t3.xnoteID = t4.ID WHERE t1.persfamID = %s", $this->data->person_id));
+		return $this->settings['db']->get_results($this->settings['db']->prepare("SELECT t1.eventdatetr AS event_date, t1.eventplace AS event_place, t1.age, t1.info, t2.eventtypeID AS event_type_id, t2.description, t2.display, t4.note FROM {$event_table} AS t1 LEFT JOIN {$event_type_table} AS t2 ON t1.eventtypeID = t2.eventtypeID LEFT JOIN {$note_links_table} AS t3 ON t3.eventID = t1.eventID LEFT JOIN {$xnotes_table} AS t4 on t3.xnoteID = t4.ID WHERE t1.persfamID = %s", $this->data->person_id));
 	}
 	
 	/** 
@@ -123,16 +123,14 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function get_person_parents() {
-		$settings = $this->get_db_settings();
-		
-		$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 		
 		if(!$family_table) {
 			return false;
 		}
 		
 		if(!empty($this->data->family_id)) {
-			$family = $settings['db']->get_row($settings['db']->prepare("SELECT * FROM {$family_table} WHERE familyID = %s", $this->data->family_id));
+			$family = $this->settings['db']->get_row($this->settings['db']->prepare("SELECT * FROM {$family_table} WHERE familyID = %s", $this->data->family_id));
 			return (object) [
 				'father' => substr($family->husband, 1),
 				'mother' => substr($family->wife, 1),
@@ -152,25 +150,23 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function get_person_children() {
-		$settings = $this->get_db_settings();
-		
-		$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 		
 		if(!$family_table) {
 			return false;
 		}
 		
-		$family = $settings['db']->get_results($settings['db']->prepare("SELECT familyID FROM {$family_table} WHERE husband = %s OR wife = %s", $this->data->person_id, $this->data->person_id));
+		$family = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT familyID FROM {$family_table} WHERE husband = %s OR wife = %s", $this->data->person_id, $this->data->person_id));
 		
 		if(!empty($family)) {
-			$children_table = isset($settings['tables']['children_table']) ? $settings['tables']['children_table'] : false;
+			$children_table = isset($this->settings['tables']['children_table']) ? $this->settings['tables']['children_table'] : false;
 			
 			if(!$children_table) {
 				return false;
 			}
 			
 			foreach($family as $family_group) {
-				$children_ids[] = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
+				$children_ids[] = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
 			}
 			
 			$children = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($children_ids)), FALSE);
@@ -189,14 +185,12 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function get_person_partners() {
-		$settings = $this->get_db_settings();
-		
-		$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 		
 		if(!$family_table) {
 			return false;
 		}
-		$family_unit = $settings['db']->get_results($settings['db']->prepare("SELECT * FROM {$family_table} WHERE husband = %s OR wife = %s", $this->data->person_id, $this->data->person_id));
+		$family_unit = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT * FROM {$family_table} WHERE husband = %s OR wife = %s", $this->data->person_id, $this->data->person_id));
 		
 		if(!empty($family_unit)) {		
 			foreach($family_unit as $key => $family) {
@@ -229,11 +223,9 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 */
 	public function get_person_siblings() {
 		if($this->has_parents()) {
-			$settings = $this->get_db_settings();
-			
 			$parents = $this->get_parents();
 			
-			$family_table = isset($settings['tables']['family_table']) ? $settings['tables']['family_table'] : false;
+			$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 			
 			if(!$family_table) {
 				return false;
@@ -242,17 +234,17 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 			$father = 'I' === substr($parents->father, 0, 1) ? $parents->father : 'I'.$parents->father;
 			$mother = 'I' === substr($parents->mother, 0, 1) ? $parents->mother : 'I'.$parents->mother;
 			
-			$family = $settings['db']->get_results($settings['db']->prepare("SELECT familyID FROM {$family_table} WHERE husband = %s OR wife = %s", $father, $mother));
+			$family = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT familyID FROM {$family_table} WHERE husband = %s OR wife = %s", $father, $mother));
 			
 			if(!empty($family)) {
-				$children_table = isset($settings['tables']['children_table']) ? $settings['tables']['children_table'] : false;
+				$children_table = isset($this->settings['tables']['children_table']) ? $this->settings['tables']['children_table'] : false;
 				
 				if(!$children_table) {
 					return false;
 				}
 				
 				foreach($family as $family_group) {
-					$sibling_ids[] = $settings['db']->get_results($settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
+					$sibling_ids[] = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT personID AS person FROM {$children_table} WHERE familyID = %s ORDER BY ordernum", $family_group->familyID));
 				}
 				
 				$siblings = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($sibling_ids)), FALSE);
@@ -276,31 +268,18 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function get_notes() {
-		$settings = $this->get_db_settings();
-		
-		$note_links_table = isset($settings['tables']['notelinks_table']) ? $settings['tables']['notelinks_table'] : false;
-		$xnotes_table = isset($settings['tables']['xnotes_table']) ? $settings['tables']['xnotes_table'] : false;
-		$event_table = isset($settings['tables']['events_table']) ? $settings['tables']['events_table'] : false;
-		$event_type_table = isset($settings['tables']['eventtypes_table']) ? $settings['tables']['eventtypes_table'] : false;
+		$note_links_table = isset($this->settings['tables']['notelinks_table']) ? $this->settings['tables']['notelinks_table'] : false;
+		$xnotes_table = isset($this->settings['tables']['xnotes_table']) ? $this->settings['tables']['xnotes_table'] : false;
+		$event_table = isset($this->settings['tables']['events_table']) ? $this->settings['tables']['events_table'] : false;
+		$event_type_table = isset($this->settings['tables']['eventtypes_table']) ? $this->settings['tables']['eventtypes_table'] : false;
 				
 		if(!$note_links_table) {
 			return false;
 		}
 		
-		$notes = $settings['db']->get_results($settings['db']->prepare("SELECT display, $xnotes_table.note as note, $note_links_table.eventID as eventID, $note_links_table.xnoteID as xnoteID, $note_links_table.ID as ID, noteID FROM {$note_links_table} LEFT JOIN {$xnotes_table} on $note_links_table.xnoteID = $xnotes_table.ID LEFT JOIN {$event_table} ON $note_links_table.eventID = $event_table.eventID LEFT JOIN {$event_type_table} on $event_type_table.eventtypeID = $event_table.eventtypeID WHERE $note_links_table.persfamID = %s ORDER BY eventdatetr, $event_type_table.ordernum, tag, $note_links_table.ordernum, ID", $this->data->person_id));
+		$notes = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT display, $xnotes_table.note as note, $note_links_table.eventID as eventID, $note_links_table.xnoteID as xnoteID, $note_links_table.ID as ID, noteID FROM {$note_links_table} LEFT JOIN {$xnotes_table} on $note_links_table.xnoteID = $xnotes_table.ID LEFT JOIN {$event_table} ON $note_links_table.eventID = $event_table.eventID LEFT JOIN {$event_type_table} on $event_type_table.eventtypeID = $event_table.eventtypeID WHERE $note_links_table.persfamID = %s ORDER BY eventdatetr, $event_type_table.ordernum, tag, $note_links_table.ordernum, ID", $this->data->person_id));
 		
 		return $notes;
-	}
-	
-	/** 
-	 *	Get the database connection and family-roots settings.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		8/17/14
-	 *	@since		1.0
-	 */
-	private function get_db_settings() {
-		return ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
 	}
 	
 	/** 
