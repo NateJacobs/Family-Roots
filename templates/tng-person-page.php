@@ -3,7 +3,11 @@
 <?php $utilities = new FamilyRootsUtilities() ?>
 <div class="media">
 	<span class="pull-left" href="#">
-		<img class="media-object img-rounded" src="http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=200" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
+		<?php if(!$utilities->get_person_photo($person)): ?>
+			<img class="media-object img-rounded" src="http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=200" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
+		<?php else: ?>
+			<img class="media-object img-rounded" src="<?php echo $utilities->get_person_photo($person); ?>" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
+		<?php endif; ?>
 	</span>
 	<div class="media-body">
 		<h2 class="media-heading"><?php echo $person->get('first_name').' '.$person->get('last_name'); ?></h2>
@@ -121,29 +125,27 @@
 	<div class="tab-pane" id="media">
 		<div class="row">
 			<br>
-			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
-					<img src="http://placehold.it/350x250" alt="...">
-				</a>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
-					<img src="http://placehold.it/350x250" alt="...">
-				</a>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
-					<img src="http://placehold.it/350x250" alt="...">
-				</a>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
-					<img src="http://placehold.it/350X250" alt="...">
-				</a>
-			</div>
+			<?php $media_iterator = 0; ?>
+			<?php foreach($person->get_media() as $media): ?>
+				<?php if($media->media_type == 'photos'): ?>
+				<div class="col-xs-6 col-md-3">
+					<div class="thumbnail">
+						<img src="<?php echo $utilities->get_photo_url($media->media_path); ?>" alt="...">
+					</div>
+					<figure class="bg-warning caption">
+						<figcaption class="wp-caption-text"><?php echo $media->description; ?></figcaption>
+					</figure>
+				</div>
+				<?php endif; ?>
+				<?php $event_iterator++; ?>
+				<?php if( $event_iterator % 4 == 0 ): ?>
+					<div class="clearfix"></div>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </div>
+<br>
 <h4>Notes</h4>
 <div class="row">
 	<?php $notes = $person->get_notes(); ?>
