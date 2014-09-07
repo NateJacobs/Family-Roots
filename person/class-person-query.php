@@ -276,7 +276,7 @@ class TNG_Person_Query extends FamilyRootsTNGDatabase {
 		$searches = [];
 		$leading_wild = ('leading' == $wild || 'both' == $wild) ? '%' : '';
 		$trailing_wild = ('trailing' == $wild || 'both' == $wild) ? '%' : '';
-		$like = $leading_wild.$db->esc_like($string).$trailing_wild;
+		$like = $leading_wild.$this->settings['db']->esc_like($string).$trailing_wild;
 
 		$date_fields = [
 			'birth_date',
