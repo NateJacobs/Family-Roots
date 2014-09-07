@@ -29,15 +29,16 @@ class FamilyRootsToolbar {
 	public function family_roots_menu() {
 		global $wp_admin_bar;
 		
-		$wp_admin_bar->add_menu([
+		$wp_admin_bar->add_node([
 			'id' => 'family-roots-menu',
-			'title' => __('TNG', 'family-roots-integration'),
+			'title' => __('Genealogy', 'family-roots-integration'),
 		]);
 		
-		$wp_admin_bar->add_menu([
+		$wp_admin_bar->add_node([
 			'id' => 'family-roots-menu-surnames',
-			'title' => __('Surnames', 'family-roots-integration'),
-			'parent' => 'family-roots-menu'
+			'title' => __('Last names', 'family-roots-integration'),
+			'parent' => 'family-roots-menu',
+			'href' => home_url('genealogy/lastnames/')
 		]);
 	}
 }
