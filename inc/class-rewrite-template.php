@@ -32,6 +32,11 @@ class FamilyRootsRewriteTemplate {
 	 */
 	public function person_rewrite() {
 		add_rewrite_rule(
+		    '^genealogy/([^/]*)/([0-9a-zA-Z%-]*)/page/([0-9]*)',
+		    'index.php?tng_type=$matches[1]&tng_$matches[1]_id=$matches[2]&tng_page=$matches[3]',
+		    'top'
+		);
+		add_rewrite_rule(
 		    '^genealogy/([^/]*)/([0-9a-zA-Z%-]*)',
 		    'index.php?tng_type=$matches[1]&tng_$matches[1]_id=$matches[2]',
 		    'top'
@@ -45,6 +50,7 @@ class FamilyRootsRewriteTemplate {
 		add_rewrite_tag('%tng_family_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_lastname_id%', '([0-9a-zA-Z%-]*)');
 		add_rewrite_tag('%tng_type%', '([a-zA-Z]*)');
+		add_rewrite_tag('%tng_page%', '([0-9]*)');
 	}
 	
 	/** 
