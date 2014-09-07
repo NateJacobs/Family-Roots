@@ -4,7 +4,7 @@
 	<h1>Last names in the <?php echo ucwords(strtolower($settings['default_tree'])); ?> family tree</h1>
 </div>
 <p class="lead">Top 15 last names in the tree</p>
-<?php echo $utilities->get_lastname_cloud(); ?>
+<?php echo family_roots_get_lastname_cloud(); ?>
 <hr>
 <?php $last_names = family_roots_unique_last_names(); ?>
 <ul class="list-inline">

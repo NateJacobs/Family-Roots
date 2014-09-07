@@ -3,10 +3,10 @@
 <?php $utilities = new FamilyRootsUtilities() ?>
 <div class="media">
 	<span class="pull-left" href="#">
-		<?php if(!$utilities->get_person_photo($person)): ?>
+		<?php if(!family_roots_get_person_photo($person)): ?>
 			<img class="media-object img-rounded" src="http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=200" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
 		<?php else: ?>
-			<img class="media-object img-rounded" src="<?php echo $utilities->get_person_photo($person); ?>" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
+			<img class="media-object img-rounded" src="<?php echo family_roots_get_person_photo($person); ?>" alt="<?php echo $person->get('first_name').' '.$person->get('last_name'); ?>">
 		<?php endif; ?>
 	</span>
 	<div class="media-body">
@@ -23,6 +23,11 @@
 				<td>Death:</td>
 				<?php $death_place = !empty($person->get('death_place')) ?  ' &mdash; '.$person->get('death_place') : '';?>
 				<td><?php echo $utilities->get_date_for_display($person->get('death_date')).$death_place; ?></td>
+			</tr>
+			<tr>
+				<td>Burial:</td>
+				<?php $burial_place = !empty($person->get('burial_place')) ?  ' &mdash; '.$person->get('burial_place') : '';?>
+				<td><?php echo $utilities->get_date_for_display($person->get('burial_date')).$burial_place; ?></td>
 			</tr>
 			<?php endif; ?>
 			<tr>
@@ -130,7 +135,7 @@
 				<?php if($media->media_type == 'photos'): ?>
 				<div class="col-xs-6 col-md-3">
 					<div class="thumbnail">
-						<img src="<?php echo $utilities->get_photo_url($media->media_path); ?>" alt="...">
+						<img src="<?php echo family_roots_get_photo_url($media->media_path); ?>" alt="...">
 					</div>
 					<figure class="bg-warning caption">
 						<figcaption class="wp-caption-text"><?php echo $media->description; ?></figcaption>

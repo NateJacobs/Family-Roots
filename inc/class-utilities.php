@@ -461,126 +461,72 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
-	 *	Return a surname tag cloud.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		9/3/14
-	 *	@since		1.0
-	 *
-	 *	@param		int	$threshold	The minimum number of people with a surname required to show in tag cloud.
-	 */
-	public function get_lastname_cloud($threshold = 15)
-	{	
-		$person_table = isset($this->settings['people_table']) ? $this->settings['people_table'] : false;
-		
-		if(!$person_table) {
-			return  false;
-		}
-		
-		$last_names = $this->db->connect()->get_results("SELECT lastname FROM {$person_table} WHERE lastname IS NOT NULL AND lastname != ' '");
-		
-		$output = array_map(function ($last_names) { return $last_names->lastname; }, $last_names);
-		$last_names = implode(' ', $output);
-		
-		$frequency = [];
-		
-		foreach(str_word_count($last_names, 1) as $word) {
-			// For each word found in the frequency table, increment its value by one
-			array_key_exists($word, $frequency) ? $frequency[ $word ]++ : $frequency[ $word ] = 0;
-		}
-		
-		$minFontSize = 12;
-		$maxFontSize = 30;
-		
-		$minimumCount = min(array_values($frequency));
-		$maximumCount = max(array_values($frequency));
-		$spread = $maximumCount - $minimumCount;
-		$cloudHTML = '';
-		$cloudTags = [];
-	 
-		$spread == 0 && $spread = 1;
-	 
-		foreach($frequency as $tag => $count)
-		{
-			if($count > $threshold) {
-				$size = $minFontSize + ($count - $minimumCount) * ($maxFontSize - $minFontSize) / $spread;
-				$cloudTags[] = '<a style="font-size: ' . floor($size) . 'px' 
-				. '" class="surname_cloud" href="'.home_url('genealogy/lastname/').$tag 
-				. '" title="'.$count.' people">' 
-				. htmlspecialchars(stripslashes($tag)).'</a>';
-			}
-		}
-	 
-		return join(' ', $cloudTags);
-	}
-	
-	/** 
-	 *	Return an array of all the people with the specified last name.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		9/4/14
-	 *	@since		1.0
-	 *
-	 *	@param		string	$last_name	The last name to search for.
-	 */
-	public function get_people_from_last_name($vars) {
-		$defaults = [
-			'search_columns' => ['last_name'],
-			'fields' => 'all'
-		];
-		
-		$args = wp_parse_args($vars, $defaults);
-		
-		$search = new TNG_Person_Query($args);
-		
-		return $search;
-	}
-	
-	/** 
-	 *	Return the url for the photo requested.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		9/5/14
-	 *	@since		1.0
-	 *
-	 *	@param		string	$file_name	The media file name.
-	 */
-	public function get_photo_url($file_name) {
-		$photo_dir = isset($this->settings['photo_dir']) ? $this->settings['photo_dir'] : false;
-		$tng_domain = isset($this->settings['tng_domain']) ? $this->settings['tng_domain'] : false;
-		
-		if(!$photo_dir) {
-			return  false;
-		}
-		
-		return trailingslashit($tng_domain).trailingslashit($photo_dir).rawurlencode($file_name);
-	}
-	
-	/** 
-	 *	Return the first photo for a person.
+	 *	
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		9/6/14
 	 *	@since		1.0
 	 *
-	 *	@param		object	$person	A TNG_Person object
+	 *	@param		
 	 */
-	public function get_person_photo($person) {
-		$media = $person->get_media();
+	public function tng_pagination($current_page, $limit, $offset, $total) {
+		$total = round($total/$limit);
 		
-		foreach($media as $item) {
-			if('photos' == $item->media_type) {
-				$photos[] = $item->media_path;
-			}
+		if($total < 2) {
+			return;
 		}
 		
-		if(empty($photos)) {
-			$url = false;
-		} else {
-			$url = $this->get_photo_url($photos[0]);
-		}
+		$current_page = $current_page === 0 ? 1 : $current_page;
 		
-		return $url;
+		$links = paginate_links(
+			[
+				'current' => max(1, $current_page),
+				'total' => $total,
+				'type' => 'array',
+				'prev_next' => false
+			]
+		);
+		
+		if($links) {
+		?>
+		<ul class="pagination" id="<?php echo esc_attr( $nav_id ); ?>" class="hidden-print">
+			<?php
+				// check if the first value of the array is the current page
+				if( false !== strpos( $links[0], 'current' ) )
+				{
+					echo '<li class="disabled"><a href="#">&laquo; Previous</a></li>';
+				}
+				else
+				{
+					$previous_page = $current_page-1;
+					echo '<li><a href="'.get_pagenum_link().'page/'.$previous_page.'">&laquo; Previous</a></li>';
+				}
+				// loop through each of the links
+				foreach( $links as $key => $link )
+				{
+					if( false !== strpos( $link, 'current' )  )
+					{
+						echo '<li class="active"><a href="#">'.$current_page.'</a></li>';
+					}
+					else
+					{
+						echo '<li>'.$link.'</li>';
+					}
+				}
+				// check if we are on the last page
+				if( $current_page == $total )
+				{
+					echo '<li class="disabled"><a href="#">Next &raquo;</a></li>';
+				}
+				else
+				{
+					$next_page = $current_page+1;
+					echo '<li><a href="'.get_pagenum_link().'page/'.$next_page.'">Next &raquo;</a></li>';
+				}
+			?>
+		</ul>
+		<?php
+		}
 	}
 }
 
