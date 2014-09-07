@@ -137,9 +137,11 @@
 					<div class="thumbnail">
 						<img src="<?php echo family_roots_get_photo_url($media->media_path); ?>" alt="...">
 					</div>
+					<?php if(!empty($media->description)): ?>
 					<figure class="bg-warning caption">
 						<figcaption class="wp-caption-text"><?php echo $media->description; ?></figcaption>
 					</figure>
+					<?php endif; ?>
 				</div>
 				<?php endif; ?>
 				<?php $event_iterator++; ?>
