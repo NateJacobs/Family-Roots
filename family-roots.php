@@ -70,6 +70,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_FAMILY . 'class-family.php');
 		require_once(FAMROOTS_PERSON . 'class-person-query.php');
 		require_once(FAMROOTS_PERSON . 'class-person.php');
+		require_once(FAMROOTS_PERSON . 'person-utilities.php');
 		//require_once(FAMROOTS_INCLUDES . 'users.php');
 	}
 	

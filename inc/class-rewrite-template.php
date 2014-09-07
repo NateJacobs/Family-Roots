@@ -20,6 +20,7 @@ class FamilyRootsRewriteTemplate {
 		add_filter('template_include', [$this, 'person_template']);
 		add_filter('template_include', [$this, 'family_template']);
 		add_filter('template_include', [$this, 'surname_template']);
+		add_filter('template_include', [$this, 'surnames_template']);
 	}
 
 	/** 
@@ -31,14 +32,19 @@ class FamilyRootsRewriteTemplate {
 	 */
 	public function person_rewrite() {
 		add_rewrite_rule(
-		    '^genealogy/([^/]*)/([0-9a-zA-Z]*)',
+		    '^genealogy/([^/]*)/([0-9a-zA-Z%-]*)',
 		    'index.php?tng_type=$matches[1]&tng_$matches[1]_id=$matches[2]',
+		    'top'
+		);
+		add_rewrite_rule(
+		    '^genealogy/([^/]*)',
+		    'index.php?tng_type=$matches[1]',
 		    'top'
 		);
 		add_rewrite_tag('%tng_person_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_family_id%', '([0-9]*)');
-		add_rewrite_tag('%tng_lastname_id%', '([a-zA-Z]*)');
-		add_rewrite_tag('%tng_type%', '([a-z]*)');
+		add_rewrite_tag('%tng_lastname_id%', '([0-9a-zA-Z%-]*)');
+		add_rewrite_tag('%tng_type%', '([a-zA-Z]*)');
 	}
 	
 	/** 
@@ -114,7 +120,32 @@ class FamilyRootsRewriteTemplate {
 		}
 		
 		return $template;
-	} 
+	}
+	
+	/** 
+	 *	Check for the existence of the TNG lastnames page if the query variable [tng_type] is set to lastnames.
+	 *	If the theme file is located in parent or child theme load that before the plugin version.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/6/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$template	The original template to load.
+	 */
+	public function surnames_template($template) {
+		$type = get_query_var('tng_type');
+		
+		if(isset($type) && 'lastnames' === $type) {
+			$theme_template = locate_template('tng-lastnames-page.php');
+			if(!empty($theme_template)) {
+				$template = $theme_template;
+			} else {
+				$template = FAMROOTS_TEMPLATES.'tng-lastnames-page.php';
+			}
+		}
+		
+		return $template;
+	}
 }
 
 $family_roots_rewrite = new FamilyRootsRewriteTemplate();
