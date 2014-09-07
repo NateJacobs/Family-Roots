@@ -471,7 +471,7 @@ class FamilyRootsUtilities {
 	 */
 	public function get_lastname_cloud($threshold = 15)
 	{	
-		$person_table = isset($this->settings['people_table']) ? $$this->settings['people_table'] : false;
+		$person_table = isset($this->settings['people_table']) ? $this->settings['people_table'] : false;
 		
 		if(!$person_table) {
 			return  false;
