@@ -1,10 +1,10 @@
 <?php $lastname = get_query_var('tng_lastname_id'); ?>
 <?php $utilities = new FamilyRootsUtilities() ?>
-<?php $people = $utilities->get_people_from_last_name(['search' => $lastname]); ?>
+<?php $people = $utilities->get_people_from_last_name(['search' => rawurldecode($lastname), 'number' => 50]); ?>
 <div class="page-header">
-	<h1><?php echo $lastname; ?></h1>
+	<h1><?php echo rawurldecode($lastname); ?></h1>
 </div>
-<p class="lead">All the people with the last name of <?php echo $lastname; ?>.</p>
+<p class="lead">All the people with the last name of <?php echo rawurldecode($lastname); ?>.</p>
 <?php if(!empty($people->get_results())): ?>
 <table class="table">
 	<thead>
