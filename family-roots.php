@@ -73,7 +73,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_PERSON . 'class-person.php');
 		require_once(FAMROOTS_PERSON . 'person-utilities.php');
 		require_once(FAMROOTS_RELATION . 'class-relationship.php');
-		//require_once(FAMROOTS_INCLUDES . 'users.php');
+		require_once(FAMROOTS_RELATION . 'class-pedigree.php');
 	}
 	
 	/**
