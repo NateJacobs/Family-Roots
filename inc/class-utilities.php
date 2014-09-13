@@ -396,6 +396,29 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
+	 *	Returns the person url for the site.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		8/17/14
+	 *	@since		1.0
+	 *
+	 *	@param		int|string|TNG_Family	$family	The person object to get the URL for.
+	 */
+	public function get_family_url($family) {
+		if($family instanceof TNG_Family) {
+			$id = $family->ID;
+		} elseif(is_numeric($family)) {
+			$id = $family;
+		} elseif('F' === substr($family, 0, 1)) {
+			$id = substr($family, 1);
+		} else {
+			$id = 0;
+		}
+		
+		return trailingslashit(trailingslashit(home_url()).'genealogy/family/'.$id);
+	}
+	
+	/** 
 	 *	
 	 *
 	 *	@author		Nate Jacobs
