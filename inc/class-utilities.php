@@ -572,6 +572,29 @@ class FamilyRootsUtilities {
 		<?php
 		}
 	}
+	
+	/** 
+	 *	Return an array of all the places.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_all_places() {
+		$places_table = isset($this->settings['places_table']) ? $this->settings['places_table'] : false;
+		
+		if(!$places_table) {
+			return false;
+		}
+		
+		$places = $this->db->connect()->get_results("SELECT ID, place, longitude, latitude, notes FROM {$places_table} ORDER BY place");
+		
+		if(empty($places)) {
+			return false;
+		} else {
+			return $places;
+		}
+	}
 }
 
 $family_roots_utilities = new FamilyRootsUtilities();
