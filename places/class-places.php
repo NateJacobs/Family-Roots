@@ -156,6 +156,45 @@ class TNG_Place extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
+	 *	Return an array of all the familes with this location as the birth place.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$type	The type of event to search the person table for a match with the place.
+	 */
+	private function get_events_by_place($type) {
+		if(!$this->exists()) {
+			return false;
+		}
+		
+		$events_table = isset($this->settings['tables']['events_table']) ? $this->settings['tables']['events_table'] : false;
+		
+		if(!$events_table) {
+			return  false;
+		}
+		
+		$event_type_table = isset($this->settings['tables']['eventtypes_table']) ? $this->settings['tables']['eventtypes_table'] : false;
+		$places_table = isset($this->settings['tables']['places_table']) ? $this->settings['tables']['places_table'] : false;
+		
+		$events = $this->settings['db']->get_results( 
+			$this->settings['db']->prepare("SELECT t1.eventdatetr AS event_date, t3.id AS place_id, t1.persfamID AS person_id, t2.display AS event_type FROM {$events_table} AS t1 LEFT JOIN {$event_type_table} AS t2 ON t1.eventtypeID = t2.eventtypeID LEFT JOIN {$places_table} AS t3 ON t3.place = %s WHERE eventplace = %s ORDER BY t2.display", $this->data->place, $this->data->place)
+		);
+		
+		if(empty($events)) {
+			return false;
+		} else {
+			// group by event type
+			$grouped_events = [];
+			foreach($events as $event) {
+				$grouped_events[$event->event_type][] = $event;
+			}
+			return $grouped_events;
+		}
+	}
+	
+	/** 
 	 *	Retrieve the value of a property from the places table.
 	 *
 	 *	@author		Nate Jacobs
@@ -281,5 +320,16 @@ class TNG_Place extends FamilyRootsTNGDatabase {
 	 */
 	public function get_divorces() {
 		return $this->get_family_by_place('divorce');
+	}
+	
+	/** 
+	 *	Return a list of personIDs who were divorced at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_events() {
+		return $this->get_events_by_place('divorce');
 	}
 }
