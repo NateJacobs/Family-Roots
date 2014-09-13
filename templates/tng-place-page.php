@@ -4,7 +4,6 @@
 <div class="page-header">
 	<h1><?php echo $place->get('place'); ?></h1>
 </div>
-<img class="img-responsive" src="http://maps.googleapis.com/maps/api/staticmap?markers=<?php echo $place->get('latitude').','.$place->get('longitude') ?>&zoom=12&size=600x200">
 <div class="row">
 	<div class="col-md-4">
 		<h2>Births</h2>
@@ -35,6 +34,33 @@
 		<?php $burials = $place->get_burials(); ?>
 		<?php if($burials): ?>
 			<?php foreach($burials as $person_id): ?>
+				<?php $person = new TNG_Person($person_id->personID); ?>
+				<p><a href="<?php echo $utilities->get_person_url($person); ?>"><?php echo $person->get('first_name').' '.$person->get('last_name'); ?></a></p>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<p class="lead">None</p>
+		<?php endif; ?>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<h2>Marriages</h2>
+		<?php $marriages = $place->get_marriages(); ?>
+		<?php if($marriages): ?>
+			<?php foreach($marriages as $person_id): ?>
+				<?php $husband = new TNG_Person($person_id->husband); ?>
+				<?php $wife = new TNG_Person($person_id->wife); ?>
+				<p><a href="<?php echo $utilities->get_person_url($husband); ?>"><?php echo $husband->get('first_name').' '.$husband->get('last_name'); ?></a> and <a href="<?php echo $utilities->get_person_url($wife); ?>"><?php echo $wife->get('first_name').' '.$wife->get('last_name'); ?></a></p>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<p class="lead">None</p>
+		<?php endif; ?>
+	</div>
+	<div class="col-md-6">
+		<h2>Divorces</h2>
+		<?php $divorces = $place->get_divorces(); ?>
+		<?php if($divorces): ?>
+			<?php foreach($divorces as $person_id): ?>
 				<?php $person = new TNG_Person($person_id->personID); ?>
 				<p><a href="<?php echo $utilities->get_person_url($person); ?>"><?php echo $person->get('first_name').' '.$person->get('last_name'); ?></a></p>
 			<?php endforeach; ?>
