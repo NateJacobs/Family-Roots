@@ -21,6 +21,8 @@ class FamilyRootsRewriteTemplate {
 		add_filter('template_include', [$this, 'family_template']);
 		add_filter('template_include', [$this, 'surname_template']);
 		add_filter('template_include', [$this, 'surnames_template']);
+		add_filter('template_include', [$this, 'place_template']);
+		add_filter('template_include', [$this, 'places_template']);
 	}
 
 	/** 
@@ -49,6 +51,7 @@ class FamilyRootsRewriteTemplate {
 		add_rewrite_tag('%tng_person_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_family_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_lastname_id%', '([0-9a-zA-Z%-]*)');
+		add_rewrite_tag('%tng_place_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_type%', '([a-zA-Z]*)');
 		add_rewrite_tag('%tng_page%', '([0-9]*)');
 	}
@@ -147,6 +150,56 @@ class FamilyRootsRewriteTemplate {
 				$template = $theme_template;
 			} else {
 				$template = FAMROOTS_TEMPLATES.'tng-lastnames-page.php';
+			}
+		}
+		
+		return $template;
+	}
+	
+	/** 
+	 *	Check for the existence of the TNG place page if the query variable [tng_type] is set to place.
+	 *	If the theme file is located in parent or child theme load that before the plugin version.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/4/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$template	The original template to load.
+	 */
+	public function place_template($template) {
+		$type = get_query_var('tng_type');
+		
+		if(isset($type) && 'place' === $type) {
+			$theme_template = locate_template('tng-place-page.php');
+			if(!empty($theme_template)) {
+				$template = $theme_template;
+			} else {
+				$template = FAMROOTS_TEMPLATES.'tng-place-page.php';
+			}
+		}
+		
+		return $template;
+	}
+	
+	/** 
+	 *	Check for the existence of the TNG places page if the query variable [tng_type] is set to places.
+	 *	If the theme file is located in parent or child theme load that before the plugin version.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$template	The original template to load.
+	 */
+	public function places_template($template) {
+		$type = get_query_var('tng_type');
+		
+		if(isset($type) && 'places' === $type) {
+			$theme_template = locate_template('tng-places-page.php');
+			if(!empty($theme_template)) {
+				$template = $theme_template;
+			} else {
+				$template = FAMROOTS_TEMPLATES.'tng-places-page.php';
 			}
 		}
 		
