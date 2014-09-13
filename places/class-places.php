@@ -7,7 +7,7 @@
  *	@date		9/13/14
  *	@since		1.0
  */
-class TNG_Places extends FamilyRootsTNGDatabase {
+class TNG_Place extends FamilyRootsTNGDatabase {
 	public $ID;
 	public $data;
 	
@@ -78,6 +78,10 @@ class TNG_Places extends FamilyRootsTNGDatabase {
 	 *	@param		string	$type	The type of event to search the person table for a match with the place.
 	 */
 	private function get_person_by_place($type) {
+		if(!$this->exists()) {
+			return false;
+		}
+		
 		$person_table = isset($this->settings['tables']['people_table']) ? $this->settings['tables']['people_table'] : false;
 		
 		if(!$person_table) {
@@ -119,6 +123,10 @@ class TNG_Places extends FamilyRootsTNGDatabase {
 	 *	@param		string	$type	The type of event to search the person table for a match with the place.
 	 */
 	private function get_family_by_place($type) {
+		if(!$this->exists()) {
+			return false;
+		}
+		
 		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
 		
 		if(!$family_table) {

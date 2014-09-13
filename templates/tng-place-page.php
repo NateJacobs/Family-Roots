@@ -1,9 +1,10 @@
-<?php $place = new TNG_Places(get_query_var('tng_place_id')); ?>
+<?php $place = new TNG_Place(get_query_var('tng_place_id')); ?>
 <?php $utilities = new FamilyRootsUtilities(); ?>
-
+<?php if($place->exists()): ?>
 <div class="page-header">
 	<h1><?php echo $place->get('place'); ?></h1>
 </div>
+<img class="img-responsive" src="http://maps.googleapis.com/maps/api/staticmap?markers=<?php echo $place->get('latitude').','.$place->get('longitude') ?>&zoom=12&size=600x200">
 <div class="row">
 	<div class="col-md-4">
 		<h2>Births</h2>
@@ -42,3 +43,8 @@
 		<?php endif; ?>
 	</div>
 </div>
+<?php else: ?>
+<div class="page-header">
+	<h1>Unknown location</h1>
+</div>
+<?php endif; ?>
