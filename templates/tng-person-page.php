@@ -57,7 +57,7 @@
 							<?php $divorce_place_object = new TNG_Place(null, $partner->divorce_place); ?>
 							<?php $married = '0000-00-00' != $partner->marriage_date ? ' &mdash; Married '.$utilities->get_date_for_display($partner->marriage_date).' &mdash; <a href="'.$utilities->get_place_url($marriage_place_object).'">'.$partner->marriage_place.'</a>' : '' ?>
 							<?php $divorced = '0000-00-00' != $partner->divorce_date ? ' &mdash; Divorced '.$utilities->get_date_for_display($partner->divorce_date).' &mdash; <a href="'.$utilities->get_place_url($divorce_place_object).'">'.$partner->divorce_place.'</a>' : '' ?>
-							<a href="<?php echo $utilities->get_person_url($partner_object); ?>"><?php echo $partner_object->get('first_name').' '.$partner_object->get('last_name'); ?></a> &ndash; <a href="<?php echo trailingslashit(home_url('genealogy/family/').substr($partner->family_id, 1)); ?>">Family Details</a><?php echo $married.' '.$divorced; ?>
+							<a href="<?php echo $utilities->get_person_url($partner_object); ?>"><?php echo $partner_object->get('first_name').' '.$partner_object->get('last_name'); ?></a> &ndash; <a href="<?php echo $utilities->get_family_url($partner->family_id); ?>">Family Details</a><?php echo $married.' '.$divorced; ?>
 							<br>
 						<?php endif; ?>
 					<?php endforeach; ?>
