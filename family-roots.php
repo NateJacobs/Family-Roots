@@ -51,6 +51,7 @@ class FamilyRootsLoad {
 		define('FAMROOTS_FAMILY', FAMROOTS_DIR.trailingslashit('family'));
 		define('FAMROOTS_PERSON', FAMROOTS_DIR.trailingslashit('person'));
 		define('FAMROOTS_RELATION', FAMROOTS_DIR.trailingslashit('relationship'));
+		define('FAMROOTS_PLACES', FAMROOTS_DIR.trailingslashit('places'));
 	}
 	
 	/**
@@ -76,6 +77,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_PERSON . 'person-utilities.php');
 		require_once(FAMROOTS_RELATION . 'class-relationship.php');
 		require_once(FAMROOTS_RELATION . 'class-pedigree.php');
+		require_once(FAMROOTS_PLACES . 'class-places.php');
 	}
 	
 	/**
