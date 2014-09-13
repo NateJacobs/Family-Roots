@@ -17,18 +17,21 @@
 		<table class="table">
 			<tr>
 				<td>Birth:</td>
-				<?php $birth_place = !empty($person->get('birth_place')) ?  ' &mdash; '.$person->get('birth_place') : '';?>
+				<?php $birth_place_object = new TNG_Place(null, $person->get('birth_place')); ?>
+				<?php $birth_place = !empty($person->get('birth_place')) ?  ' &mdash; <a href="'.$utilities->get_place_url($birth_place_object).'">'.$person->get('birth_place').'</a>' : '';?>
 				<td><?php echo $utilities->get_date_for_display($person->get('birth_date')).$birth_place; ?></td>
 			</tr>
 			<?php if(!$utilities->is_living($person->get('living'), $person->get('birth_date'))): ?>
 			<tr>
 				<td>Death:</td>
-				<?php $death_place = !empty($person->get('death_place')) ?  ' &mdash; '.$person->get('death_place') : '';?>
+				<?php $death_place_object = new TNG_Place(null, $person->get('death_place')); ?>
+				<?php $death_place = !empty($person->get('death_place')) ?  ' &mdash; <a href="'.$utilities->get_place_url($death_place_object).'">'.$person->get('death_place').'</a>' : '';?>
 				<td><?php echo $utilities->get_date_for_display($person->get('death_date')).$death_place; ?></td>
 			</tr>
 			<tr>
 				<td>Burial:</td>
-				<?php $burial_place = !empty($person->get('burial_place')) ?  ' &mdash; '.$person->get('burial_place') : '';?>
+				<?php $burial_place_object = new TNG_Place(null, $person->get('burial_place')); ?>
+				<?php $burial_place = !empty($person->get('burial_place')) ?  ' &mdash; <a href="'.$utilities->get_place_url($burial_place_object).'">'.$person->get('burial_place').'</a>' : '';?>
 				<td><?php echo $utilities->get_date_for_display($person->get('burial_date')).$burial_place; ?></td>
 			</tr>
 			<?php endif; ?>
@@ -50,8 +53,10 @@
 					<?php foreach($partners as $partner): ?>
 						<?php if(!empty($partner->person_id)): ?>
 							<?php $partner_object = new TNG_Person($partner->person_id);?>
-							<?php $married = '0000-00-00' != $partner->marriage_date ? ' &mdash; Married '.$utilities->get_date_for_display($partner->marriage_date).' &mdash; '.$partner->marriage_place : '' ?>
-							<?php $divorced = '0000-00-00' != $partner->divorce_date ? ' &mdash; Divorced '.$utilities->get_date_for_display($partner->divorce_date).' &mdash; '.$partner->divorce_place : '' ?>
+							<?php $marriage_place_object = new TNG_Place(null, $partner->marriage_place); ?>
+							<?php $divorce_place_object = new TNG_Place(null, $partner->divorce_place); ?>
+							<?php $married = '0000-00-00' != $partner->marriage_date ? ' &mdash; Married '.$utilities->get_date_for_display($partner->marriage_date).' &mdash; <a href="'.$utilities->get_place_url($marriage_place_object).'">'.$partner->marriage_place.'</a>' : '' ?>
+							<?php $divorced = '0000-00-00' != $partner->divorce_date ? ' &mdash; Divorced '.$utilities->get_date_for_display($partner->divorce_date).' &mdash; <a href="'.$utilities->get_place_url($divorce_place_object).'">'.$partner->divorce_place.'</a>' : '' ?>
 							<a href="<?php echo $utilities->get_person_url($partner_object); ?>"><?php echo $partner_object->get('first_name').' '.$partner_object->get('last_name'); ?></a> &ndash; <a href="<?php echo trailingslashit(home_url('genealogy/family/').substr($partner->family_id, 1)); ?>">Family Details</a><?php echo $married.' '.$divorced; ?>
 							<br>
 						<?php endif; ?>

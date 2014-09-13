@@ -352,17 +352,17 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
-	 *	
+	 *	Returns the person url for the site.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/17/14
 	 *	@since		1.0
 	 *
-	 *	@param		
+	 *	@param		int|string|TNG_Person	$person	The person object to get the URL for.
 	 */
 	public function get_person_url($person) {
-		if($person instanceof TNG_PERSON) {
-			$id = substr($person->get('person_id'), 1);
+		if($person instanceof TNG_Person) {
+			$id = $person->ID;
 		} elseif(is_numeric($person)) {
 			$id = $person;
 		} elseif('I' === substr($person, 0, 1)) {
@@ -372,6 +372,27 @@ class FamilyRootsUtilities {
 		}
 		
 		return trailingslashit(trailingslashit(home_url()).'genealogy/person/'.$id);
+	}
+	
+	/** 
+	 *	Returns the place url for the site.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 *
+	 *	@param		int|string|TNG_Place	$person	The person object to get the URL for.
+	 */
+	public function get_place_url($place) {
+		if($place instanceof TNG_Place) {
+			$id = $place->ID;
+		} elseif(is_numeric($place)) {
+			$id = $place;
+		} else {
+			$id = 0;
+		}
+		
+		return trailingslashit(trailingslashit(home_url()).'genealogy/place/'.$id);
 	}
 	
 	/** 
