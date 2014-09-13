@@ -84,11 +84,11 @@ class TNG_Person extends FamilyRootsTNGDatabase {
 				$value = 'I'.$value;
 			}
 			
-			return  $this->settings['db']->get_row( 
+			return $this->settings['db']->get_row( 
 				$this->settings['db']->prepare("SELECT ID, personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, burialdatetr AS burial_date, burialplace AS burial_place, baptdatetr AS baptism_date, baptplace AS baptism_place, changedate AS change_date, nickname, title, prefix, suffix, famc AS family_id, living FROM {$person_table} WHERE personID = %s", $value)
 			);
 		} elseif('name' === $field) {
-			return  $this->settings['db']->get_row( 
+			return $this->settings['db']->get_row( 
 				$this->settings['db']->prepare("SELECT ID, personID AS person_id, lastname AS last_name, firstname AS first_name, birthdatetr AS birth_date, sex, birthplace AS birth_place, deathdatetr AS death_date, deathplace AS death_place, burialdatetr AS burial_date, burialplace AS burial_place, baptdatetr AS baptism_date, baptplace AS baptism_place, changedate AS change_date, nickname, title, prefix, suffix, famc AS family_id, living FROM {$person_table} WHERE firstname = %s AND lastname = %s", sanitize_user($value['first']), sanitize_user($value['last']))
 			);
 		}
