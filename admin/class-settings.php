@@ -39,11 +39,11 @@ class FamilyRootsSettings {
 	public function settings_menu() {
 		// add plugins options page to the WordPress Settings menu as a submenu link
 		add_options_page(
-			'Family Roots - TNG Integration',
+			__('Family Roots - TNG Integration', 'family-roots'),
 			'Family Roots',
 			'manage_options',
 			'family-roots-options',
-			[ $this, 'family_roots_options_page' ]
+			[$this, 'family_roots_options_page']
 		);
 	}
 
@@ -59,22 +59,21 @@ class FamilyRootsSettings {
 	public function family_roots_options_page() {
 		?>
 		<div class="wrap">
-			<h2><?php _e('Family Roots Options', 'family-roots-integration'); ?></h2>
+			<h2><?php _e('Family Roots Options', 'family-roots'); ?></h2>
 			<?php
 				$settings = get_option('family-roots-settings');
 
 				// is the tng_path setting present? Meaning, upon activation the plugin found the TNG path. If it isn't, display a warning
 				if(empty($settings['tng_path'])) {
 					?>
-						<div class='error'><p> <?php _e('Your TNG file path could not be determined. Please enter it in the appropriate field below.', 'family-roots-integration'); ?></p></div>
+						<div class='error'><p> <?php _e('Your TNG file path could not be determined. Please enter it in the appropriate field below.', 'family-roots'); ?></p></div>
 					<?php
 				} 
 			?>
 			<form action="options.php" method="POST">
 				<?php
-					settings_fields( 'family-roots-options' );
-					do_settings_sections( 'family-roots-options' );
-					
+					settings_fields('family-roots-options');
+					do_settings_sections('family-roots-options');
 					submit_button();
 				?>
 			</form>
@@ -93,14 +92,14 @@ class FamilyRootsSettings {
 		// TNG settings section
 		add_settings_section( 
 			'tng-settings', 
-			'TNG Settings', 
-			[ $this, 'tng_settings_callback' ], 
+			__('TNG Settings', 'family-roots'),
+			[$this, 'tng_settings_callback'], 
 			'family-roots-options' 
 		);
 		add_settings_field( 
 			'tng-path', 
-			'Path to TNG Files', 
-			[ $this, 'tng_path_callback' ], 
+			__('Path to TNG Files', 'family-roots'),
+			[$this, 'tng_path_callback'], 
 			'family-roots-options', 
 			'tng-settings' 
 		);
@@ -109,28 +108,7 @@ class FamilyRootsSettings {
 		register_setting( 
 			'family-roots-options', 
 			'family-roots-settings', 
-			[ $this, 'family_roots_validate' ]
-		);
-		
-		// users section
-		add_settings_section( 
-			'user-settings', 
-			'User Settings', 
-			[ $this, 'user_settings_callback' ], 
-			'family-roots-users' 
-		);
-		add_settings_field( 
-			'sync-user-management', 
-			'Combine TNG and WordPress user management?', 
-			[ $this, 'user_sync_callback' ], 
-			'family-roots-users', 
-			'user-settings'
-		);
-		
-		// register users and logins section
-		register_setting( 
-			'family-roots-users', 
-			'family-roots-users-settings'
+			[$this, 'family_roots_validate']
 		);
 	}
 	
@@ -142,32 +120,8 @@ class FamilyRootsSettings {
 	 *	@since		0.1
 	 */
 	public function tng_settings_callback() {
-		_e( 'These settings apply to your TNG installation', 'family-roots-integration' );
+		_e('These settings apply to your TNG installation', 'family-roots');
 
-	}
-		
-	/** 
-	 *	User Settings and display user settings.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		11/3/12
-	 *	@since		0.1
-	 */
-	public function user_settings_callback() {
-		_e( 'WordPress Users and TNG Users Integration', 'family-roots-integration' );
-	}
-	
-	/** 
-	 *	Advanced Settings.
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		11/3/12
-	 *	@since		0.1
-	 *
-	 *	@todo		add method to update TNG DB values
-	 */
-	public function advanced_settings_callback() {
-		_e( 'Advanced', 'family-roots-integration' );
 	}
 	
 	/** 
@@ -185,24 +139,6 @@ class FamilyRootsSettings {
 	}
 	
 	/** 
-	 *	Combine User Management
-	 *
-	 *	@author		Nate Jacobs
-	 *	@date		11/17/12
-	 *	@since		0.1
-	 */
-	public function user_sync_callback() {
-		$settings = get_option('family-roots-users-settings');
-		$checked = isset($settings['sync_users']) ? $checked = ' checked="checked" ' : '';
-		
-		echo "<input ".$checked." type='checkbox' name='family-roots-users-settings[sync_users]' />";
-		echo "<span class='description'> If this option is checked, all of the user management shall be done from WordPress</span>";
-		
-	//if($options['chkbox1']) { $checked = ' checked="checked" '; }
-	//echo "<input ".$checked." id='plugin_chk1' name='plugin_options[chkbox1]' type='checkbox' />";
-	}
-	
-	/** 
 	 *	Family Roots Validation called when the settings page is saved.
 	 *
 	 *	@author		Nate Jacobs
@@ -212,8 +148,6 @@ class FamilyRootsSettings {
 	 *	@param	array	$input
 	 */
 	public function family_roots_validate($input) {
-		//$output = get_option('family-roots-settings');
-		
 		$utilities = new FamilyRootsUtilities();
 		$output = $utilities->get_tng_db_values();
 		
