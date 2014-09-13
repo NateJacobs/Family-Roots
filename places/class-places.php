@@ -54,17 +54,96 @@ class TNG_Places extends FamilyRootsTNGDatabase {
 		$places_table = isset($this->settings['tables']['places_table']) ? $this->settings['tables']['places_table'] : false;
 		
 		if(!$places_table) {
-			return  false;
+			return false;
 		}
 		
 		if($field === 'id') {
-			return  $this->settings['db']->get_row( 
+			return $this->settings['db']->get_row( 
 				$this->settings['db']->prepare("SELECT ID, place, longitude, latitude, notes FROM {$places_table} WHERE ID = %d", $value)
 			);
 		} elseif( $field === 'name') {
-			return  $this->settings['db']->get_row( 
+			return $this->settings['db']->get_row( 
 				$this->settings['db']->prepare("SELECT ID, place, longitude, latitude, notes FROM {$places_table} WHERE place = %s", $value)
 			);
+		}
+	}
+	
+	/** 
+	 *	Return an array of all the people with this location as either the birth place, death place or burial place.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$type	The type of event to search the person table for a match with the place.
+	 */
+	private function get_person_by_place($type) {
+		$person_table = isset($this->settings['tables']['people_table']) ? $this->settings['tables']['people_table'] : false;
+		
+		if(!$person_table) {
+			return  false;
+		}
+		
+		switch($type) {
+			case 'birth':
+				$field = 'birthplace';
+				break;
+			case 'death':
+				$field = 'deathplace';
+				break;
+			case 'burial':
+				$field = 'burialplace';
+				break;
+			default:
+				$field = 'birthplace';
+		}
+		
+		$places = $this->settings['db']->get_results( 
+			$this->settings['db']->prepare("SELECT personID FROM {$person_table} WHERE $field = %s", $this->data->place)
+		);
+		
+		if(empty($places)) {
+			return false;
+		} else {
+			return $places;
+		}
+	}
+	
+	/** 
+	 *	Return an array of all the familes with this location as the birth place.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 *
+	 *	@param		string	$type	The type of event to search the person table for a match with the place.
+	 */
+	private function get_family_by_place($type) {
+		$family_table = isset($this->settings['tables']['family_table']) ? $this->settings['tables']['family_table'] : false;
+		
+		if(!$family_table) {
+			return  false;
+		}
+		
+		switch($type) {
+			case 'marriage':
+				$field = 'marrplace';
+				break;
+			case 'divorce':
+				$field = 'divplace';
+				break;
+			default:
+				$field = 'marrplace';
+		}
+		
+		$places = $this->settings['db']->get_results( 
+			$this->settings['db']->prepare("SELECT familyID, husband, wife FROM {$family_table} WHERE $field = %s", $this->data->place)
+		);
+		
+		if(empty($places)) {
+			return false;
+		} else {
+			return $places;
 		}
 	}
 	
@@ -139,5 +218,60 @@ class TNG_Places extends FamilyRootsTNGDatabase {
 	 */
 	public function exists() {
 		return !empty($this->ID);
+	}
+	
+	/** 
+	 *	Return a list of personIDs who were born at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_births() {
+		return $this->get_person_by_place('birth');
+	}
+	
+	/** 
+	 *	Return a list of personIDs who died at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_deaths() {
+		return $this->get_person_by_place('death');
+	}
+	
+	/** 
+	 *	Return a list of personIDs who are buried at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_burials() {
+		return $this->get_person_by_place('burial');
+	}
+	
+	/** 
+	 *	Return a list of personIDs who were married at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_marriages() {
+		return $this->get_family_by_place('marriage');
+	}
+	
+	/** 
+	 *	Return a list of personIDs who were divorced at that location.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		9/13/14
+	 *	@since		1.0
+	 */
+	public function get_divorces() {
+		return $this->get_family_by_place('divorce');
 	}
 }
