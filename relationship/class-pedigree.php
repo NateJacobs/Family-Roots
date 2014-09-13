@@ -52,8 +52,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 	protected function build_array($person, $depth) {
 		$pedigree_array = [
 			'name' => $person->get('first_name').' '.$person->get('last_name'),
-			'born' => $this->utilities->get_date_for_display($person->get('birth_date')),
-			'died' => $this->utilities->is_living($person->get('living'), $person->get('birth_date')) ? '' : $this->utilities->get_date_for_display($person->get('death_date')),
+			'born' => $this->utilities->get_date_for_display($person->get('birth_date'), 'm/d/Y'),
+			'died' => $this->utilities->is_living($person->get('living'), $person->get('birth_date')) ? '' : $this->utilities->get_date_for_display($person->get('death_date'), 'm/d/Y'),
 			'birthPlace' => $person->get('birth_place'),
 			'deathPlace' => $person->get('death_place')
 		];
@@ -65,8 +65,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 					$father = new TNG_Person($parent);
 					$pedigree_array['parents'][0] = [
 						'name' => $father->get('first_name').' '.$father->get('last_name'),
-						'born' => $this->utilities->get_date_for_display($father->get('birth_date')),
-						'died' => $this->utilities->is_living($father->get('living'), $father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father->get('death_date')),
+						'born' => $this->utilities->get_date_for_display($father->get('birth_date'), 'm/d/Y'),
+						'died' => $this->utilities->is_living($father->get('living'), $father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father->get('death_date'), 'm/d/Y'),
 						'birthPlace' => $father->get('birth_place'),
 						'deathPlace' => $father->get('death_place')
 					];
@@ -78,8 +78,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 								$father_father = new TNG_Person($padre);
 								$pedigree_array['parents'][0]['parents'][0] = [
 									'name' => $father_father->get('first_name').' '.$father_father->get('last_name'),
-									'born' => $this->utilities->get_date_for_display($father_father->get('birth_date')),
-									'died' => $this->utilities->is_living($father_father->get('living'), $father_father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father_father->get('death_date')),
+									'born' => $this->utilities->get_date_for_display($father_father->get('birth_date'), 'm/d/Y'),
+									'died' => $this->utilities->is_living($father_father->get('living'), $father_father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father_father->get('death_date'), 'm/d/Y'),
 									'birthPlace' => $father_father->get('birth_place'),
 									'deathPlace' => $father_father->get('death_place')
 								];
@@ -89,8 +89,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 								$father_mother = new TNG_Person($padre);
 								$pedigree_array['parents'][0]['parents'][1] = [
 									'name' => $father_mother->get('first_name').' '.$father_mother->get('last_name'),
-									'born' => $this->utilities->get_date_for_display($father_mother->get('birth_date')),
-									'died' => $this->utilities->is_living($father_mother->get('living'), $father_mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father_mother->get('death_date')),
+									'born' => $this->utilities->get_date_for_display($father_mother->get('birth_date'), 'm/d/Y'),
+									'died' => $this->utilities->is_living($father_mother->get('living'), $father_mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($father_mother->get('death_date'), 'm/d/Y'),
 									'birthPlace' => $father_mother->get('birth_place'),
 									'deathPlace' => $father_mother->get('death_place')
 								];
@@ -103,8 +103,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 					$mother = new TNG_Person($parent);
 					$pedigree_array['parents'][1] = [
 						'name' => $mother->get('first_name').' '.$mother->get('last_name'),
-						'born' => $this->utilities->get_date_for_display($mother->get('birth_date')),
-						'died' => $this->utilities->is_living($mother->get('living'), $mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother->get('death_date')),
+						'born' => $this->utilities->get_date_for_display($mother->get('birth_date'), 'm/d/Y'),
+						'died' => $this->utilities->is_living($mother->get('living'), $mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother->get('death_date'), 'm/d/Y'),
 						'birthPlace' => $mother->get('birth_place'),
 						'deathPlace' => $mother->get('death_place')
 					];
@@ -116,8 +116,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 								$mother_father = new TNG_Person($madre);
 								$pedigree_array['parents'][1]['parents'][0] = [
 									'name' => $mother_father->get('first_name').' '.$mother_father->get('last_name'),
-									'born' => $this->utilities->get_date_for_display($mother_father->get('birth_date')),
-									'died' => $this->utilities->is_living($mother_father->get('living'), $mother_father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother_father->get('death_date')),
+									'born' => $this->utilities->get_date_for_display($mother_father->get('birth_date'), 'm/d/Y'),
+									'died' => $this->utilities->is_living($mother_father->get('living'), $mother_father->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother_father->get('death_date'), 'm/d/Y'),
 									'birthPlace' => $mother_father->get('birth_place'),
 									'deathPlace' => $mother_father->get('death_place')
 								];
@@ -127,8 +127,8 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 								$mother_mother = new TNG_Person($madre);
 								$pedigree_array['parents'][1]['parents'][1] = [
 									'name' => $mother_mother->get('first_name').' '.$mother_mother->get('last_name'),
-									'born' => $this->utilities->get_date_for_display($mother_mother->get('birth_date')),
-									'died' => $this->utilities->is_living($mother_mother->get('living'), $mother_mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother_mother->get('death_date')),
+									'born' => $this->utilities->get_date_for_display($mother_mother->get('birth_date'), 'm/d/Y'),
+									'died' => $this->utilities->is_living($mother_mother->get('living'), $mother_mother->get('birth_date')) ? '' : $this->utilities->get_date_for_display($mother_mother->get('death_date'), 'm/d/Y'),
 									'birthPlace' => $mother_mother->get('birth_place'),
 									'deathPlace' => $mother_mother->get('death_place')
 								];

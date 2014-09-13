@@ -1,6 +1,8 @@
 <?php $person_id = get_query_var('tng_person_id'); ?>
 <?php $person = new TNG_Person($person_id); ?>
-<?php $utilities = new FamilyRootsUtilities() ?>
+<?php $utilities = new FamilyRootsUtilities(); ?>
+<?php $pedigree = new TNG_Pedigree($person) ?>
+
 <div class="media">
 	<span class="pull-left" href="#">
 		<?php if(!family_roots_get_person_photo($person)): ?>
@@ -92,6 +94,7 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li class="active"><a href="#events" role="tab" data-toggle="tab">Events</a></li>
 	<li><a href="#media" role="tab" data-toggle="tab">Media</a></li>
+	<li><a href="#pedigree" role="tab" data-toggle="tab">Ancestors</a></li>
 </ul>
 <!-- Tab panes -->
 <div class="tab-content">
@@ -150,6 +153,10 @@
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
+	</div>
+	<div class="tab-pane" id="pedigree">
+		<span id="person-pedigree-json" hidden><?php echo $pedigree->get_pedigree_json(); ?></span>
+		<div id="pedigree-chart"></div>
 	</div>
 </div>
 <br>
