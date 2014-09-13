@@ -69,6 +69,25 @@
 		<?php endif; ?>
 	</div>
 </div>
+<div class="row">
+	<?php $events = $place->get_events(); ?>
+	<?php if($events): ?>
+		<?php $event_iterator = 0; ?>
+		<?php foreach($events as $type => $event): ?>
+			<div class="col-xs-12 col-md-4">
+				<h2><?php echo $type; ?></h2>
+				<?php foreach($event as $single): ?>
+				<?php $person = new TNG_Person($single->person_id); ?>
+					<p><a href="<?php echo $utilities->get_person_url($person); ?>"><?php echo $person->get('first_name').' '.$person->get('last_name'); ?></a></p>
+				<?php endforeach; ?>
+			</div>
+			<?php $event_iterator++; ?>
+			<?php if( $event_iterator % 3 == 0 ): ?>
+				<div class="clearfix"></div>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+</div>
 <?php else: ?>
 <div class="page-header">
 	<h1>Unknown location</h1>
