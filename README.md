@@ -7,11 +7,12 @@ The plugin expects WordPress and TNG to be set-up a specific way to ensure a sea
 
 #### Access the TNG Data
 There are several classes that allow you to pull out the data you want from the plugin.
-* Person Class - provide the person ID and a TNG_Person object will be returned.
+* Person Class - provide the person ID or name and a TNG_Person object will be returned.
 * Family Class - provide the family ID and a TNG_Family object will be returned.
 * Relationship Class - provide two person IDs and the blood relationship will be returned.
 * Person Query Class - search the person table using different variables.
 * Family Query Class - search the family table using different variables.
+* Places Class - provide the place ID or name and a TNG_Places object will be returned.
 
 #### Display the TNG Data
 The plugin adds rewrite rules to display the TNG data using custom templates in the theme directory. The following rewrite rules are supported.
@@ -19,6 +20,9 @@ The plugin adds rewrite rules to display the TNG data using custom templates in 
 * home_url()/genealogy/lastname/LASTNAME/(page/PAGE#)
 * home_url()/genealogy/person/ID
 * home_url()/genealogy/family/ID
+* home_url()/genealogy/places
+* home_url()/genealogy/place/ID/
+
 
 ##### Templates Supported
 The following template names are supported in the theme folder. If the plugin does not find any there, the basic templates will be loaded from the plugin folder. The following templates are supported.
@@ -26,6 +30,8 @@ The following template names are supported in the theme folder. If the plugin do
 * tng-lastname-page.php
 * tng-person-page.php
 * tng-family-page.php
+* tng-places-page.php
+* tng-place-page.php
 
 ### Roadmap
 **Version 1.0**
@@ -33,7 +39,6 @@ The following template names are supported in the theme folder. If the plugin do
 * WordPress Toolbar access to common features
 * Widgetized sidebars
 * Add plugin hooks and filters to allow for other developers to extend and add-on
-* TNG_Location class
 * TNG_Notes class
 * TNG_Media class
 * TNG_Events class
