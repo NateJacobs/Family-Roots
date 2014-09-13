@@ -31,14 +31,21 @@ class FamilyRootsToolbar {
 		
 		$wp_admin_bar->add_node([
 			'id' => 'family-roots-menu',
-			'title' => __('Genealogy', 'family-roots-integration'),
+			'title' => __('Genealogy', 'family-roots'),
 		]);
 		
 		$wp_admin_bar->add_node([
 			'id' => 'family-roots-menu-surnames',
-			'title' => __('Last names', 'family-roots-integration'),
+			'title' => __('Last names', 'family-roots'),
 			'parent' => 'family-roots-menu',
 			'href' => home_url('genealogy/lastnames/')
+		]);
+		
+		$wp_admin_bar->add_node([
+			'id' => 'family-roots-menu-places',
+			'title' => __('Places', 'family-roots'),
+			'parent' => 'family-roots-menu',
+			'href' => home_url('genealogy/places/')
 		]);
 	}
 }
