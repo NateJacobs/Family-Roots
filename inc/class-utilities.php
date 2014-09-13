@@ -285,7 +285,7 @@ class FamilyRootsUtilities {
 	 *
 	 *	@param		string	$date	The date to format.
 	 */
-	public function get_date_for_display($date) {
+	public function get_date_for_display($date, $format = 'l, F d, Y') {
 		// if the birth date has just a year, e.g. 1950-00-00
 		if('00-00' === substr($date, 5, 5) && '0000' != substr($date, 0, 4)) {
 			$date_1 = substr_replace($date, "01-01", 5);
@@ -294,7 +294,7 @@ class FamilyRootsUtilities {
 			if('0000-00-00' == $date) {
 				$date = 'Unknown';
 			} else {
-				$date = date('l, F d, Y', strtotime($date));
+				$date = date($format, strtotime($date));
 			}
 		}
 		
