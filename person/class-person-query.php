@@ -262,7 +262,7 @@ class TNG_Person_Query extends FamilyRootsTNGDatabase {
 	}
 	
 	/** 
-	 *	Build the search sequal statement
+	 *	Build the search sql statement
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		9/5/14
