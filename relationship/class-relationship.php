@@ -7,7 +7,7 @@
  *	@date		9/7/14
  *	@since		1.0
  */
-class TNG_Relationship extends FamilyRootsTNGDatabase {
+class TNG_Relationship {
 	
 	public $relationship;
 	public $person_1_id;
@@ -25,6 +25,8 @@ class TNG_Relationship extends FamilyRootsTNGDatabase {
 	 *	@param		int|string	$person_b_id		The id of the second person
 	 */
 	public function __construct($person_a_id = 0, $person_b_id = 0) {
+		global $tng_db;
+		
 		if($person_a_id === 0 || $person_b_id === 0) {
 			$this->relationship = false;
 		}
@@ -33,7 +35,7 @@ class TNG_Relationship extends FamilyRootsTNGDatabase {
 		
 		// if both contain data
 		if($person_a_id && $person_b_id) {
-			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
+			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
 			$this->person_1_id = $this->format_prefix($person_a_id);
 			$this->person_2_id = $this->format_prefix($person_b_id);
 			$data = $this->calculate_relationship();

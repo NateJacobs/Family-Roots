@@ -7,7 +7,7 @@
  *	@date		8/10/14
  *	@since		1.0
  */
-class TNG_Family extends FamilyRootsTNGDatabase {
+class TNG_Family {
 	
 	public $ID;
 	
@@ -27,11 +27,13 @@ class TNG_Family extends FamilyRootsTNGDatabase {
 	 *	@param		
 	 */
 	public function __construct($id = 0) {
+		global $tng_db;
+		
 		if(!empty($id) && (!is_numeric($id) && 'F' != substr($id, 0, 1))) {
 			$id = 0;
 		}
 		
-		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
+		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
 		
 		if($id) {
 			$data = $this->get_family_parents($id);

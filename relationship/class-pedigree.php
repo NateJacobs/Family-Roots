@@ -11,7 +11,7 @@
  *	@date		9/7/14
  *	@since		1.0
  */
-class TNG_Pedigree extends FamilyRootsTNGDatabase {
+class TNG_Pedigree {
 	private $utilities;
 	private $settings;
 	private $pedigree;
@@ -28,8 +28,9 @@ class TNG_Pedigree extends FamilyRootsTNGDatabase {
 	 *	@param		int	$depth	how many levels deep the pedigree should be generated for.
 	 */
 	public function __construct(TNG_Person $person, $depth = 4) {
+		global $tng_db;
 		$this->utilities = new FamilyRootsUtilities();
-		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
+		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
 		
 		$data = $this->build_array($person, $depth);
 		

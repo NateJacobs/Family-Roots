@@ -19,7 +19,9 @@ class FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function __construct() {
+		global $tng_db;
 		
+		$tng_db = $this->connect();
 	}
 	
 	/** 
@@ -46,3 +48,5 @@ class FamilyRootsTNGDatabase {
 		}
 	}
 }
+
+$family_roots_db = new FamilyRootsTNGDatabase();

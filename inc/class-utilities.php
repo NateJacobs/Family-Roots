@@ -20,7 +20,8 @@ class FamilyRootsUtilities {
  	 *	@since		0.1
  	 */
 	public function __construct() {
-		$this->db = new FamilyRootsTNGDatabase();
+		global $tng_db;
+		$this->db = $tng_db;
 		$this->settings = get_option('family-roots-settings');
 	}
 	
@@ -587,7 +588,7 @@ class FamilyRootsUtilities {
 			return false;
 		}
 		
-		$places = $this->db->connect()->get_results("SELECT ID, place, longitude, latitude, notes FROM {$places_table} ORDER BY place");
+		$places = $this->db->get_results("SELECT ID, place, longitude, latitude, notes FROM {$places_table} ORDER BY place");
 		
 		if(empty($places)) {
 			return false;

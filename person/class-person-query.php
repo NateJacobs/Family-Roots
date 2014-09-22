@@ -7,7 +7,7 @@
  *	@date		8/10/14
  *	@since		1.0
  */
-class TNG_Person_Query extends FamilyRootsTNGDatabase {
+class TNG_Person_Query {
 	
 	public $query_vars;
 	
@@ -35,8 +35,9 @@ class TNG_Person_Query extends FamilyRootsTNGDatabase {
 	 *	@param		array	$query	The requested variables
 	 */
 	public function __construct($query = null) {
+		global $tng_db;
 		if(!empty($query)) {
-			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => parent::connect()];
+			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
 			$this->prepare_query($query);
 			$this->query();
 		}

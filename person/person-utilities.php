@@ -9,8 +9,7 @@
  */
 function family_roots_unique_last_names() {
 	$settings = get_option('family-roots-settings');
-	$db = new FamilyRootsTNGDatabase();
-	$connect = $db->connect();
+	global $tng_db;
 	
 	$person_table = isset($settings['people_table']) ? $settings['people_table'] : false;
 		
@@ -18,7 +17,7 @@ function family_roots_unique_last_names() {
 		return false;
 	}
 	
-	return $connect->get_results("SELECT DISTINCT lastname FROM {$person_table} WHERE lastname IS NOT NULL");
+	return $tng_db->get_results("SELECT DISTINCT lastname FROM {$person_table} WHERE lastname IS NOT NULL");
 }
 
 /** 
@@ -32,8 +31,7 @@ function family_roots_unique_last_names() {
  */
 function family_roots_get_lastname_cloud($threshold = 15) {
 	$settings = get_option('family-roots-settings');
-	$db = new FamilyRootsTNGDatabase();
-	$connect = $db->connect();
+	global $tng_db;
 		
 	$person_table = isset($settings['people_table']) ? $settings['people_table'] : false;
 	
@@ -41,7 +39,7 @@ function family_roots_get_lastname_cloud($threshold = 15) {
 		return  false;
 	}
 	
-	$last_names = $connect->get_results("SELECT lastname FROM {$person_table} WHERE lastname IS NOT NULL AND lastname != ' '");
+	$last_names = $tng_db->get_results("SELECT lastname FROM {$person_table} WHERE lastname IS NOT NULL AND lastname != ' '");
 	
 	$output = array_map(function ($last_names) { return $last_names->lastname; }, $last_names);
 	$last_names = implode(' ', $output);
