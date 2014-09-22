@@ -327,6 +327,6 @@ class TNG_Person_Query extends FamilyRootsTNGDatabase {
 	 *	@since		1.0
 	 */
 	public function get_total() {
-		return $this->total_people;
+		return (int) $this->total_people;
 	}
 }
