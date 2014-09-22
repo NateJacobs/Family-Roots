@@ -1,6 +1,6 @@
 <?php $family_id = get_query_var('tng_family_id'); ?>
 <?php $family = new TNG_Family($family_id); ?>
-<?php $utilities = new FamilyRootsUtilities() ?>
+<?php $utilities = new FamilyRootsUtilities(); ?>
 
 <?php if($family->exists()): ?>
 	<div class="page-header">
