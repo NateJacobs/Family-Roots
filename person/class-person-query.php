@@ -68,7 +68,7 @@ class TNG_Person_Query {
 				'count_total' => true
 			]);
 			
-			do_action( 'pre_get_tng_people', $this );
+			do_action( 'family_roots_pre_get_people', $this );
 			
 			$qv =& $this->query_vars;
 			
@@ -212,8 +212,8 @@ class TNG_Person_Query {
 					}
 				});
 				
-				$ids = implode(',', wp_parse_id_list($qv['include']));
-				$this->query_where .= " AND personID IN ($ids)";
+				$ids = implode("', '", $qv['include']);
+				$this->query_where .= " AND personID IN ('" .$ids. "')";
 			} elseif(!empty($qv['exclude'])) {
 				array_walk($qv['exclude'], function(&$item) { 
 					if('I' === substr(strtoupper($item), 0, 1)) {
@@ -223,8 +223,8 @@ class TNG_Person_Query {
 					}
 				});
 				
-				$ids = implode(',', wp_parse_id_list($qv['exclude']));
-				$this->query_where .= " AND personID NOT IN ($ids)";
+				$ids = implode("', '", $qv['exclude']);
+				$this->query_where .= " AND personID NOT IN ('" .$ids. "')";
 			}
 		}
 	}
