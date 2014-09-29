@@ -41,7 +41,7 @@ class TNG_Family {
 		
 		if($data) {
 			$this->parents = $data;
-			$this->ID = (int) $id;
+			$this->ID = (int) $data->family_id;
 			$this->children = $this->get_family_children();
 		}
 	}
@@ -86,6 +86,7 @@ class TNG_Family {
 		
 		if(!is_null($family)) {
 			return (object) [
+				'family_id' => $family->ID,
 				'father' => new TNG_Person($family->husband),
 				'mother' => new TNG_Person($family->wife),
 				'marriage_date' => $family->marrdatetr,
