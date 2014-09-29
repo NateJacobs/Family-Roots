@@ -51,24 +51,24 @@ class TNG_Family_Query {
 	 *	@param		array	$query	{
 	 *		Optional. Array of Query parameters
 	 *		
-	 *		@type array		$include			The specific family ID to include from the results.
-	 *		@type array		$exclude			The specific fmaily ID to exclude from the results.
-	 *		@type string		$search			The search term.
+	 *		@type array		$include	The specific family ID to include from the results.
+	 *		@type array		$exclude	The specific fmaily ID to exclude from the results.
+	 *		@type string		$search		The search term.
 	 *		@type array		$search_columns	The columns to search with the search terms.
-	 *										[ID, marriage_date, divorce_date, marriage_place, divorce_place, husband, wife]
-	 *		@type string		$orderby			The column to use to sort the results: ID, husband, wife, marriage_place.
-	 *		@type string		$order			How to order the results: ASC, DESC.
-	 *		@type int		$offset			The number of familes to offset before retrieval.
-	 *		@type int		$number			The total number of familes to return.
-	 *		@type bool		$count_total		Whether or not the total number of families found should be returned.
-	 *		@type array		$child_in		An array of children IDs.
-	 *		@type array		$parent_in		An array of parent IDs.
-	 *		@type array		$husband_in		An array of husband IDs.
-	 *		@type array		$wife_in			An array of wife IDs.
-	 *		@type array		$child_name		An array of children names: [[first, last], [first, last]].
-	 *		@type array		$parent_name		An array of parent names: [[first, last], [first, last]].
+	 *							[ID, marriage_date, divorce_date, marriage_place, divorce_place, husband, wife]
+	 *		@type string		$orderby	The column to use to sort the results: ID, husband, wife, marriage_place.
+	 *		@type string		$order		How to order the results: ASC, DESC.
+	 *		@type int		$offset		The number of familes to offset before retrieval.
+	 *		@type int		$number		The total number of familes to return.
+	 *		@type bool		$count_total	Whether or not the total number of families found should be returned.
+	 *		@type array		$child_in	An array of children IDs.
+	 *		@type array		$parent_in	An array of parent IDs.
+	 *		@type array		$husband_in	An array of husband IDs.
+	 *		@type array		$wife_in	An array of wife IDs.
+	 *		@type array		$child_name	An array of children names: [[first, last], [first, last]].
+	 *		@type array		$parent_name	An array of parent names: [[first, last], [first, last]].
 	 *		@type array		$husband_name	An array of husband names: [[first, last], [first, last]].
-	 *		@type array		$wife_name		An array of wife names: [[first, last], [first, last]].
+	 *		@type array		$wife_name	An array of wife names: [[first, last], [first, last]].
 	 *	}
 	 */
 	public function prepare_query($query) {
@@ -343,7 +343,7 @@ class TNG_Family_Query {
 	}
 	
 	/** 
-	 *	
+	 *	Run the actual query.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		9/28/14
