@@ -65,10 +65,10 @@ class TNG_Family_Query {
 	 *		@type array		$parent_in	An array of parent IDs.
 	 *		@type array		$husband_in	An array of husband IDs.
 	 *		@type array		$wife_in	An array of wife IDs.
-	 *		@type array		$child_name	An array of children names: [[first, last], [first, last]].
-	 *		@type array		$parent_name	An array of parent names: [[first, last], [first, last]].
-	 *		@type array		$husband_name	An array of husband names: [[first, last], [first, last]].
-	 *		@type array		$wife_name	An array of wife names: [[first, last], [first, last]].
+	 *		@type array		$child_name	An array of children names: [first, last].
+	 *		@type array		$parent_name	An array of parent names: [first, last].
+	 *		@type array		$husband_name	An array of husband names: [first, last].
+	 *		@type array		$wife_name	An array of wife names: [first, last].
 	 *	}
 	 */
 	public function prepare_query($query) {
@@ -484,7 +484,7 @@ class TNG_Family_Query {
 		$first = $this->get_name_sql($name['first']);
 		$last = $this->get_name_sql($name['last']);
 		
-		$family_ids = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT famc AS familyID FROM {$person_table} WHERE firstname = %s AND lastname = %s", $first, $last));
+		$family_ids = $this->settings['db']->get_results($this->settings['db']->prepare("SELECT famc AS familyID FROM {$person_table} WHERE firstname LIKE %s AND lastname LIKE %s", $first, $last));
 		
 		return $family_ids;
 	}
