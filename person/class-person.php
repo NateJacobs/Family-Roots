@@ -37,6 +37,7 @@ class TNG_Person {
 	 */
 	public function __construct($id = 0, $name = []) {
 		global $tng_db;
+		$this->utility = new FamilyRootsUtilities();
 		
 		if(!empty($id) && (!is_numeric($id) && 'I' != substr($id, 0, 1))) {
 			$name = $id;
@@ -54,6 +55,7 @@ class TNG_Person {
 		if($data) {
 			$this->data = $data;
 			$this->ID = (int) $data->ID;
+			$this->living = $this->utility->is_living($data->living, $data->birth_date);
 			$this->events = $this->get_person_events();
 			$this->parents = $this->get_person_parents();
 			$this->children = $this->get_person_children();
