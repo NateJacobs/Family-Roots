@@ -85,8 +85,8 @@ class FamilyRootsFilterSearch {
 				$wp_query->found_posts = $this->people_count+$total_found;
 				// the max pages is the total posts and people divided by the set posts_per_page variable
 				$max_pages = $wp_query->found_posts/$wp_query->get('posts_per_page');
-				// the max number of pages is the max pages rounded to the nearest whole number if it is a float otherwise the whole number
-				$wp_query->max_num_pages = is_float($max_pages) ? round($max_pages, 0) : $max_pages;
+				// the max number of pages is the max pages rounded up to the nearest whole number if it is a float otherwise the whole number
+				$wp_query->max_num_pages = is_float($max_pages) ? ceil($max_pages) : $max_pages;
 				
 				// only run if there are not enough search results to fill the pagination limit
 				if($wp_query->get('posts_per_page') > count($args)) {					
