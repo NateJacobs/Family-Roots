@@ -86,13 +86,14 @@ class TNG_Family {
 		
 		if(!is_null($family)) {
 			return (object) [
-				'family_id' => $family->ID,
+				'family_id' => substr($family->familyID, 1),
 				'father' => new TNG_Person($family->husband),
 				'mother' => new TNG_Person($family->wife),
 				'marriage_date' => $family->marrdatetr,
 				'marriage_place' => $family->marrplace,
 				'divorce_date' => $family->divdatetr,
-				'divorce_place' => $family->divplace
+				'divorce_place' => $family->divplace,
+				'change_date' => $family->changedate
 			];
 		} else {
 			return false;
