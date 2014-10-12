@@ -267,7 +267,7 @@ class FamilyRootsUtilities {
 	 *	@date		8/17/14
 	 *	@since		1.0
 	 *
-	 *	@param		string	$living	A 1 to indicatge living or a 0 to indicate dead.
+	 *	@param		string	$living	A 1 to indicate living or a 0 to indicate dead.
 	 */
 	public function is_living($living, $birth_date) {
 		if('0' == $living && '0000-00-00' != $birth_date){
