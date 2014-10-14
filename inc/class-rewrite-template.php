@@ -70,7 +70,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'person' === $type) {
-			$theme_template = locate_template('tng-person-page.php');
+			$theme_template = locate_template('family-roots/tng-person-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
@@ -95,7 +95,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'family' === $type) {
-			$theme_template = locate_template('tng-family-page.php');
+			$theme_template = locate_template('family-roots/tng-family-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
@@ -120,7 +120,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'lastname' === $type) {
-			$theme_template = locate_template('tng-lastname-page.php');
+			$theme_template = locate_template('family-roots/tng-lastname-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
@@ -145,7 +145,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'lastnames' === $type) {
-			$theme_template = locate_template('tng-lastnames-page.php');
+			$theme_template = locate_template('family-roots/tng-lastnames-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
@@ -170,7 +170,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'place' === $type) {
-			$theme_template = locate_template('tng-place-page.php');
+			$theme_template = locate_template('family-roots/tng-place-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
@@ -195,7 +195,7 @@ class FamilyRootsRewriteTemplate {
 		$type = get_query_var('tng_type');
 		
 		if(isset($type) && 'places' === $type) {
-			$theme_template = locate_template('tng-places-page.php');
+			$theme_template = locate_template('family-roots/tng-places-page.php');
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
