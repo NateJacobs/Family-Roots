@@ -108,7 +108,7 @@ class FamilyRootsLoad {
 	 *	@since		0.1
 	 */
 	public function activation() {
-		include_once(plugin_dir_path(__FILE__).'/inc/utilities.php');
+		include_once(plugin_dir_path(__FILE__).'/inc/class-utilities.php');
 		flush_rewrite_rules();
 		
 		$utilities = new FamilyRootsUtilities();
