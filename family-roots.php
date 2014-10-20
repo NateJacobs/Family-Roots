@@ -79,6 +79,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_RELATION . 'class-pedigree.php');
 		require_once(FAMROOTS_PLACES . 'class-places.php');
 		require_once(FAMROOTS_INCLUDES . 'class-filter-search.php');
+		require_once(FAMROOTS_INCLUDES . 'class-shortcodes.php');
 	}
 	
 	/**
