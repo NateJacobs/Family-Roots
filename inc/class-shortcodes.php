@@ -106,7 +106,7 @@ class Shortcodes {
 					}
 					
 					if(!empty($divorced)) {
-						$response .= '<dt>Marriage</dt><dd>'.$divorced.'</dd>';
+						$response .= '<dt>Divorce</dt><dd>'.$divorced.'</dd>';
 					}
 					
 					if($family->has_children()) {
