@@ -596,6 +596,25 @@ class FamilyRootsUtilities {
 			return $places;
 		}
 	}
+	
+	/** 
+	 *	Check if the current user is allowed to view living person information.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		10/19/14
+	 *	@since		1.0
+	 *
+	 *	@param		object	$person	The TNG_Person object
+	 */
+	public function living_allowed(TNG_Person $person) {
+		if(!$person->living) {
+			return true;
+		} elseif(is_user_logged_in() && $person->living) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 $family_roots_utilities = new FamilyRootsUtilities();
