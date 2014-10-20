@@ -13,8 +13,8 @@
 		<dl>
 			<?php $marriage_place_object = new TNG_Place(null, $family->marriage_place); ?>
 			<?php $divorce_place_object = new TNG_Place(null, $family->divorce_place); ?>
-			<?php $married = '0000-00-00' != $family->get('marriage_date') ? $utilities->get_date_for_display($family->get('marriage_date')).' &mdash; <a href="'.$utilities->get_place_url($marriage_place_object).'">'.$family->get('marriage_place').'</a>' : '' ?>
-			<?php $divorced = '0000-00-00' != $family->get('divorce_date') ? $utilities->get_date_for_display($family->get('divorce_date')).' &mdash; <a href="'.$utilities->get_place_url($divorce_place_object).'">'.$family->get('divorce_place').'</a>' : '' ?>
+			<?php $married = '0000-00-00' != $family->get('marriage_date') ? $utilities->get_date_for_display($family->get('marriage_date')).' &mdash; <a href="'.$utilities->get_place_url($marriage_place_object).'">'.$family->get('marriage_place').'</a>' : ''; ?>
+			<?php $divorced = '0000-00-00' != $family->get('divorce_date') ? $utilities->get_date_for_display($family->get('divorce_date')).' &mdash; <a href="'.$utilities->get_place_url($divorce_place_object).'">'.$family->get('divorce_place').'</a>' : ''; ?>
 			<?php if(!empty($married)): ?>
 				<dt>Marriage</dt>
 				<dd><?php echo $married; ?></dd>
