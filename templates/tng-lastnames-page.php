@@ -3,8 +3,8 @@
 <?php $settings = get_option('family-roots-settings'); ?>
 <div id="main-content" class="main-content">
 	<div class="page-content">
-		<div class="page-header">
-			<h1>Last names in the <?php echo ucwords(strtolower($settings['default_tree'])); ?> family tree</h1>
+		<div class="entry-header">
+			<h1 class="entry-title">Last names in the <?php echo ucwords(strtolower($settings['default_tree'])); ?> family tree</h1>
 		</div>
 		<p class="lead">Top 15 last names in the tree</p>
 		<?php echo family_roots_get_lastname_cloud(); ?>

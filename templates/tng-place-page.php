@@ -4,8 +4,8 @@
 <?php if($place->exists()): ?>
 <div id="main-content" class="main-content">
 	<div class="page-content">
-		<div class="page-header">
-			<h1><?php echo $place->get('place'); ?></h1>
+		<div class="entry-header">
+			<h1 class="entry-title"><?php echo $place->get('place'); ?></h1>
 		</div>
 		<div class="row">
 			<div class="col-md-4">

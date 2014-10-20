@@ -7,8 +7,8 @@
 <?php $people = family_roots_get_people_from_last_name(['search' => rawurldecode($lastname), 'number' => $number, 'offset' => $offset]); ?>
 <div id="main-content" class="main-content">
 	<div class="page-content">
-		<div class="page-header">
-			<h1><?php echo rawurldecode($lastname); ?></h1>
+		<div class="entry-header">
+			<h1 class="entry-title"><?php echo rawurldecode($lastname); ?></h1>
 		</div>
 		<p class="lead">All the people with the last name of <?php echo rawurldecode($lastname); ?>.</p>
 		<?php if(!empty($people->get_results())): ?>

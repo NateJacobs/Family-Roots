@@ -5,8 +5,8 @@
 
 <?php if($family->exists()): ?>
 <div id="main-content" class="main-content">
-	<div class="page-content">
-		<div class="page-header">
+	<div class="entry-header">
+		<div class="entry-title">
 			<h2>Family of <?php echo $family->get_father_name(); ?> and <?php echo $family->get_mother_name(); ?></h2>
 		</div>
 		<h3>Parents</h3>
