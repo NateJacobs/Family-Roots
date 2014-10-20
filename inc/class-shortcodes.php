@@ -114,6 +114,8 @@ class Shortcodes {
 						$response .= '<dd>'.count($family->get_children()).'</dd>';
 					}
 					
+					$response .= apply_filters('family_roots_family_shortcode_dl', '', $family);
+					
 					$response .= '</dl>';
 				}
 				
