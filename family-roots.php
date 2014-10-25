@@ -52,6 +52,7 @@ class FamilyRootsLoad {
 		define('FAMROOTS_PERSON', FAMROOTS_DIR.trailingslashit('person'));
 		define('FAMROOTS_RELATION', FAMROOTS_DIR.trailingslashit('relationship'));
 		define('FAMROOTS_PLACES', FAMROOTS_DIR.trailingslashit('places'));
+		define('FAMROOTS_WIDGETS', FAMROOTS_DIR.trailingslashit('widgets'));
 	}
 	
 	/**
@@ -80,6 +81,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_PLACES . 'class-places.php');
 		require_once(FAMROOTS_INCLUDES . 'class-filter-search.php');
 		require_once(FAMROOTS_INCLUDES . 'class-shortcodes.php');
+		require_once(FAMROOTS_WIDGETS . 'class-birthday-widget.php');
 	}
 	
 	/**
