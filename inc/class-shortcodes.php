@@ -7,7 +7,7 @@
  *	@date		10/19/14
  *	@since		1.0
  */
-class Shortcodes {
+class FamilyRootsShortcodes {
 	/** 
 	 *	Hook into WordPress and prepare all the methods as necessary.
 	 *
@@ -127,4 +127,4 @@ class Shortcodes {
 	}
 }
 
-$family_roots_shortcodes = new Shortcodes();
+$family_roots_shortcodes = new FamilyRootsShortcodes();
