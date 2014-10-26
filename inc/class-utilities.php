@@ -23,6 +23,7 @@ class FamilyRootsUtilities {
 		global $tng_db;
 		$this->db = $tng_db;
 		$this->settings = get_option('family-roots-settings');
+		date_default_timezone_set(get_option('timezone_string'));
 	}
 	
 	/** 
@@ -420,13 +421,14 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
-	 *	
+	 *	Determine the person's age.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/17/14
 	 *	@since		1.0
 	 *
-	 *	@param		
+	 *	@param		string	$birth_date	The birthdate of the person.
+	 *	@param		string	$death_date	The deathdate of the person.
 	 */
 	public function get_person_age($birth_date, $death_date) {
 		// set default age
