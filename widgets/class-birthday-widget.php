@@ -15,7 +15,7 @@ class FamilyRootsBirthdayWidget extends WP_Widget {
 	 */
 	public function __construct() {
 		parent::__construct(
-			'foo_widget',
+			'family_roots_birthday_widget',
 			__('Family Roots Birthdays', 'family_roots'),
 			['description' => __('A list of birthdays from TNG for the current day.', 'family_roots')]
 		);
@@ -32,11 +32,46 @@ class FamilyRootsBirthdayWidget extends WP_Widget {
 	 * 	@param 		array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
+		date_default_timezone_set(get_option('timezone_string'));
+		$query_args = [
+			'date_columns' => [
+				'birth_date'
+			],
+			'date_search' => [
+				[
+					'month' => date('m'),
+					'day' => date('d')
+				]
+			]
+		];
+		
+		$birthdays = new TNG_Person_Query($query_args);
+		
 		echo $args['before_widget'];
+		
 		if (!empty( $instance['title'])) {
 			echo $args['before_title'].apply_filters('widget_title', $instance['title']).$args['after_title'];
 		}
-		echo __( 'Hello, World!', 'family_roots' );
+		
+		if($birthdays->get_total() > 0) {
+			$utilities = new FamilyRootsUtilities();
+			
+			$ul_class = apply_filters('family_roots_widget_ul_class', 'list-group');
+			$li_class = apply_filters('family_roots_widget_li_class', 'list-group-item');
+			
+			echo '<ul class="'.$ul_class.'">';
+			
+			foreach($birthdays->get_results() as $person) {
+				echo '<li class="'.$li_class.'"><a href="'.$utilities->get_person_url($person).'">'.$person->get('first_name').' '.$person->get('last_name').'</a></li>';
+			}
+			
+			echo '</ul>';
+		} else {
+			echo apply_filters('family_roots_widget_no_results_before', '<div class="panel-body">');
+			_e('There are no recorded birthdays today', 'family_roots');
+			echo apply_filters('family_roots_widget_no_results_after', '</div>');
+		}
+		
 		echo $args['after_widget'];
 	}
 	
