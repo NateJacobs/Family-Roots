@@ -60,10 +60,12 @@ class TNG_Person_Query {
 				'exclude' => [],
 				'search' => '',
 				'search_columns' => [],
+				'date_search' => [],
+				'date_columns' > [],
 				'orderby' => 'last_name',
 				'order' => 'ASC',
 				'offset' => '',
-				'number' => '',
+				'number' => 200,
 				'fields' => 'all',
 				'count_total' => true
 			]);
@@ -186,11 +188,8 @@ class TNG_Person_Query {
 						'first_name',
 						'last_name',
 						'birth_place',
-						'birth_date',
 						'death_place',
-						'death_date',
-						'burial_place',
-						'burial_date'
+						'burial_place'
 					];
 					
 					$search_columns = array_intersect($qv['search_columns'], $columns);
@@ -199,8 +198,23 @@ class TNG_Person_Query {
 				if(!$search_columns) {
 					$search_columns = ['lastname', 'firstname'];
 				}
-	
+				
 				$this->query_where .= $this->get_search_sql($search, $search_columns, $wild);
+			}
+			
+			if(!empty($qv['date_search'])) {
+				$date_columns = [];
+				if($qv['date_columns']) {
+					$columns = [
+						'birth_date',
+						'death_date',
+						'burial_date'
+					];
+					
+					$date_columns = array_intersect($qv['date_columns'], $columns);
+					
+					$this->query_where .= $this->get_date_sql($qv['date_search'], $date_columns);
+				}
 			}
 			
 			if(!empty($qv['include'])) {
@@ -263,7 +277,7 @@ class TNG_Person_Query {
 	}
 	
 	/** 
-	 *	Build the search sql statement
+	 *	Build the search sql statement.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		9/5/14
@@ -273,33 +287,20 @@ class TNG_Person_Query {
 	 *	@param		array	$cols	The search columns.
 	 *	@param		bool		$wild	If there are any wild cards used in the search.
 	 */
-	protected function get_search_sql( $string, $cols, $wild = false ) {
+	protected function get_search_sql($string, $cols, $wild = false) {
 		$searches = [];
 		$leading_wild = ('leading' == $wild || 'both' == $wild) ? '%' : '';
 		$trailing_wild = ('trailing' == $wild || 'both' == $wild) ? '%' : '';
 		$like = $leading_wild.$this->settings['db']->esc_like($string).$trailing_wild;
-
-		$date_fields = [
-			'birth_date',
-			'death_date',
-			'burial_date'
-		];
 		
 		foreach($cols as $col) {
-			if('ID' == $col || in_array($col, $date_fields)) {
-				switch($col) {
-					case 'birth_date': $searches[] = $this->settings['db']->prepare("birthdatetr = %s", $string); break;
-					case 'death_date': $searches[] = $this->settings['db']->prepare("deathdatetr = %s", $string); break;
-					case 'burial_date': $searches[] = $this->settings['db']->prepare("burialdate = %s", $string); break;
-					default:
-						if('I' === substr(strtoupper($string), 0, 1)) {
-							$string = $string;
-						} else {
-							$string = 'I'.$string;
-						}
-						$searches[] = $this->settings['db']->prepare("personID = %s", $string); 
-						break;
+			if('ID' == $col) {
+				if('I' === substr(strtoupper($string), 0, 1)) {
+					$string = $string;
+				} else {
+					$string = 'I'.$string;
 				}
+				$searches[] = $this->settings['db']->prepare("personID = %s", $string);
 			} else {
 				$tng_field_name = str_replace('_', '', $col);
 				$searches[] = $this->settings['db']->prepare( "$tng_field_name LIKE %s", $like );
@@ -309,6 +310,49 @@ class TNG_Person_Query {
 		return ' AND (' . implode(' OR ', $searches) . ')';
 	}
 	
+	
+	/** 
+	 *	
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		10/25/14
+	 *	@since		1.0
+	 *
+	 *	@param		
+	 */
+	public function get_date_sql($query, $cols) {
+		$searches = [];
+		
+		add_filter( 'date_query_valid_columns', function($valid_columns){
+			$valid_columns[] = 'birthdatetr';
+			$valid_columns[] = 'deathdatetr';
+			$valid_columns[] = 'burialdatetr';
+			return $valid_columns;
+		});
+		
+		foreach($cols as $col) {
+			switch($col) {
+				case 'birth_date': $col = 'birthdatetr'; break;
+				case 'death_date': $col = 'deathdatetr'; break;
+				case 'burial_date': $col = 'burialdatetr'; break;
+				default: $col = 'birthdatetr'; break;
+			}
+			
+			$date = new WP_Date_Query($query, $col);
+		
+			$searches[] = $date->get_sql();
+		}
+		
+		remove_filter('date_query_valid_columns', function($valid_columns){
+			return $valid_columns;
+		});
+		
+		array_walk($searches, function(&$value, $key){
+				$value = substr($value, 5);
+		});
+				
+		return ' AND (' . implode(' OR ', $searches) . ')';
+	}
 	/** 
 	 *	Return all the people found.
 	 *
