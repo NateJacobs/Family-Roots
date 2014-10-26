@@ -82,6 +82,7 @@ class FamilyRootsLoad {
 		require_once(FAMROOTS_INCLUDES . 'class-filter-search.php');
 		require_once(FAMROOTS_INCLUDES . 'class-shortcodes.php');
 		require_once(FAMROOTS_WIDGETS . 'class-birthday-widget.php');
+		require_once(FAMROOTS_WIDGETS . 'class-deathday-widget.php');
 	}
 	
 	/**
