@@ -5,8 +5,8 @@ Search all the people in the TNG database.
 
 ## Methods
 
-* get_results() - return an array of all the families found from the query.
-* get_total() - the number of families found if count_total is set to TRUE.
+* get_results() - return an array of all the people found from the query.
+* get_total() - the number of people found if count_total is set to TRUE.
 
 ## Parameters
 
@@ -16,10 +16,10 @@ Show specific people by person ID.
 * include (array) - list of people to include
 * exclude (array) - list of people to exclude
 
-#### Return specific familes
+#### Return specific people
 ````$person_query = new TNG_Person_Query(['include' => [1, 2, 3]]);````
 
-#### Return specific familes except a specific list of families
+#### Return specific people except a specific list of people
 ````$person_query = new TNG_Person_Query(['exclude' => [4, 5, 6]]);````
 
 ### Search
@@ -37,7 +37,7 @@ Search people.
 #### Dispaly people based upon a keyword search using first and last name
 ````$person_query = new TNG_Person_Query(['search' => 'John']);````
 
-#### Dispaly familes based only upon the birth_place column
+#### Dispaly people based only upon the birth_place column
 ````$person_query = new TNG_Person_Query(['search' => 'New York', 'search_columns' => ['birth_place']]);````
 
 ### Date Searching
