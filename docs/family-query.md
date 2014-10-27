@@ -3,9 +3,10 @@
 ## Description
 Search all the family groups in the TNG database. 
 
-## Interacting with TNG_Family_Query
-
 ## Methods
+
+* get_results() - return an array of all the families found from the query.
+* get_total() - the number of families found if count_total is set to TRUE.
 
 ## Parameters
 
@@ -39,3 +40,33 @@ Search families.
 
 #### Dispaly familes based only upon the marriage_date column
 ````$family_query = new TNG_Family_Query(['search' => '2000-01-01', 'search_columns' => ['marriage_date']]);````
+
+### Parent and Children Search
+Search the families by parent and/or children by ID or name.
+
+* child_in (array) - an array of children IDs.
+* parent_in (array) - an array of parent IDs.
+* husband_in (array) - an array of husband IDs.
+* wife_in (array) - an array of wife IDs.
+* child_name (array) - a child's first and last name.
+* parent_name (array) - a parent's first and last name.
+* husband_name (array) - a husband's first and last name.
+* wife_name (array) - a wife's first and last name.
+
+#### Return the families with the following children
+````$family_query = new TNG_Family_Query(['child_in' => [1, 3, 5]]);````
+
+#### Return the families with the following husband
+````$family_query = new TNG_Family_Query(['husband_name' => ['first' => 'John', 'last' => 'Smith']]);````
+
+### Order, Orderby, Offset, Number
+Manipulate how the data is returned.
+
+* order (string) - ASC or DESC.
+* orderby (string) - which database column to order by.
+* offset (integer) - which database row to start returning results from.
+* number (integer) - the total number of families to return.
+
+### Total Number of Families Found
+
+* count_total (bool) - Should the total number of families found be returned.
