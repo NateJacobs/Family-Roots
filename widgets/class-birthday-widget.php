@@ -16,8 +16,8 @@ class FamilyRootsBirthdayWidget extends WP_Widget {
 	public function __construct() {
 		parent::__construct(
 			'family_roots_birthday_widget',
-			__('Family Roots Birthdays', 'family_roots'),
-			['description' => __('A list of birthdays from TNG for the current day.', 'family_roots')]
+			__('Family Roots Birthdays', 'family-roots'),
+			['description' => __('A list of birthdays from TNG for the current day.', 'family-roots')]
 		);
 	}
 	
@@ -68,7 +68,7 @@ class FamilyRootsBirthdayWidget extends WP_Widget {
 			echo '</ul>';
 		} else {
 			echo apply_filters('family_roots_widget_no_results_before', '<div class="panel-body">');
-			_e('There are no recorded birthdays today', 'family_roots');
+			_e('There are no recorded birthdays today', 'family-roots');
 			echo apply_filters('family_roots_widget_no_results_after', '</div>');
 		}
 		
@@ -88,11 +88,11 @@ class FamilyRootsBirthdayWidget extends WP_Widget {
 		if(isset($instance['title'])) {
 			$title = $instance['title'];
 		} else {
-			$title = __('Birthdays', 'family_roots');
+			$title = __('Birthdays', 'family-roots');
 		}
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'family_roots'); ?></label> 
+		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'family-roots'); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>">
 		</p>
 		<?php
