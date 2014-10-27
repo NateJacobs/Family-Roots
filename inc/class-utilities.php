@@ -97,8 +97,7 @@ class FamilyRootsUtilities {
 	 *
 	 *	@todo		Add error handling
 	 */
-	public function get_tng_db_values()
-	{
+	public function get_tng_db_values() {
 		// get array of config.php and customconfig.php
 		$results = $this->get_tng_config();
 				
@@ -224,8 +223,7 @@ class FamilyRootsUtilities {
 	 *
 	 *	@param		string	$line
 	 */
-	protected function split_value($line)
-	{
+	protected function split_value($line) {
 		// split on the =
 		$value = explode('=', $line);
 		// remove the double quotes and ending semi-colon
