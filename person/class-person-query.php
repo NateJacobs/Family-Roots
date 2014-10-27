@@ -185,6 +185,7 @@ class TNG_Person_Query {
 				$search_columns = [];
 				if($qv['search_columns']) {
 					$columns = [
+						'ID',
 						'first_name',
 						'last_name',
 						'birth_place',
