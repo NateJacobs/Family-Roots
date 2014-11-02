@@ -3,8 +3,8 @@
 /**
  *	Plugin Name: 	Family Roots
  *	Description: 	The Next Generation of Genealogy Site Building and WordPress Integration.
- *	Version: 		0.1
- *	Date:			10/28/12
+ *	Version: 		1.0
+ *	Date:			10/27/14
  *	Author:			Nate Jacobs
  *	Author URI:		https://github.com/NateJacobs
  */
@@ -113,7 +113,6 @@ class FamilyRootsLoad {
 	 */
 	public function activation() {
 		include_once(plugin_dir_path(__FILE__).'/inc/class-utilities.php');
-		flush_rewrite_rules();
 		
 		$utilities = new FamilyRootsUtilities();
 		
@@ -122,8 +121,11 @@ class FamilyRootsLoad {
 		// if the path is not empty, add option to db
 		if(!empty($path)) {
 			add_option('family-roots-settings', ['tng_path' => trailingslashit($path)]);
-			$utilities->get_tng_db_values();
-		}		
+			$settings = $utilities->get_tng_db_values();
+			update_option('family-roots-settings', $settings);
+		}
+		
+		flush_rewrite_rules();
 	}
 	
 	/** 
