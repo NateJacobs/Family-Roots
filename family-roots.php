@@ -98,6 +98,7 @@ class FamilyRootsLoad {
 	public function admin() {
 		if(is_admin()) {
 			require_once(FAMROOTS_ADMIN . 'class-settings.php');
+			require_once(FAMROOTS_ADMIN . 'class-nav-menus.php');
 		}
 	}
 	
