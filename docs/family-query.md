@@ -35,10 +35,10 @@ Search families.
 	* husband - Search by the husband ID. This can be either a string (I123) or an integer (123).
 	* wife - Search by the wife ID. This can be either a string (I123) or an integer (123).
 	
-#### Dispaly familes based upon a keyword search
+#### Display familes based upon a keyword search
 ````$family_query = new TNG_Family_Query(['search' => 'New York']);````
 
-#### Dispaly familes based only upon the marriage_date column
+#### Display familes based only upon the marriage_date column
 ````$family_query = new TNG_Family_Query(['search' => '2000-01-01', 'search_columns' => ['marriage_date']]);````
 
 ### Parent and Children Search
