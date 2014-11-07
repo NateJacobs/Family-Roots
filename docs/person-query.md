@@ -34,10 +34,10 @@ Search people.
 	* death_place - Search by death place.
 	* burial_place - Search by burial place.
 	
-#### Dispaly people based upon a keyword search using first and last name
+#### Display people based upon a keyword search using first and last name
 ````$person_query = new TNG_Person_Query(['search' => 'John']);````
 
-#### Dispaly people based only upon the birth_place column
+#### Display people based only upon the birth_place column
 ````$person_query = new TNG_Person_Query(['search' => 'New York', 'search_columns' => ['birth_place']]);````
 
 ### Date Searching
