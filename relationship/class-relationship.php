@@ -35,7 +35,7 @@ class TNG_Relationship {
 		
 		// if both contain data
 		if($person_a_id && $person_b_id) {
-			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
+			$this->settings = ['tables' => get_option('family_roots_settings'), 'db' => $tng_db];
 			$this->person_1_id = $this->format_prefix($person_a_id);
 			$this->person_2_id = $this->format_prefix($person_b_id);
 			$data = $this->calculate_relationship();

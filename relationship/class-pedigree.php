@@ -30,7 +30,7 @@ class TNG_Pedigree {
 	public function __construct(TNG_Person $person, $depth = 4) {
 		global $tng_db;
 		$this->utilities = new FamilyRootsUtilities();
-		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
+		$this->settings = ['tables' => get_option('family_roots_settings'), 'db' => $tng_db];
 		
 		$data = $this->build_array($person, $depth);
 		

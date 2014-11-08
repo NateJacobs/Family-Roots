@@ -35,7 +35,7 @@ class TNG_Family_Query {
 	public function __construct($query = null) {
 		global $tng_db;
 		if(!is_null($query)) {
-			$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
+			$this->settings = ['tables' => get_option('family_roots_settings'), 'db' => $tng_db];
 			$this->prepare_query($query);
 			$this->query();
 		}

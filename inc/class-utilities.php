@@ -22,7 +22,7 @@ class FamilyRootsUtilities {
 	public function __construct() {
 		global $tng_db;
 		$this->db = $tng_db;
-		$this->settings = get_option('family-roots-settings');
+		$this->settings = get_option('family_roots_settings');
 		date_default_timezone_set(get_option('timezone_string'));
 	}
 	
@@ -71,7 +71,7 @@ class FamilyRootsUtilities {
 	 */
 	private function get_tng_config() {
 		// get the tng file path
-		$settings = get_option('family-roots-settings');
+		$settings = get_option('family_roots_settings');
 		
 		// if the tng file path is present
 		if(!empty($settings['tng_path'])) {
@@ -108,7 +108,7 @@ class FamilyRootsUtilities {
 			$db_values = [];
 			$settings = [];
 			
-			$settings = get_option('family-roots-settings');
+			$settings = get_option('family_roots_settings');
 			
 			// loop through each line and find all the values that start with $database_ or $users_table
 			foreach($results as $line) {

@@ -121,9 +121,9 @@ class FamilyRootsLoad {
 		
 		// if the path is not empty, add option to db
 		if(!empty($path)) {
-			add_option('family-roots-settings', ['tng_path' => trailingslashit($path)]);
+			add_option('family_roots_settings', ['tng_path' => trailingslashit($path)]);
 			$settings = $utilities->get_tng_db_values();
-			update_option('family-roots-settings', $settings);
+			update_option('family_roots_settings', $settings);
 		}
 		
 		flush_rewrite_rules();
@@ -137,7 +137,7 @@ class FamilyRootsLoad {
 	 *	@since		0.1
 	 */
 	public function deletion() {
-		// remove family-roots-settings, family-roots-users-settings, family-roots-advanced-settings
+		// remove family_roots_settings, family-roots-users-settings, family-roots-advanced-settings
 		// remove roles and capabilities
 	}
 }

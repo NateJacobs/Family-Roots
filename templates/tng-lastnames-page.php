@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <?php $utilities = new FamilyRootsUtilities() ?>
-<?php $settings = get_option('family-roots-settings'); ?>
+<?php $settings = get_option('family_roots_settings'); ?>
 <div id="main-content" class="main-content">
 	<div class="page-content">
 		<div class="entry-header">

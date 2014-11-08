@@ -8,7 +8,7 @@
  *	@since		1.0
  */
 function family_roots_unique_last_names() {
-	$settings = get_option('family-roots-settings');
+	$settings = get_option('family_roots_settings');
 	global $tng_db;
 	
 	$person_table = isset($settings['people_table']) ? $settings['people_table'] : false;
@@ -30,7 +30,7 @@ function family_roots_unique_last_names() {
  *	@param		int	$threshold	The minimum number of people with a surname required to show in tag cloud.
  */
 function family_roots_get_lastname_cloud($threshold = 15) {
-	$settings = get_option('family-roots-settings');
+	$settings = get_option('family_roots_settings');
 	global $tng_db;
 		
 	$person_table = isset($settings['people_table']) ? $settings['people_table'] : false;
@@ -108,7 +108,7 @@ function family_roots_get_people_from_last_name($vars) {
  *	@param		string	$file_name	The media file name.
  */
 function family_roots_get_photo_url($file_name) {
-	$settings = get_option('family-roots-settings');
+	$settings = get_option('family_roots_settings');
 	$photo_dir = isset($settings['photo_dir']) ? $settings['photo_dir'] : false;
 	$tng_domain = isset($settings['tng_domain']) ? $settings['tng_domain'] : false;
 	

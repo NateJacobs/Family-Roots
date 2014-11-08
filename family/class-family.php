@@ -33,7 +33,7 @@ class TNG_Family {
 			$id = 0;
 		}
 		
-		$this->settings = ['tables' => get_option('family-roots-settings'), 'db' => $tng_db];
+		$this->settings = ['tables' => get_option('family_roots_settings'), 'db' => $tng_db];
 		
 		if($id) {
 			$data = $this->get_family_parents($id);
