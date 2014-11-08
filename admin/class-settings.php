@@ -150,9 +150,24 @@ class FamilyRootsSettings {
 		add_settings_field(
 			'tng-database-table-names',
 			__('Table Names', 'family-roots'),
-			[$this, 'tng_database_people_table_callback'],
+			[$this, 'tng_database_table_names_callback'],
 			'family-roots-options',
 			'tng-table-names'
+		);
+		
+		// misc TNG config values
+		add_settings_section(
+			'tng-misc-values',
+			__('TNG Config Values', 'family-roots'),
+			[$this, 'tng_database_config_section_callback'],
+			'family-roots-options'
+		);
+		add_settings_field(
+			'tng-misc-config-values',
+			__('Misc Config Values', 'family-roots'),
+			[$this, 'tng_database_misc_config_callback'],
+			'family-roots-options',
+			'tng-misc-values'
 		);
 		
 		// register tng and wp settings sections
@@ -183,7 +198,7 @@ class FamilyRootsSettings {
 	 *	@since		1.0
 	 */
 	public function tng_database_section_callback() {
-		_e('The database values for TNG.', 'family-roots');
+		_e('The database values for TNG. If these are empty, ensure the path is correct above and press the "Save Changes" button below to automatically get the values.', 'family-roots');
 	}
 	
 	/** 
@@ -194,7 +209,18 @@ class FamilyRootsSettings {
 	 *	@since		1.0
 	 */
 	public function tng_database_name_section_callback() {
-		_e('The database table names for TNG.', 'family-roots');
+		_e('The database table names for TNG. If these are empty, ensure the path is correct above and press the "Save Changes" button below to automatically get the values.', 'family-roots');
+	}
+	
+	/** 
+	 *	Output the misc config section description.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		11/7/14
+	 *	@since		1.0
+	 */
+	public function tng_database_config_section_callback() {
+		_e('If these are empty, ensure the path is correct above and press the "Save Changes" button below to automatically get the values.', 'family_roots');
 	}
 	
 	/** 
@@ -277,54 +303,66 @@ class FamilyRootsSettings {
 	 *	@date		11/1/14
 	 *	@since		1.0
 	 */
-	public function tng_database_people_table_callback() {
-		$people_table = isset($this->settings['people_table']) ? esc_attr($this->settings['people_table']) : '';
-		
+	public function tng_database_table_names_callback() {
 		?>
-		<label>TNG URL</label>
-		<input class="widefat" type="text" name="family-roots-settings[tng_domain]" value="<?php echo isset($this->settings['tng_domain']) ? esc_attr($this->settings['tng_domain']) : ''; ?>">
-		<br><br>
-		<label>People Table</label>
+		<label><?php _e('People Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[people_table]" value="<?php echo isset($this->settings['people_table']) ? esc_attr($this->settings['people_table']) : ''; ?>">
 		<br><br>
-		<label>Family Table</label>
+		<label><?php _e('Family Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[family_table]" value="<?php echo isset($this->settings['family_table']) ? esc_attr($this->settings['family_table']) : ''; ?>">
 		<br><br>
-		<label>Children Table</label>
+		<label><?php _e('Children Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[children_table]" value="<?php echo isset($this->settings['children_table']) ? esc_attr($this->settings['children_table']) : '';?>">
 		<br><br>
-		<label>Places Table</label>
+		<label><?php _e('Places Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[places_table]" value="<?php echo isset($this->settings['places_table']) ? esc_attr($this->settings['places_table']) : ''; ?>">
 		<br><br>
-		<label>Sources Table</label>
+		<label><?php _e('Sources Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[sources_table]" value="<?php echo isset($this->settings['sources_table']) ? esc_attr($this->settings['sources_table']) : ''; ?>">
 		<br><br>
-		<label>Events Table</label>
+		<label><?php _e('Events Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[events_table]" value="<?php echo isset($this->settings['events_table']) ? esc_attr($this->settings['events_table']) : ''; ?>">
 		<br><br>
-		<label>Event Types Table</label>
+		<label><?php _e('Event Types Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[eventtypes_table]" value="<?php echo isset($this->settings['eventtypes_table']) ? esc_attr($this->settings['eventtypes_table']) : ''; ?>">
 		<br><br>
-		<label>Tree Table</label>
+		<label><?php _e('Tree Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[trees_table]" value="<?php echo isset($this->settings['trees_table']) ? esc_attr($this->settings['trees_table']) : ''; ?>">
 		<br><br>
-		<label>Default Tree</label>
+		<label><?php _e('Default Tree', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[default_tree]" value="<?php echo isset($this->settings['default_tree']) ? esc_attr($this->settings['default_tree']) : ''; ?>">
 		<br><br>
-		<label>Note Links Table</label>
+		<label><?php _e('Note Links Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[notelinks_table]" value="<?php echo isset($this->settings['notelinks_table']) ? esc_attr($this->settings['notelinks_table']) : ''; ?>">
 		<br><br>
-		<label>XNote Table</label>
+		<label><?php _e('XNote Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[xnotes_table]" value="<?php echo isset($this->settings['xnotes_table']) ? esc_attr($this->settings['xnotes_table']) : ''; ?>">
 		<br><br>
-		<label>Users Table</label>
+		<label><?php _e('Users Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[users_table]" value="<?php echo isset($this->settings['users_table']) ? esc_attr($this->settings['users_table']) : ''; ?>">
 		<br><br>
-		<label>Media Table</label>
+		<label><?php _e('Media Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[media_table]" value="<?php echo isset($this->settings['media_table']) ? esc_attr($this->settings['media_table']) : ''; ?>">
 		<br><br>
-		<label>Media Links Table</label>
+		<label><?php _e('Media Links Table', 'family_roots'); ?></label>
 		<input class="widefat" type="text" name="family-roots-settings[media_links_table]" value="<?php echo isset($this->settings['media_links_table']) ? esc_attr($this->settings['media_links_table']) : ''; ?>">
+		<?php
+	}
+	
+	/** 
+	 *	Render the input fields for the misc config values from TNG.
+	 *
+	 *	@author		Nate Jacobs
+	 *	@date		11/7/14
+	 *	@since		1.0
+	 */
+	public function tng_database_misc_config_callback() {
+		?>
+		<label><?php _e('TNG URL', 'family_roots'); ?></label>
+		<input class="widefat" type="text" name="family-roots-settings[tng_domain]" value="<?php echo isset($this->settings['tng_domain']) ? esc_attr($this->settings['tng_domain']) : ''; ?>">
+		<br><br>
+		<label><?php _e('Photo Directory', 'family_roots'); ?></label>
+		<input class="widefat" type="text" name="family-roots-settings[tng_domain]" value="<?php echo isset($this->settings['photo_dir']) ? esc_attr($this->settings['photo_dir']) : ''; ?>">
 		<?php
 	}
 	
@@ -338,8 +376,13 @@ class FamilyRootsSettings {
 	 *	@param	array	$input
 	 */
 	public function family_roots_validate($input) {
+		$utilities = new FamilyRootsUtilities();
+		$output = $utilities->get_tng_db_values();
+		
 		foreach($input as $key => $text) {
-			$output[$key] = wp_filter_nohtml_kses($text);
+			if(isset($text) && !empty($text)) {
+				$output[$key] = sanitize_text_field($text);
+			}
 		}
 		
 		return $output;
