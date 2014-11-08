@@ -38,6 +38,8 @@ class FamilyRootsUtilities {
 		// get the directory above the WordPress install
 		$path = dirname(ABSPATH);
 		
+		$files = [];
+		
 		// define options for recursive iterator
 		$directory = new RecursiveDirectoryIterator($path,RecursiveDirectoryIterator::SKIP_DOTS);
 		$iterator = new RecursiveIteratorIterator($directory,RecursiveIteratorIterator::LEAVES_ONLY);
@@ -204,7 +206,7 @@ class FamilyRootsUtilities {
 					$settings['photo_dir'] = $this->split_value($line);
 				}
 			}
-						
+			
 			$settings['host'] = trim($db_values['host']);
 			$settings['name'] = trim($db_values['name']);
 			$settings['username'] = trim($db_values['username']);
@@ -215,7 +217,7 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
-	 *	
+	 *	Split the string on a "=" sign and remove the double quotes and ending semi-colon.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		8/5/14
