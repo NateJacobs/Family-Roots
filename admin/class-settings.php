@@ -281,6 +281,9 @@ class FamilyRootsSettings {
 		$people_table = isset($this->settings['people_table']) ? esc_attr($this->settings['people_table']) : '';
 		
 		?>
+		<label>TNG URL</label>
+		<input class="widefat" type="text" name="family-roots-settings[tng_domain]" value="<?php echo isset($this->settings['tng_domain']) ? esc_attr($this->settings['tng_domain']) : ''; ?>">
+		<br><br>
 		<label>People Table</label>
 		<input class="widefat" type="text" name="family-roots-settings[people_table]" value="<?php echo isset($this->settings['people_table']) ? esc_attr($this->settings['people_table']) : ''; ?>">
 		<br><br>

@@ -113,7 +113,7 @@ function family_roots_get_photo_url($file_name) {
 	$tng_domain = isset($settings['tng_domain']) ? $settings['tng_domain'] : false;
 	
 	if(!$photo_dir) {
-		return  false;
+		return false;
 	}
 	
 	return trailingslashit($tng_domain).trailingslashit($photo_dir).rawurlencode($file_name);
