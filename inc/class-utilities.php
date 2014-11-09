@@ -508,13 +508,11 @@ class FamilyRootsUtilities {
 	}
 	
 	/** 
-	 *	
+	 *	Build the pagination HTML.
 	 *
 	 *	@author		Nate Jacobs
 	 *	@date		9/6/14
 	 *	@since		1.0
-	 *
-	 *	@param		
 	 */
 	public function tng_pagination($current_page, $limit, $offset, $total) {
 		$total = round($total/$limit);

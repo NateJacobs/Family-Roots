@@ -34,7 +34,7 @@ The following template names are supported in the theme folder. If the plugin do
 * /family-roots/tng-place-page.php
 
 ### Requirements
-* PHP 5.4 or greater
+* PHP 5.5 or greater
 * WordPress 4.0 or greater
 * TNG on same server as WordPress
 * Only one tree in TNG
