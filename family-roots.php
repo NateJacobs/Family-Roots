@@ -3,7 +3,7 @@
 /**
  *	Plugin Name: 	Family Roots
  *	Description: 	The Next Generation of Genealogy Site Building and WordPress Integration.
- *	Version: 		1.0
+ *	Version: 		1.2
  *	Date:			10/27/14
  *	Author:			Nate Jacobs
  *	Author URI:		https://github.com/NateJacobs
