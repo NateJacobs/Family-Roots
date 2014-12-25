@@ -114,8 +114,8 @@ class FamilyRootsFilterSearch {
 		
 		// get the total number of people found
 		$this->people_count = $people->get_total();
-		
-		if(!empty($people->get_results())) {
+		$results = $people->get_results();
+		if(!empty($results)) {
 			$author_id = get_users(['role' => 'administrator']);
 			foreach($people->get_results() as $person) {
 				$death = !$this->utility->is_living($person->get('living'), $person->get('birth_date')) ? '&ndash; Death Date: '.$this->utility->get_date_for_display($person->get('death_date')) : '';
@@ -245,8 +245,8 @@ class FamilyRootsFilterSearch {
 		$family_results = [];
 		
 		$this->family_count = $family->get_total();
-		
-		if(!empty($family->get_results())) {
+		$results = $family->get_results();
+		if(!empty($results)) {
 			$author_id = get_users(['role' => 'administrator']);
 			
 			foreach($family->get_results() as $fam) {

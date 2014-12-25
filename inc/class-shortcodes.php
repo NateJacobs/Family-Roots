@@ -46,15 +46,17 @@ class FamilyRootsShortcodes {
 						$response .= '<small> Deceased</small>';
 					}
 					
-					$birth_place_object = new TNG_Place(null, $person->get('birth_place'));
-					$birth_place = !empty($person->get('birth_place')) ?  ' &mdash; <a href="'.$utilities->get_place_url($birth_place_object).'">'.$person->get('birth_place').'</a>' : '';
+					$person_birth_place = $person->get('birth_place');
+					$birth_place_object = new TNG_Place(null, $person_birth_place);
+					$birth_place = !empty($person_birth_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($birth_place_object).'">'.$person->get('birth_place').'</a>' : '';
 					$response .= '<br><br><table class="table">';
 					$response .= '<tr><td>Birth:</td>';
 					$response .= '<td>'.$utilities->get_date_for_display($person->get('birth_date')).$birth_place.'</td></tr>';
 					
 					if(!$person->living) {
-						$death_place_object = new TNG_Place(null, $person->get('death_place'));
-						$death_place = !empty($person->get('death_place')) ?  ' &mdash; <a href="'.$utilities->get_place_url($death_place_object).'">'.$person->get('death_place').'</a>' : '';
+						$person_death_place = $person->get('death_place');
+						$death_place_object = new TNG_Place(null, $person_death_place);
+						$death_place = !empty($person_death_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($death_place_object).'">'.$person->get('death_place').'</a>' : '';
 						$response .= '<tr><td>Death:</td>';
 						$response .= '<td>'.$utilities->get_date_for_display($person->get('death_date')).$death_place.'</td></tr>';
 					}

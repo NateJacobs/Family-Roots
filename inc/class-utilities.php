@@ -488,8 +488,10 @@ class FamilyRootsUtilities {
 	 *	@param		object	$person	The TNG_Person object
 	 */
 	public function get_parent_template($person) {
-		$father = !empty($person->get('father')) ? new TNG_Person($person->get('father')) : null;
-		$mother = !empty($person->get('mother')) ? new TNG_Person($person->get('mother')) : null;
+		$father_object = $person->get('father');
+		$mother_object = $person->get('mother');
+		$father = !empty($father_object) ? new TNG_Person($father_object) : null;
+		$mother = !empty($mother_object) ? new TNG_Person($mother_object) : null;
 		
 		$father_name = is_null($father) ? null : '<a href="'.$this->get_person_url($father).'">'.$father->get('first_name').' '.$father->get('last_name').'</a>';
 		$mother_name = is_null($mother) ? null : '<a href="'.$this->get_person_url($mother).'">'.$mother->get('first_name').' '.$mother->get('last_name').'</a>';
