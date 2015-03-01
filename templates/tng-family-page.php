@@ -50,7 +50,7 @@
 						<tr>
 							<td>Burial:</td>
 							<?php $burial_place_object = new TNG_Place(null, $family->get('father')->burial_place); ?>
-							<?php $burial_place = !empty($family->get('father')->burial_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($birth_place_object).'">'.$family->get('father')->burial_place.'</a>' : '';?>
+							<?php $burial_place = !empty($family->get('father')->burial_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($burial_place_object).'">'.$family->get('father')->burial_place.'</a>' : '';?>
 							<td><?php echo $utilities->get_date_for_display($family->get('father')->burial_date).$burial_place; ?></td>
 						</tr>
 						<?php endif; ?>
@@ -93,7 +93,7 @@
 						<tr>
 							<td>Burial:</td>
 							<?php $burial_place_object = new TNG_Place(null, $family->get('mother')->burial_place); ?>
-							<?php $burial_place = !empty($family->get('mother')->burial_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($birth_place_object).'">'.$family->get('mother')->burial_place.'</a>' : '';?>
+							<?php $burial_place = !empty($family->get('mother')->burial_place) ?  ' &mdash; <a href="'.$utilities->get_place_url($burial_place_object).'">'.$family->get('mother')->burial_place.'</a>' : '';?>
 							<td><?php echo $utilities->get_date_for_display($family->get('mother')->burial_date).$burial_place; ?></td>
 						</tr>
 						<?php endif; ?>
