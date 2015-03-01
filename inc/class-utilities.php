@@ -536,7 +536,7 @@ class FamilyRootsUtilities {
 		
 		if($links) {
 		?>
-		<ul class="pagination" id="<?php echo esc_attr( $nav_id ); ?>" class="hidden-print">
+		<ul class="pagination" id="tng-pagination" class="hidden-print">
 			<?php
 				// check if the first value of the array is the current page
 				if( false !== strpos( $links[0], 'current' ) )
