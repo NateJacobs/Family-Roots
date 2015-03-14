@@ -393,7 +393,7 @@ class FamilyRootsUtilities {
 		} elseif(is_string($place)) {
 			$place_array = explode(', ', $place);
 			$places = implode( ', ', array_filter( array_reverse( $place_array ) ) );
-			$id = str_replace( ' ', '-', str_replace(', ', '/', trim( $places ) ) );
+			$id = strtolower( str_replace( ' ', '-', str_replace(', ', '/', trim( $places ) ) ) );
 		} else {
 			$id = 0;
 		}
