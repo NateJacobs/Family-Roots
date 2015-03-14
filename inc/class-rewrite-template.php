@@ -34,25 +34,42 @@ class FamilyRootsRewriteTemplate {
 	 */
 	public function person_rewrite() {
 		add_rewrite_rule(
+		    '^genealogy/place/([0-9a-zA-Z%-]*)/([a-zA-Z%-]*)/([a-zA-Z%-]*)',
+		    'index.php?tng_type=place&tng_place_id=$matches[1]&tng_locality_1=$matches[2]&tng_locality_2=$matches[3]',
+		    'top'
+		);
+		
+		add_rewrite_rule(
+		    '^genealogy/place/([0-9a-zA-Z%-]*)/([a-zA-Z%-]*)',
+		    'index.php?tng_type=place&tng_place_id=$matches[1]&tng_locality_1=$matches[2]',
+		    'top'
+		);
+		
+		add_rewrite_rule(
 		    '^genealogy/([^/]*)/([0-9a-zA-Z%-]*)/page/([0-9]*)',
 		    'index.php?tng_type=$matches[1]&tng_$matches[1]_id=$matches[2]&tng_page=$matches[3]',
 		    'top'
 		);
+		
 		add_rewrite_rule(
 		    '^genealogy/([^/]*)/([0-9a-zA-Z%-]*)',
 		    'index.php?tng_type=$matches[1]&tng_$matches[1]_id=$matches[2]',
 		    'top'
 		);
+		
 		add_rewrite_rule(
 		    '^genealogy/([^/]*)',
 		    'index.php?tng_type=$matches[1]',
 		    'top'
 		);
+		
 		add_rewrite_tag('%tng_person_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_family_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_lastname_id%', '([0-9a-zA-Z%-]*)');
 		add_rewrite_tag('%tng_place_id%', '([0-9]*)');
 		add_rewrite_tag('%tng_type%', '([a-zA-Z]*)');
+		add_rewrite_tag('%tng_locality_1%', '([a-zA-Z]*)');
+		add_rewrite_tag('%tng_locality_2%', '([a-zA-Z]*)');
 		add_rewrite_tag('%tng_page%', '([0-9]*)');
 	}
 	
@@ -168,13 +185,24 @@ class FamilyRootsRewriteTemplate {
 	 */
 	public function place_template($template) {
 		$type = get_query_var('tng_type');
-		
+		$id = get_query_var('tng_place_id');
+		$place_id = (int) $id;
+
 		if(isset($type) && 'place' === $type) {
-			$theme_template = locate_template('family-roots/tng-place-page.php');
+			if($place_id) {
+				$theme_template = locate_template('family-roots/tng-place-page.php');
+			} else {
+				$theme_template = locate_template('family-roots/tng-locality-page.php');
+			}
+			
 			if(!empty($theme_template)) {
 				$template = $theme_template;
 			} else {
-				$template = FAMROOTS_TEMPLATES.'tng-place-page.php';
+				if($place_id) {
+					$template = FAMROOTS_TEMPLATES.'tng-place-page.php';
+				} else {
+					$template = FAMROOTS_TEMPLATES.'tng-locality-page.php';
+				}
 			}
 		}
 		
@@ -193,7 +221,7 @@ class FamilyRootsRewriteTemplate {
 	 */
 	public function places_template($template) {
 		$type = get_query_var('tng_type');
-		
+				
 		if(isset($type) && 'places' === $type) {
 			$theme_template = locate_template('family-roots/tng-places-page.php');
 			if(!empty($theme_template)) {
