@@ -21,7 +21,7 @@ class TNG_Place {
 	 *	@param		string	$id		The place ID.
 	 *	@param		array	$name	The place name.
 	 */
-	public function __construct($id=0, $name = null) {
+	public function __construct($id = 0, $name = null) {
 		global $tng_db;
 		
 		if(!is_null($name) && $id === 0) {
