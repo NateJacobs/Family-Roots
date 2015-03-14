@@ -114,7 +114,9 @@ class TNG_Locality {
 		$utilities = new FamilyRootsUtilities();
 		
 		foreach($locations as $location) {
-			if( $location->count == '1' && $location->locality === $location->whole_place ) {
+			$location_count = substr_count($location->locality, ',');
+
+			if( $location_count > 2 || ( $location->count == '1' && $location->locality === $location->whole_place ) ) {
 				$place_object = new TNG_Place(0, $location->whole_place);
 				$place_url = $place_object;
 			} else {
