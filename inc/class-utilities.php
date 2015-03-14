@@ -383,13 +383,17 @@ class FamilyRootsUtilities {
 	 *	@date		9/13/14
 	 *	@since		1.0
 	 *
-	 *	@param		int|string|TNG_Place	$person	The person object to get the URL for.
+	 *	@param		int|string|TNG_Place	$place	The place object to get the URL for.
 	 */
 	public function get_place_url($place) {
 		if($place instanceof TNG_Place) {
 			$id = $place->ID;
 		} elseif(is_numeric($place)) {
 			$id = $place;
+		} elseif(is_string($place)) {
+			$place_array = explode(', ', $place);
+			$places = implode( ', ', array_filter( array_reverse( $place_array ) ) );
+			$id = str_replace( ' ', '-', str_replace(', ', '/', trim( $places ) ) );
 		} else {
 			$id = 0;
 		}
@@ -404,7 +408,7 @@ class FamilyRootsUtilities {
 	 *	@date		8/17/14
 	 *	@since		1.0
 	 *
-	 *	@param		int|string|TNG_Family	$family	The person object to get the URL for.
+	 *	@param		int|string|TNG_Family	$family	The family object to get the URL for.
 	 */
 	public function get_family_url($family) {
 		if($family instanceof TNG_Family) {
@@ -591,6 +595,31 @@ class FamilyRootsUtilities {
 		}
 		
 		$places = $this->db->get_results("SELECT ID, place, longitude, latitude, notes FROM {$places_table} ORDER BY place");
+		
+		if(empty($places)) {
+			return false;
+		} else {
+			return $places;
+		}
+	}
+	
+	/** 
+	 * 
+	 *
+	 * @author Nate Jacobs
+	 * @date 3/7/15
+	 * @since 1.0
+	 *
+	 * @param 
+	 */
+	public function get_grouped_places_by_us_state() {
+		$places_table = isset($this->settings['places_table']) ? $this->settings['places_table'] : false;
+		
+		if(!$places_table) {
+			return false;
+		}
+		
+		$places = $this->db->get_results("SELECT trim(substring_index(place,',',-1)) as location, count(place) as count FROM tng_places WHERE trim(substring_index(place,',',-1)) IN('Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','Washington DC') GROUP BY location ORDER by location");
 		
 		if(empty($places)) {
 			return false;
