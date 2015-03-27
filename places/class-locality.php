@@ -10,6 +10,7 @@
 class TNG_Locality {
 	public $place;
 	public $data;
+	public $allow_numeric;
 
 	/**
 	 * Start up the locality class.
@@ -19,15 +20,18 @@ class TNG_Locality {
 	 * @since 1.3
 	 *
 	 * @param array $location The location parts.
+	 * @param array $allow_numeric Allow the query to return places with numbers in them.
 	 */
-	public function __construct( $location = null ) {
+	public function __construct( $location = null, $allow_numeric = true ) {
 		global $tng_db;
 		$data = false;
 
 		if ( is_null( $location ) ) {
 			return false;
 		}
-
+		
+		$this->allow_numeric = $allow_numeric;
+		
 		$this->settings = ['tables' => get_option('family_roots_settings'), 'db' => $tng_db];
 
 		if ( !empty( $location[2] ) ) {
@@ -64,10 +68,18 @@ class TNG_Locality {
 		}
 
 		$clean_location = $this->clean_location( $locality );
-
-		return $this->settings['db']->get_row(
-			$this->settings['db']->prepare("SELECT trim(substring_index(place,',',%d)) as place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = %s", $offset, $offset, $clean_location)
-		);
+		
+		if( $this->allow_numeric ) {
+			$place = $this->settings['db']->get_row(
+				$this->settings['db']->prepare("SELECT trim(substring_index(place,',',%d)) as place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = %s", $offset, $offset, $clean_location)
+			);	
+		} else {
+			$place = $this->settings['db']->get_row(
+				$this->settings['db']->prepare("SELECT trim(substring_index(place,',',%d)) as place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = %s AND substring_index(place,' ',1) NOT REGEXP '[0-9]+'", $offset, $offset, $clean_location)
+			);
+		}
+		
+		return $place;
 	}
 
 	/**
@@ -106,9 +118,15 @@ class TNG_Locality {
 			return false;
 		}
 		
-		$locations = $this->settings['db']->get_results(
-			$this->settings['db']->prepare("SELECT distinct trim(substring_index(place,',',%d)) as locality, trim(place) as whole_place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = '%s' GROUP BY locality ORDER by locality", $this->offset-1, $this->offset, $this->place)
-		);
+		if( $this->allow_numeric ) {
+			$locations = $this->settings['db']->get_results(
+				$this->settings['db']->prepare("SELECT distinct trim(substring_index(place,',',%d)) as locality, trim(place) as whole_place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = '%s' GROUP BY locality ORDER by locality", $this->offset-1, $this->offset, $this->place)
+			);
+		} else {
+			$locations = $this->settings['db']->get_results(
+				$this->settings['db']->prepare("SELECT distinct trim(substring_index(place,',',%d)) as locality, trim(place) as whole_place, count(place) as count FROM {$places_table} WHERE trim(substring_index(place,',',%d)) = '%s' AND substring_index(place,' ',1) NOT REGEXP '[0-9]+' GROUP BY locality ORDER by locality", $this->offset-1, $this->offset, $this->place)
+			);
+		}
 		
 		$localities = [];
 		$utilities = new FamilyRootsUtilities();
